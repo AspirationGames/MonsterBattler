@@ -208,7 +208,7 @@ public class BattleSystem : MonoBehaviour
             {
                 Debug.Log("Find new target");
                 FindNewTarget(attackingUnit, ref targetMonster, ref targetHud, ref targetUnit);
-                
+                Debug.Log("target monster is null?" + targetMonster == null);
             }
 
             if(targetMonster == null)
@@ -244,7 +244,20 @@ public class BattleSystem : MonoBehaviour
         //attack phase over
         selectedMoves.Clear(); //clear move queu
         selectedTargets.Clear(); //clear target queu
-        PlayerAction();
+
+        if(!playerParty.HasHealthyMonster()) //player has no healthy monsters
+        {
+            Debug.Log("you lose");
+        }
+        else if(!enemyParty.HasHealthyMonster()) //enemyu has no healthy monsters
+        {
+            Debug.Log("you win");
+        }
+        else
+        {
+            PlayerAction();
+        }
+        
         
     }
 
@@ -262,6 +275,12 @@ public class BattleSystem : MonoBehaviour
                     targetHud = battleHuds[battleUnits.IndexOf(unit)];
                     return; //we use return to exit the method completly
                 }
+                else
+                {
+                    Debug.Log("No Target can be found");
+                    targetMonster = null;
+                    return;
+                }
             }
         }
         else if(!attackingUnit.isPlayerMonster && targetUnit.isPlayerMonster) //enemy attacking player
@@ -275,10 +294,16 @@ public class BattleSystem : MonoBehaviour
                     targetHud = battleHuds[battleUnits.IndexOf(unit)];
                     return;
                 }
+                else
+                {
+                    targetMonster = null;
+                    return;
+                }
             }
         }
-        else
+        else                                                                //targeted ally
         {
+            
             targetMonster = null;
             return; //if the unit is targeting itself or an ally we will just return for now.
         }
