@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30520e625ab1aac49b844bb99066645f, type: 3}
+  m_Name: FireStarter
+  m_EditorClassIdentifier: 
+  monsterName: Fire
+  description: 
+  frontSprite: {fileID: 21300000, guid: 9fcc9f0761dabfd4f91df6382d298493, type: 3}
+  backSprite: {fileID: 21300000, guid: 315bd6bf5e4b7134d85b5f8655e78f08, type: 3}
+  type1: 3
+  type2: 0
+  maxHP: 50
+  attack: 50
+  defense: 50
+  spAttack: 50
+  spDefense: 50
+  speed: 50
+  learnableMoves:
+  - moveBase: {fileID: 11400000, guid: beec11c45a89d9845a4c28380ad6788f, type: 2}
+    moveLevel: 1
+  - moveBase: {fileID: 11400000, guid: dd7a514fab729454cba15d5bcba39f1a, type: 2}
+    moveLevel: 1
+  - moveBase: {fileID: 11400000, guid: 5914a93cd1ffedc4f95936f1601f9bd8, type: 2}
+    moveLevel: 4
