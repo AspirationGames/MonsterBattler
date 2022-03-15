@@ -204,35 +204,41 @@ public class BattleSystem : MonoBehaviour
 
             // need to find way of changing target in the even that target dies mid turn. 
 
-            //if(targetMonster.HP <= 0)
-         //   {
-                //if(attackingUnit.isPlayerMonster && targetUnit.isPlayerMonster!)
-           //     {
-                    //foreach(BattleUnit unit in battleUnits)
-             //       {
-                        //if(unit.isPlayerMonster! && unit.Monster.HP > 0)
-               //         {
-                            
-                 //       }
-                   // }
-                //}
-            //}
-
-            attackingMove.AP--; //reduce AP of move being used
-
-            yield return battleDialogueBox.TypeDialog
-            ($"{attackingMonster.Base.MonsterName} use {attackingMove.Base.MoveName} on {targetMonster.Base.MonsterName}");
-
-            var damageDetails = targetMonster.TakeDamage(attackingMove, attackingMonster);
-            yield return targetHud.UpdateHP();
-            yield return ShowDamageDetails(damageDetails);
-
-            if(damageDetails.Fainted)//if the monster FAINTS
+            if(targetMonster.HP <= 0) // check if target is alive
             {
-                yield return battleDialogueBox.TypeDialog($"{targetMonster.Base.MonsterName} fainted");
-                turnOrder.Remove(targetUnit);
-
+                Debug.Log("Find new target");
+                FindNewTarget(attackingUnit, ref targetMonster, ref targetHud, ref targetUnit);
+                
             }
+
+            if(targetMonster == null)
+            {
+                yield return battleDialogueBox.TypeDialog
+                ($"{attackingMonster.Base.MonsterName} use {attackingMove.Base.MoveName}");
+                yield return battleDialogueBox.TypeDialog
+                ("But it Failed");
+            }
+            else
+            {
+                //Perform attack
+                attackingMove.AP--; 
+                yield return battleDialogueBox.TypeDialog
+                ($"{attackingMonster.Base.MonsterName} use {attackingMove.Base.MoveName} on {targetMonster.Base.MonsterName}");
+
+                var damageDetails = targetMonster.TakeDamage(attackingMove, attackingMonster);
+                yield return targetHud.UpdateHP();
+                yield return ShowDamageDetails(damageDetails);
+
+                if(damageDetails.Fainted)//if the monster FAINTS
+                {
+                    yield return battleDialogueBox.TypeDialog($"{targetMonster.Base.MonsterName} fainted");
+                    turnOrder.Remove(targetUnit);
+
+                }
+            }
+
+
+            
             
         }
         //attack phase over
@@ -240,6 +246,43 @@ public class BattleSystem : MonoBehaviour
         selectedTargets.Clear(); //clear target queu
         PlayerAction();
         
+    }
+
+    void FindNewTarget(BattleUnit attackingUnit, ref Monster targetMonster, ref BattleHud targetHud, ref BattleUnit targetUnit)
+    {
+        
+        if (attackingUnit.isPlayerMonster && !targetUnit.isPlayerMonster) //player attacking enemy
+        {
+            foreach (BattleUnit unit in battleUnits)
+            {
+                if (!unit.isPlayerMonster && unit.Monster.HP > 0)
+                {
+                    targetUnit = unit;
+                    targetMonster = unit.Monster;
+                    targetHud = battleHuds[battleUnits.IndexOf(unit)];
+                    return; //we use return to exit the method completly
+                }
+            }
+        }
+        else if(!attackingUnit.isPlayerMonster && targetUnit.isPlayerMonster) //enemy attacking player
+        {
+            foreach (BattleUnit unit in battleUnits)
+            {
+                if (unit.isPlayerMonster && unit.Monster.HP > 0)
+                {
+                    targetUnit = unit;
+                    targetMonster = unit.Monster;
+                    targetHud = battleHuds[battleUnits.IndexOf(unit)];
+                    return;
+                }
+            }
+        }
+        else
+        {
+            targetMonster = null;
+            return; //if the unit is targeting itself or an ally we will just return for now.
+        }
+
     }
 
     IEnumerator ShowDamageDetails(DamageDetails damageDetails)
