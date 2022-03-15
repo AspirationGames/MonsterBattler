@@ -245,6 +245,13 @@ public class BattleSystem : MonoBehaviour
         selectedMoves.Clear(); //clear move queu
         selectedTargets.Clear(); //clear target queu
 
+        CheckMonsterParties();
+        
+    }
+    
+    void CheckMonsterParties()
+    {   
+
         if(!playerParty.HasHealthyMonster()) //player has no healthy monsters
         {
             Debug.Log("you lose");
@@ -258,8 +265,8 @@ public class BattleSystem : MonoBehaviour
             PlayerAction();
         }
         
-        
     }
+
 
     void FindNewTarget(BattleUnit attackingUnit, ref Monster targetMonster, ref BattleHud targetHud, ref BattleUnit targetUnit)
     {
@@ -277,7 +284,6 @@ public class BattleSystem : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("No Target can be found");
                     targetMonster = null;
                     return;
                 }
