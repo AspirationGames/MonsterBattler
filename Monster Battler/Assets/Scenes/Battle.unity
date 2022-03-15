@@ -4932,10 +4932,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fff11e18372e11e45a55ae4acf4dbf73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsters:
-  - _base: {fileID: 11400000, guid: 57d0a29cc67460745b766488d455f982, type: 2}
-    level: 5
+  party:
   - _base: {fileID: 11400000, guid: 149c32699cedbe04c8af6b598da1c975, type: 2}
+    level: 50
+  - _base: {fileID: 11400000, guid: 57d0a29cc67460745b766488d455f982, type: 2}
     level: 5
 --- !u!4 &1844712394
 Transform:
@@ -4981,11 +4981,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fff11e18372e11e45a55ae4acf4dbf73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsters:
+  party:
   - _base: {fileID: 11400000, guid: 424fb588cf7627c4f9b0c80bc5b7d64f, type: 2}
-    level: 7
+    level: 5
   - _base: {fileID: 11400000, guid: d63bf37dc82034448bb8d1234f4d8a31, type: 2}
-    level: 7
+    level: 5
 --- !u!4 &1891973317
 Transform:
   m_ObjectHideFlags: 0
