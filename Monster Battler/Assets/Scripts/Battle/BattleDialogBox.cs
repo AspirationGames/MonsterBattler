@@ -16,8 +16,7 @@ public class BattleDialogBox : MonoBehaviour
     [SerializeField] GameObject targetSelector;
 
     Button[] moveButtons; 
-    Button[] targetButtons;   
-    
+    Button[] targetButtons;
     void Awake() 
     {
       moveButtons  = moveSelector.GetComponentsInChildren<Button>(); //get our move buttons
@@ -93,4 +92,6 @@ public class BattleDialogBox : MonoBehaviour
 
         }
     }
+
+    
 }

@@ -6,6 +6,14 @@ public class MonsterParty : MonoBehaviour
 {
     [SerializeField] List<Monster> party;
 
+    public List<Monster> Party
+    {
+        get
+        {
+            return party;
+        }
+    }
+
     void Awake()
     {
         foreach(var monster in party)
@@ -14,9 +22,9 @@ public class MonsterParty : MonoBehaviour
         }
     }
 
-    public Monster GetMonster(int monsterIndex)
+    public Monster GetMonster(int partyMemberIndex)
     {
-        return party[monsterIndex];
+        return party[partyMemberIndex];
     }
 
     public bool HasHealthyMonster()

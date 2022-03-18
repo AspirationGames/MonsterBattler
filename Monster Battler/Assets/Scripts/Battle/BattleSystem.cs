@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public enum BattleState {Start, PlayerAction, PlayerMoveOne, PlayerMoveTwo, EnemyMove, Busy}
+public enum BattleState {Start, PlayerAction, PlayerMoveOne, PlayerMoveTwo, EnemyMove, Busy, PartyScreen}
 public class BattleSystem : MonoBehaviour
 {
     [SerializeField] List<BattleUnit> battleUnits;
     [SerializeField] List<BattleHud> battleHuds;
 
     [SerializeField] BattleDialogBox battleDialogueBox;
+    [SerializeField] PartyScreen partyScreen;
 
     BattleState battleState;    
 
@@ -60,6 +61,7 @@ public class BattleSystem : MonoBehaviour
 
        yield return battleDialogueBox.TypeDialog($"A wild {battleUnits[2].Monster.Base.MonsterName} and {battleUnits[3].Monster.Base.MonsterName} appeared!"); //you can use yield return to call anothe coroutine which is what we are doing here
        
+        partyScreen.Init();
         TurnOrder();
         PlayerAction();
     }
@@ -109,6 +111,13 @@ public class BattleSystem : MonoBehaviour
             battleDialogueBox.SetMoveNames(battleUnits[1].Monster.Moves);
         } 
         
+    }
+
+    public void SwitchMonster()
+    {
+        battleState = BattleState.PartyScreen;
+        partyScreen.SetPartyData(playerParty.Party);
+        partyScreen.gameObject.SetActive(true);
     }
 
     public void OnMoveSelected(int moveIndex)
@@ -192,6 +201,7 @@ public class BattleSystem : MonoBehaviour
     IEnumerator PerformMoves()
     {
         battleState = BattleState.Busy;
+        List<BattleUnit> faintedUnits = new List<BattleUnit>();
 
         for(int i=0; i < turnOrder.Count; i++)
         {
@@ -206,9 +216,7 @@ public class BattleSystem : MonoBehaviour
 
             if(targetMonster.HP <= 0) // check if target is alive
             {
-                Debug.Log("Find new target");
                 FindNewTarget(attackingUnit, ref targetMonster, ref targetHud, ref targetUnit);
-                Debug.Log("target monster is null?" + targetMonster == null);
             }
 
             if(targetMonster == null)
@@ -233,6 +241,7 @@ public class BattleSystem : MonoBehaviour
                 {
                     yield return battleDialogueBox.TypeDialog($"{targetMonster.Base.MonsterName} fainted");
                     turnOrder.Remove(targetUnit);
+                    faintedUnits.Add(targetUnit);
 
                 }
             }
@@ -245,28 +254,39 @@ public class BattleSystem : MonoBehaviour
         selectedMoves.Clear(); //clear move queu
         selectedTargets.Clear(); //clear target queu
 
-        CheckMonsterParties();
+        if (faintedUnits.Count > 0)
+        {
+            if(!playerParty.HasHealthyMonster()) //player has no healthy monsters
+            {
+                Debug.Log("you lose");
+            }
+            else if(!enemyParty.HasHealthyMonster()) //enemyu has no healthy monsters
+            {
+                Debug.Log("you win");
+            }
+            else
+            {
+                foreach(BattleUnit faintedUnit in faintedUnits)
+                {
+                    if (faintedUnit.isPlayerMonster)
+                    {
+                        yield return PartyMemberSelection(faintedUnit);
+                    }
+                }
+            }
+        }
+        
         
     }
     
-    void CheckMonsterParties()
-    {   
 
-        if(!playerParty.HasHealthyMonster()) //player has no healthy monsters
-        {
-            Debug.Log("you lose");
-        }
-        else if(!enemyParty.HasHealthyMonster()) //enemyu has no healthy monsters
-        {
-            Debug.Log("you win");
-        }
-        else
-        {
-            PlayerAction();
-        }
-        
+    private IEnumerator PartyMemberSelection(BattleUnit unitSwitchingOut)
+    {
+       //Switch Out
+       yield return new WaitForSeconds(1f); //place holder
     }
 
+   
 
     void FindNewTarget(BattleUnit attackingUnit, ref Monster targetMonster, ref BattleHud targetHud, ref BattleUnit targetUnit)
     {
