@@ -24,7 +24,9 @@ public class Monster
 
     public int HP {get; set;} //our monsters current HP, we are using a property
     public List<Move> Moves{ get; set;} //we are using a property for the moves
-
+    
+    bool inBattle;
+    public bool InBattle {get; set;} //flag for if monster is actively in battle
     public void Init() //this method creates our pokemon
     {
         HP = MaxHP;

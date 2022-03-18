@@ -30,4 +30,6 @@ public class PartyMemberUI : MonoBehaviour
        yield return hpBar.SetHPSmooth((float) monster.HP / monster.MaxHP);
        hpText.text = monster.HP.ToString() + "/" + monster.MaxHP.ToString();
     }
+
+    
 }

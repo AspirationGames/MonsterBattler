@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public enum BattleState {Start, PlayerAction, PlayerMoveOne, PlayerMoveTwo, EnemyMove, Busy, PartyScreen}
+public enum BattleState {PlayerAction1, PlayerAction2, EnemyMove1, EnemmyMove2, Busy, PartyScreen}
 public class BattleSystem : MonoBehaviour
 {
     [SerializeField] List<BattleUnit> battleUnits;
@@ -18,9 +18,12 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] List<BattleUnit> turnOrder = new List<BattleUnit>();
     List<int> selectedMoves =  new List<int>();
     List<int> selectedTargets = new List<int>();
+    List<int> selectedSwitch = new List<int>();
 
     [SerializeField] MonsterParty playerParty;
     [SerializeField] MonsterParty enemyParty;
+
+    int skipIndex = 99;
 
 
     void Start()
@@ -42,15 +45,17 @@ public class BattleSystem : MonoBehaviour
         {
             if(unit.isPlayerMonster)
             {
-                unit.Setup(playerParty.GetMonster(battleUnits.IndexOf(unit))); //returns monsters at index 0 and 1
+                unit.Setup(playerParty.Monsters[battleUnits.IndexOf(unit)]); //returns monsters at index 0 and 1
                 battleHuds[battleUnits.IndexOf(unit)].SetData(unit.Monster);
+                unit.Monster.InBattle = true;
                 turnOrder.Add(unit);
 
             }
             else
             {
-                unit.Setup(enemyParty.GetMonster(battleUnits.IndexOf(unit)-2)); //returns monsters at index 0 and 1 for enemy party which is why we subtract by 2
+                unit.Setup(enemyParty.Monsters[battleUnits.IndexOf(unit)-2]); //returns monsters at index 0 and 1 for enemy party which is why we subtract by 2
                 battleHuds[battleUnits.IndexOf(unit)].SetData(unit.Monster);
+                unit.Monster.InBattle = true;
                 turnOrder.Add(unit);
                 
             }
@@ -58,11 +63,13 @@ public class BattleSystem : MonoBehaviour
             
         }
 
+        partyScreen.Init();
 
        yield return battleDialogueBox.TypeDialog($"A wild {battleUnits[2].Monster.Base.MonsterName} and {battleUnits[3].Monster.Base.MonsterName} appeared!"); //you can use yield return to call anothe coroutine which is what we are doing here
        
-        partyScreen.Init();
+        
         TurnOrder();
+        battleState = BattleState.PlayerAction1; //changing the battle state
         PlayerAction();
     }
 
@@ -88,49 +95,58 @@ public class BattleSystem : MonoBehaviour
 
    void PlayerAction()
     {
-        battleState = BattleState.PlayerAction; //changing the battle state
+        
         StartCoroutine(battleDialogueBox.TypeDialog("What will you do?"));
         battleDialogueBox.EnableActionSelector(true);
     }
 
-    public void SelectMove()
+    public void Fight()
     {
 
         battleDialogueBox.EnableMoveSelector(true);
         
-        if(battleState == BattleState.PlayerAction)
+        if(battleState == BattleState.PlayerAction1)
         {
             battleDialogueBox.EnableActionSelector(false);
-            battleState = BattleState.PlayerMoveOne;
             battleDialogueBox.SetMoveNames(battleUnits[0].Monster.Moves);
         } 
-        else if(battleState == BattleState.PlayerMoveOne)
+        else if(battleState == BattleState.PlayerAction2)
         {
             battleDialogueBox.EnableTargetSelector(false);
-            battleState = BattleState.PlayerMoveTwo;
             battleDialogueBox.SetMoveNames(battleUnits[1].Monster.Moves);
         } 
         
     }
 
-    public void SwitchMonster()
+    public void Switch()
     {
-        battleState = BattleState.PartyScreen;
-        partyScreen.SetPartyData(playerParty.Party);
+
+        
+        partyScreen.SetPartyData(playerParty.Monsters);
         partyScreen.gameObject.SetActive(true);
+        battleDialogueBox.EnableActionSelector(false);
+        StartCoroutine(battleDialogueBox.TypeDialog("Select a monster to switch in."));
+        
+        
     }
+
+
 
     public void OnMoveSelected(int moveIndex)
     {
 
         //save selected moves
-        if(battleState == BattleState.PlayerMoveOne)
+        if(battleState == BattleState.PlayerAction1)
         {
             selectedMoves.Insert(0,moveIndex);
+            //skip value for switch
+            selectedSwitch.Insert(0,skipIndex);
         }
-        else if(battleState == BattleState.PlayerMoveTwo)
+        else if(battleState == BattleState.PlayerAction2)
         { 
             selectedMoves.Insert(1,moveIndex);
+            //skip value for switch
+            selectedSwitch.Insert(1,skipIndex);
         }
 
         SelectTarget();
@@ -149,38 +165,71 @@ public class BattleSystem : MonoBehaviour
     public void OnTargetSelected(int targetIndex)
     {
         //save selected targets
-        if(battleState == BattleState.PlayerMoveOne)
+        if(battleState == BattleState.PlayerAction1)
         {
 
             selectedTargets.Insert(0,targetIndex);
+            battleDialogueBox.EnableTargetSelector(false);
+            battleState = BattleState.PlayerAction2;
+            PlayerAction();
+            
+            
             
         }
-        else if(battleState == BattleState.PlayerMoveTwo)
+        else if(battleState == BattleState.PlayerAction2)
         {
             selectedTargets.Insert(1,targetIndex);
+            battleDialogueBox.EnableTargetSelector(false);
+            battleState = BattleState.EnemyMove1;
+            EnemyActionSelection();
 
         }
 
-        PlayerMoveComplete();
+    }
+    public void OnSwitchSelected(int switchMonsterIndex)
+    {
+        var selectedMonster = playerParty.Monsters[switchMonsterIndex];
+
+        if(selectedMonster.HP <= 0) //if the slected monster is fainted
+        {
+            StartCoroutine(battleDialogueBox.TypeDialog($"{selectedMonster} is fainted."));
+            return;
+        }
+        if(selectedMonster.InBattle) //if the slected monster is already in battle
+        {
+            StartCoroutine(battleDialogueBox.TypeDialog($"{selectedMonster} is already in battle."));
+            return;
+        }
+        else if(battleState == BattleState.PlayerAction1)
+        {
+            selectedSwitch.Insert(0,switchMonsterIndex);
+            // dummy numbers  to allow code to work
+            selectedMoves.Insert(0,skipIndex);
+            selectedTargets.Insert(0,skipIndex);
+
+            partyScreen.gameObject.SetActive(false);
+            battleState = BattleState.PlayerAction2;
+            PlayerAction();
+            
+        }
+        else if(battleState == BattleState.PlayerAction2)
+        {
+            selectedSwitch.Insert(1,switchMonsterIndex);
+            // dummy numbers  to allow code to work
+            selectedMoves.Insert(1,skipIndex);
+            selectedTargets.Insert(1,skipIndex);
+
+            partyScreen.gameObject.SetActive(false);
+            battleState = BattleState.EnemyMove1;
+            EnemyActionSelection();
+
+        }
     }
 
-    void PlayerMoveComplete()
+    void EnemyActionSelection()
     {
-
-        if(battleState == BattleState.PlayerMoveOne)
-        {
-
-            SelectMove();
-            
-        }
-        else if(battleState == BattleState.PlayerMoveTwo)
-        {
-            //end trurn;
-            battleDialogueBox.EnableTargetSelector(false);
-            battleState = BattleState.EnemyMove;
-            EnemyMoveSelection();
-            
-        }
+        //potentially allow enemy to switch for now just attack
+        EnemyMoveSelection();
     }
 
     void EnemyMoveSelection()
@@ -192,25 +241,64 @@ public class BattleSystem : MonoBehaviour
             int randomTargetIndex = UnityEngine.Random.Range(0,1);
             selectedMoves.Insert(i, randmomMoveIndex);
             selectedTargets.Insert(i, randomTargetIndex);
+            selectedSwitch.Insert(i,skipIndex);
         }
 
-        StartCoroutine(PerformMoves());
+        StartCoroutine(SwitchMonsters());
+
+        
     }
     
+    
+
+    IEnumerator SwitchMonsters()
+    {
+        battleState = BattleState.Busy;
+
+
+        for(int i=0; i < turnOrder.Count; i++)
+        {
+            Monster currentMonster = turnOrder[i].Monster;
+            BattleUnit currentUnit = turnOrder[i];
+
+            
+
+            if(selectedSwitch[battleUnits.IndexOf(currentUnit)] == skipIndex)//if no switch was initiated for this turn just continue onto the next turn
+            {
+                continue;
+            }
+            else
+            {
+                Monster incomingMonster = playerParty.Monsters[ selectedSwitch[battleUnits.IndexOf(turnOrder[i])] ];
+                currentUnit.Monster.InBattle = false;
+                yield return battleDialogueBox.TypeDialog
+                ($"{currentMonster.Base.MonsterName} switched out. You sent out {incomingMonster.Base.MonsterName}");
+                turnOrder.Remove(currentUnit);
+            }
+
+            //Need to add more logic for switch out and in.
+
+            
+        }
+
+        selectedSwitch.Clear(); //clear swtichqueue 
+        yield return PerformMoves();
+
+        
+    }
 
     IEnumerator PerformMoves()
     {
-        battleState = BattleState.Busy;
         List<BattleUnit> faintedUnits = new List<BattleUnit>();
 
         for(int i=0; i < turnOrder.Count; i++)
         {
             Monster attackingMonster = turnOrder[i].Monster;
             BattleUnit attackingUnit = turnOrder[i];
-            Move attackingMove = attackingMonster.Moves[ selectedMoves[battleUnits.IndexOf(turnOrder[i])] ]; 
-            Monster targetMonster = battleUnits[ selectedTargets[battleUnits.IndexOf(turnOrder[i])] ].Monster;
-            BattleHud targetHud = battleHuds[ selectedTargets[battleUnits.IndexOf(turnOrder[i])] ];
-            BattleUnit targetUnit = battleUnits[ selectedTargets[battleUnits.IndexOf(turnOrder[i])] ];
+            Move attackingMove = attackingMonster.Moves[ selectedMoves[battleUnits.IndexOf(attackingUnit)] ]; 
+            Monster targetMonster = battleUnits[ selectedTargets[battleUnits.IndexOf(attackingUnit)] ].Monster;
+            BattleHud targetHud = battleHuds[ selectedTargets[battleUnits.IndexOf(attackingUnit)] ];
+            BattleUnit targetUnit = battleUnits[ selectedTargets[battleUnits.IndexOf(attackingUnit)] ];
 
             // need to find way of changing target in the even that target dies mid turn. 
 
@@ -270,21 +358,21 @@ public class BattleSystem : MonoBehaviour
                 {
                     if (faintedUnit.isPlayerMonster)
                     {
-                        yield return PartyMemberSelection(faintedUnit);
+                        //Switch Out Monster
+                        Debug.Log("you need to swtich in new monsters");
                     }
                 }
             }
+        }
+        else
+        {
+            PlayerAction();
+            battleState = BattleState.PlayerAction1;
         }
         
         
     }
     
-
-    private IEnumerator PartyMemberSelection(BattleUnit unitSwitchingOut)
-    {
-       //Switch Out
-       yield return new WaitForSeconds(1f); //place holder
-    }
 
    
 

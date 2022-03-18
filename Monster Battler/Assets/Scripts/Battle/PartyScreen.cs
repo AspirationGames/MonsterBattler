@@ -5,6 +5,7 @@ using UnityEngine;
 public class PartyScreen : MonoBehaviour
 {
     PartyMemberUI[] memberSlots;
+    List<Monster> monsters;
 
     public void Init()
     {
@@ -13,6 +14,8 @@ public class PartyScreen : MonoBehaviour
 
     public void SetPartyData(List<Monster> monsters)
     {
+        this.monsters = monsters;
+
         for (int i=0; i < memberSlots.Length; i++)
         {
             if(i < monsters.Count)
@@ -26,5 +29,5 @@ public class PartyScreen : MonoBehaviour
         }
     }
 
-
+    
 }

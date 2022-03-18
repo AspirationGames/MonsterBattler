@@ -4,34 +4,29 @@ using UnityEngine;
 
 public class MonsterParty : MonoBehaviour
 {
-    [SerializeField] List<Monster> party;
+    [SerializeField] List<Monster> monsters;
 
-    public List<Monster> Party
+    public List<Monster> Monsters
     {
         get
         {
-            return party;
+            return monsters;
         }
     }
 
     void Awake()
     {
-        foreach(var monster in party)
+        foreach(var monster in monsters)
         {
             monster.Init();
         }
-    }
-
-    public Monster GetMonster(int partyMemberIndex)
-    {
-        return party[partyMemberIndex];
     }
 
     public bool HasHealthyMonster()
     {
         bool hasHealthyMonster;
 
-        foreach(Monster monster in party)
+        foreach(Monster monster in monsters)
         {
             if(monster.HP > 0)
             {
@@ -41,10 +36,6 @@ public class MonsterParty : MonoBehaviour
         }
 
         return hasHealthyMonster = false; 
-
-        
-
-        
     }
 
 }
