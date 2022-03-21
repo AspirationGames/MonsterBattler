@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public enum BattleState {PlayerAction1, PlayerAction2, EnemyMove1, EnemmyMove2, Busy, PartyScreen}
+public enum BattleState {PlayerAction1, PlayerAction2, EnemyMove1, EnemmyMove2, Busy}
 public class BattleSystem : MonoBehaviour
 {
     [SerializeField] List<BattleUnit> battleUnits;
@@ -68,16 +68,15 @@ public class BattleSystem : MonoBehaviour
        yield return battleDialogueBox.TypeDialog($"A wild {battleUnits[2].Monster.Base.MonsterName} and {battleUnits[3].Monster.Base.MonsterName} appeared!"); //you can use yield return to call anothe coroutine which is what we are doing here
        
         
-        TurnOrder();
-        battleState = BattleState.PlayerAction1; //changing the battle state
-        PlayerAction();
+       NewTurn();
     }
 
-    void TurnOrder()
+    void NewTurn()
     {
 
         turnOrder.Sort(SpeedComparison);
-        
+        battleState = BattleState.PlayerAction1; //changing the battle state
+        PlayerAction();
     }
 
     int SpeedComparison(BattleUnit a, BattleUnit b)
@@ -112,7 +111,7 @@ public class BattleSystem : MonoBehaviour
         } 
         else if(battleState == BattleState.PlayerAction2)
         {
-            battleDialogueBox.EnableTargetSelector(false);
+            battleDialogueBox.EnableActionSelector(false);
             battleDialogueBox.SetMoveNames(battleUnits[1].Monster.Moves);
         } 
         
@@ -197,7 +196,7 @@ public class BattleSystem : MonoBehaviour
         }
         if(selectedMonster.InBattle) //if the slected monster is already in battle
         {
-            StartCoroutine(battleDialogueBox.TypeDialog($"{selectedMonster} is already in battle."));
+            StartCoroutine(battleDialogueBox.TypeDialog($"{selectedMonster} is already selected for battle."));
             return;
         }
         else if(battleState == BattleState.PlayerAction1)
@@ -206,6 +205,8 @@ public class BattleSystem : MonoBehaviour
             // dummy numbers  to allow code to work
             selectedMoves.Insert(0,skipIndex);
             selectedTargets.Insert(0,skipIndex);
+
+            selectedMonster.InBattle = true; //We set the selected monster inbattle to prevent it from being selected again
 
             partyScreen.gameObject.SetActive(false);
             battleState = BattleState.PlayerAction2;
@@ -218,6 +219,8 @@ public class BattleSystem : MonoBehaviour
             // dummy numbers  to allow code to work
             selectedMoves.Insert(1,skipIndex);
             selectedTargets.Insert(1,skipIndex);
+
+            selectedMonster.InBattle = true;
 
             partyScreen.gameObject.SetActive(false);
             battleState = BattleState.EnemyMove1;
@@ -260,6 +263,7 @@ public class BattleSystem : MonoBehaviour
         {
             Monster currentMonster = turnOrder[i].Monster;
             BattleUnit currentUnit = turnOrder[i];
+            BattleHud currentHud = battleHuds[battleUnits.IndexOf(currentUnit)];
 
             
 
@@ -272,11 +276,17 @@ public class BattleSystem : MonoBehaviour
                 Monster incomingMonster = playerParty.Monsters[ selectedSwitch[battleUnits.IndexOf(turnOrder[i])] ];
                 currentUnit.Monster.InBattle = false;
                 yield return battleDialogueBox.TypeDialog
-                ($"{currentMonster.Base.MonsterName} switched out. You sent out {incomingMonster.Base.MonsterName}");
-                turnOrder.Remove(currentUnit);
+                ($"{currentMonster.Base.MonsterName} switched out.");
+
+                //set up new unit
+                currentUnit.Setup(incomingMonster);
+                currentHud.SetData(incomingMonster);
+                battleDialogueBox.SetMoveNames(incomingMonster.Moves);
+                yield return battleDialogueBox.TypeDialog($"Go  {incomingMonster.Base.MonsterName}!");
+
             }
 
-            //Need to add more logic for switch out and in.
+            
 
             
         }
@@ -295,28 +305,33 @@ public class BattleSystem : MonoBehaviour
         {
             Monster attackingMonster = turnOrder[i].Monster;
             BattleUnit attackingUnit = turnOrder[i];
+        
+            if(selectedMoves[battleUnits.IndexOf(attackingUnit)] == skipIndex || attackingMonster.HP <= 0) //Skip attack check
+            {
+                continue;
+            }
+
+                
             Move attackingMove = attackingMonster.Moves[ selectedMoves[battleUnits.IndexOf(attackingUnit)] ]; 
             Monster targetMonster = battleUnits[ selectedTargets[battleUnits.IndexOf(attackingUnit)] ].Monster;
             BattleHud targetHud = battleHuds[ selectedTargets[battleUnits.IndexOf(attackingUnit)] ];
             BattleUnit targetUnit = battleUnits[ selectedTargets[battleUnits.IndexOf(attackingUnit)] ];
-
-            // need to find way of changing target in the even that target dies mid turn. 
 
             if(targetMonster.HP <= 0) // check if target is alive
             {
                 FindNewTarget(attackingUnit, ref targetMonster, ref targetHud, ref targetUnit);
             }
 
-            if(targetMonster == null)
+            if(targetMonster == null) //if no new valid target can be found
             {
                 yield return battleDialogueBox.TypeDialog
                 ($"{attackingMonster.Base.MonsterName} use {attackingMove.Base.MoveName}");
                 yield return battleDialogueBox.TypeDialog
                 ("But it Failed");
             }
-            else
+            else //Perform Attack
             {
-                //Perform attack
+                
                 attackingMove.AP--; 
                 yield return battleDialogueBox.TypeDialog
                 ($"{attackingMonster.Base.MonsterName} use {attackingMove.Base.MoveName} on {targetMonster.Base.MonsterName}");
@@ -328,7 +343,6 @@ public class BattleSystem : MonoBehaviour
                 if(damageDetails.Fainted)//if the monster FAINTS
                 {
                     yield return battleDialogueBox.TypeDialog($"{targetMonster.Base.MonsterName} fainted");
-                    turnOrder.Remove(targetUnit);
                     faintedUnits.Add(targetUnit);
 
                 }
@@ -354,6 +368,7 @@ public class BattleSystem : MonoBehaviour
             }
             else
             {
+
                 foreach(BattleUnit faintedUnit in faintedUnits)
                 {
                     if (faintedUnit.isPlayerMonster)
@@ -366,8 +381,7 @@ public class BattleSystem : MonoBehaviour
         }
         else
         {
-            PlayerAction();
-            battleState = BattleState.PlayerAction1;
+            NewTurn();
         }
         
         
