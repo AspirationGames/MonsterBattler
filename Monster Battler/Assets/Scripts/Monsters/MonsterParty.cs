@@ -38,4 +38,22 @@ public class MonsterParty : MonoBehaviour
         return hasHealthyMonster = false; 
     }
 
+    public bool CanSwitch()
+    {
+        //checking to see if party as units available to switch in
+        bool canSwitchIn;
+
+        foreach(Monster monster in monsters)
+        {
+            if(monster.HP > 0 && !monster.InBattle)
+            {
+                canSwitchIn = true;
+                return canSwitchIn;
+            }
+        }
+
+        return canSwitchIn = false;
+
+    }
+
 }

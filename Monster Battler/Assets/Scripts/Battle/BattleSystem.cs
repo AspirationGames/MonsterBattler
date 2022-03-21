@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public enum BattleState {PlayerAction1, PlayerAction2, EnemyMove1, EnemmyMove2, Busy}
+public enum BattleState {PlayerAction1, PlayerAction2, EnemyMove1, EnemmyMove2, Busy, Switching}
 public class BattleSystem : MonoBehaviour
 {
     [SerializeField] List<BattleUnit> battleUnits;
@@ -227,6 +227,13 @@ public class BattleSystem : MonoBehaviour
             EnemyActionSelection();
 
         }
+        else if(battleState == BattleState.Switching)
+        {
+            selectedSwitch.Add(switchMonsterIndex);
+            selectedMonster.InBattle = true;
+            partyScreen.gameObject.SetActive(false);
+            battleState = BattleState.Busy; //switch back to busy state to allow for coroutines to finish.
+        }
     }
 
     void EnemyActionSelection()
@@ -273,18 +280,43 @@ public class BattleSystem : MonoBehaviour
             }
             else
             {
-                Monster incomingMonster = playerParty.Monsters[ selectedSwitch[battleUnits.IndexOf(turnOrder[i])] ];
-                currentUnit.Monster.InBattle = false;
-                yield return battleDialogueBox.TypeDialog
-                ($"{currentMonster.Base.MonsterName} switched out.");
+                if(currentUnit.isPlayerMonster)
+                {
+                    Monster incomingMonster = playerParty.Monsters[ selectedSwitch[battleUnits.IndexOf(turnOrder[i])] ];
 
-                //set up new unit
-                currentUnit.Setup(incomingMonster);
-                currentHud.SetData(incomingMonster);
-                battleDialogueBox.SetMoveNames(incomingMonster.Moves);
-                yield return battleDialogueBox.TypeDialog($"Go  {incomingMonster.Base.MonsterName}!");
+                    currentUnit.Monster.InBattle = false;
+                    yield return battleDialogueBox.TypeDialog
+                    ($"{currentMonster.Base.MonsterName} switched out.");
+
+                    //set up new unit
+                    currentUnit.Setup(incomingMonster);
+                    currentHud.SetData(incomingMonster);
+                    battleDialogueBox.SetMoveNames(incomingMonster.Moves);
+                    yield return battleDialogueBox.TypeDialog($"Go  {incomingMonster.Base.MonsterName}!");
+
+                    
+                    
+                }
+                else if(!currentUnit.isPlayerMonster)
+                {
+                    Monster incomingMonster = enemyParty.Monsters[ selectedSwitch[battleUnits.IndexOf(turnOrder[i])] ];
+
+                    currentUnit.Monster.InBattle = false;
+                    yield return battleDialogueBox.TypeDialog
+                    ($"{currentMonster.Base.MonsterName} switched out.");
+
+                    //set up new unit
+                    currentUnit.Setup(incomingMonster);
+                    currentHud.SetData(incomingMonster);
+                    battleDialogueBox.SetMoveNames(incomingMonster.Moves);
+                    yield return battleDialogueBox.TypeDialog($"Enemy Sent out  {incomingMonster.Base.MonsterName}!");
+                }
+                
+                
 
             }
+
+
 
             
 
@@ -296,6 +328,8 @@ public class BattleSystem : MonoBehaviour
 
         
     }
+
+    
 
     IEnumerator PerformMoves()
     {
@@ -368,15 +402,25 @@ public class BattleSystem : MonoBehaviour
             }
             else
             {
-
-                foreach(BattleUnit faintedUnit in faintedUnits)
+                foreach (BattleUnit faintedUnit in faintedUnits)
                 {
-                    if (faintedUnit.isPlayerMonster)
+                    if (faintedUnit.isPlayerMonster && playerParty.CanSwitch())
                     {
-                        //Switch Out Monster
-                        Debug.Log("you need to swtich in new monsters");
+
+                        yield return FaintedSwitch(faintedUnit);
+
+                    }
+                    else if(!faintedUnit.isPlayerMonster && enemyParty.CanSwitch())
+                    {
+                        //enemy Switch
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
+
+                NewTurn(); //after for loop is complete
             }
         }
         else
@@ -386,9 +430,32 @@ public class BattleSystem : MonoBehaviour
         
         
     }
-    
 
-   
+    IEnumerator FaintedSwitch(BattleUnit faintedUnit)
+    {
+        battleState = BattleState.Switching;
+        Switch();
+
+        while(battleState == BattleState.Switching)
+        {
+            yield return null;
+        }
+
+        //Switching out Monster below
+
+        faintedUnit.Monster.InBattle = false;
+        Monster incomingMonster = playerParty.Monsters[ selectedSwitch[0] ];
+        BattleHud faintedtHud = battleHuds[battleUnits.IndexOf(faintedUnit)];
+
+        faintedUnit.Setup(incomingMonster);
+        faintedtHud.SetData(incomingMonster);
+        battleDialogueBox.SetMoveNames(incomingMonster.Moves);
+        yield return battleDialogueBox.TypeDialog($"Go  {incomingMonster.Base.MonsterName}!");
+        selectedSwitch.Clear();
+        
+    }
+
+
 
     void FindNewTarget(BattleUnit attackingUnit, ref Monster targetMonster, ref BattleHud targetHud, ref BattleUnit targetUnit)
     {
