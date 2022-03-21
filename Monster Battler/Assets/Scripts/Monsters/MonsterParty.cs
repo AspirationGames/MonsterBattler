@@ -56,4 +56,15 @@ public class MonsterParty : MonoBehaviour
 
     }
 
+    public void SwapPartyPositions(Monster currentMonster, Monster incomingMonster)
+    {
+        int currentMonsterIndex = monsters.IndexOf(currentMonster);
+        int incomingMonsterIndex = monsters.IndexOf(incomingMonster);
+
+        monsters.Remove(currentMonster);
+        monsters.Remove(incomingMonster);
+        monsters.Insert(currentMonsterIndex, incomingMonster);
+        monsters.Insert(incomingMonsterIndex, currentMonster);
+    }
+
 }

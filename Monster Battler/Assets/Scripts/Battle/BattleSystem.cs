@@ -294,7 +294,8 @@ public class BattleSystem : MonoBehaviour
                     battleDialogueBox.SetMoveNames(incomingMonster.Moves);
                     yield return battleDialogueBox.TypeDialog($"Go  {incomingMonster.Base.MonsterName}!");
 
-                    
+                    //re-order position in party screen
+                    playerParty.SwapPartyPositions(currentMonster, incomingMonster);
                     
                 }
                 else if(!currentUnit.isPlayerMonster)
@@ -310,6 +311,9 @@ public class BattleSystem : MonoBehaviour
                     currentHud.SetData(incomingMonster);
                     battleDialogueBox.SetMoveNames(incomingMonster.Moves);
                     yield return battleDialogueBox.TypeDialog($"Enemy Sent out  {incomingMonster.Base.MonsterName}!");
+
+                    //re-order position in party screen
+                    enemyParty.SwapPartyPositions(currentMonster, incomingMonster);
                 }
                 
                 
@@ -443,16 +447,21 @@ public class BattleSystem : MonoBehaviour
 
         //Switching out Monster below
 
-        faintedUnit.Monster.InBattle = false;
+        
+        Monster faintedMonster = faintedUnit.Monster;
         Monster incomingMonster = playerParty.Monsters[ selectedSwitch[0] ];
         BattleHud faintedtHud = battleHuds[battleUnits.IndexOf(faintedUnit)];
 
+        faintedMonster.InBattle = false;
         faintedUnit.Setup(incomingMonster);
         faintedtHud.SetData(incomingMonster);
         battleDialogueBox.SetMoveNames(incomingMonster.Moves);
         yield return battleDialogueBox.TypeDialog($"Go  {incomingMonster.Base.MonsterName}!");
         selectedSwitch.Clear();
         
+        //re-order position in party screen
+        playerParty.SwapPartyPositions(faintedMonster, incomingMonster);
+
     }
 
 
