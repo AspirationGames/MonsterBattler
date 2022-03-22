@@ -67,4 +67,21 @@ public class MonsterParty : MonoBehaviour
         monsters.Insert(incomingMonsterIndex, currentMonster);
     }
 
+    public Monster FindNextHealthyMonster()
+    {
+        foreach(Monster monster in monsters)
+        {
+            if(monster.HP > 0 && !monster.InBattle)
+            {
+                
+                return monster;
+            }
+            
+        }
+
+        Debug.Log("No Healthy Monster found. Please review code!");
+        return monsters[0];
+
+    }
+
 }

@@ -416,7 +416,7 @@ public class BattleSystem : MonoBehaviour
                     }
                     else if(!faintedUnit.isPlayerMonster && enemyParty.CanSwitch())
                     {
-                        //enemy Switch
+                        EnemyFaintedSwitch(faintedUnit);
                     }
                     else
                     {
@@ -435,6 +435,24 @@ public class BattleSystem : MonoBehaviour
         
     }
 
+    void EnemyFaintedSwitch(BattleUnit faintedUnit)
+    {
+        Monster faintedMonster = faintedUnit.Monster;
+        BattleHud faintedtHud = battleHuds[battleUnits.IndexOf(faintedUnit)];
+        Monster incomingMonster = enemyParty.FindNextHealthyMonster(); //Place Holder for more robust enemy logic
+        
+
+        faintedMonster.InBattle = false;
+        faintedUnit.Setup(incomingMonster);
+        faintedtHud.SetData(incomingMonster);
+        battleDialogueBox.SetMoveNames(incomingMonster.Moves);
+        StartCoroutine(battleDialogueBox.TypeDialog($"Enemy sent out  {incomingMonster.Base.MonsterName}!"));
+        selectedSwitch.Clear();
+        
+        //re-order position in party screen
+        enemyParty.SwapPartyPositions(faintedMonster, incomingMonster);
+    }
+
     IEnumerator FaintedSwitch(BattleUnit faintedUnit)
     {
         battleState = BattleState.Switching;
@@ -449,8 +467,9 @@ public class BattleSystem : MonoBehaviour
 
         
         Monster faintedMonster = faintedUnit.Monster;
-        Monster incomingMonster = playerParty.Monsters[ selectedSwitch[0] ];
         BattleHud faintedtHud = battleHuds[battleUnits.IndexOf(faintedUnit)];
+        Monster incomingMonster = playerParty.Monsters[ selectedSwitch[0] ];
+        
 
         faintedMonster.InBattle = false;
         faintedUnit.Setup(incomingMonster);
