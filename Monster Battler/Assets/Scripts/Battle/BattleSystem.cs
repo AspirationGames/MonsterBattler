@@ -9,8 +9,6 @@ public enum BattleState
 public class BattleSystem : MonoBehaviour
 {
     [SerializeField] List<BattleUnit> battleUnits;
-    [SerializeField] List<BattleHud> battleHuds;
-
     [SerializeField] BattleDialogBox battleDialogueBox;
     [SerializeField] PartyScreen partyScreen;
 
@@ -47,7 +45,6 @@ public class BattleSystem : MonoBehaviour
             if(unit.IsPlayerMonster)
             {
                 unit.Setup(playerParty.Monsters[battleUnits.IndexOf(unit)]); //returns monsters at index 0 and 1
-                battleHuds[battleUnits.IndexOf(unit)].SetData(unit.Monster);
                 unit.Monster.InBattle = true;
                 turnOrder.Add(unit);
 
@@ -55,7 +52,6 @@ public class BattleSystem : MonoBehaviour
             else
             {
                 unit.Setup(enemyParty.Monsters[battleUnits.IndexOf(unit)-2]); //returns monsters at index 0 and 1 for enemy party which is why we subtract by 2
-                battleHuds[battleUnits.IndexOf(unit)].SetData(unit.Monster);
                 unit.Monster.InBattle = true;
                 turnOrder.Add(unit);
                 
@@ -351,7 +347,6 @@ public class BattleSystem : MonoBehaviour
         {
             Monster currentMonster = turnOrder[i].Monster;
             BattleUnit currentUnit = turnOrder[i];
-            BattleHud currentHud = battleHuds[battleUnits.IndexOf(currentUnit)];
 
             
 
@@ -371,7 +366,6 @@ public class BattleSystem : MonoBehaviour
 
                     //set up new unit
                     currentUnit.Setup(incomingMonster);
-                    currentHud.SetData(incomingMonster);
                     battleDialogueBox.SetMoveNames(incomingMonster.Moves);
                     yield return battleDialogueBox.TypeDialog($"Go  {incomingMonster.Base.MonsterName}!");
 
@@ -389,7 +383,6 @@ public class BattleSystem : MonoBehaviour
 
                     //set up new unit
                     currentUnit.Setup(incomingMonster);
-                    currentHud.SetData(incomingMonster);
                     battleDialogueBox.SetMoveNames(incomingMonster.Moves);
                     yield return battleDialogueBox.TypeDialog($"Enemy Sent out  {incomingMonster.Base.MonsterName}!");
 
@@ -433,12 +426,11 @@ public class BattleSystem : MonoBehaviour
                 
             Move attackingMove = attackingMonster.Moves[ selectedMoves[battleUnits.IndexOf(attackingUnit)] ]; 
             Monster targetMonster = battleUnits[ selectedTargets[battleUnits.IndexOf(attackingUnit)] ].Monster;
-            BattleHud targetHud = battleHuds[ selectedTargets[battleUnits.IndexOf(attackingUnit)] ];
             BattleUnit targetUnit = battleUnits[ selectedTargets[battleUnits.IndexOf(attackingUnit)] ];
 
             if(targetMonster.HP <= 0) // check if target is alive
             {
-                FindNewTarget(attackingUnit, ref targetMonster, ref targetHud, ref targetUnit);
+                FindNewTarget(attackingUnit, ref targetMonster, ref targetUnit);
 
             }
 
@@ -456,7 +448,7 @@ public class BattleSystem : MonoBehaviour
                 ($"{attackingMonster.Base.MonsterName} use {attackingMove.Base.MoveName} on {targetMonster.Base.MonsterName}");
 
                 var damageDetails = targetMonster.TakeDamage(attackingMove, attackingMonster);
-                yield return targetHud.UpdateHP();
+                yield return targetUnit.Hud.UpdateHP();
                 yield return ShowDamageDetails(damageDetails);
 
                 if(damageDetails.Fainted)//if the monster FAINTS
@@ -485,7 +477,6 @@ public class BattleSystem : MonoBehaviour
         }
         else
         {
-            Debug.Log("ERROR");
             NewTurn();
         }
         
@@ -528,14 +519,12 @@ public class BattleSystem : MonoBehaviour
     IEnumerator EnemyFaintedSwitch(BattleUnit faintedUnit)
     {
         Monster faintedMonster = faintedUnit.Monster;
-        BattleHud faintedtHud = battleHuds[battleUnits.IndexOf(faintedUnit)];
         Monster incomingMonster = enemyParty.FindNextHealthyMonster(); //Place Holder for more robust enemy logic
         
 
         faintedMonster.InBattle = false;
         incomingMonster.InBattle = true;
         faintedUnit.Setup(incomingMonster);
-        faintedtHud.SetData(incomingMonster);
         battleDialogueBox.SetMoveNames(incomingMonster.Moves);
         yield return battleDialogueBox.TypeDialog($"Enemy sent out  {incomingMonster.Base.MonsterName}!"); 
         selectedSwitch.Clear();
@@ -558,13 +547,11 @@ public class BattleSystem : MonoBehaviour
 
         
         Monster faintedMonster = faintedUnit.Monster;
-        BattleHud faintedtHud = battleHuds[battleUnits.IndexOf(faintedUnit)];
         Monster incomingMonster = playerParty.Monsters[ selectedSwitch[0] ];
         
 
         faintedMonster.InBattle = false;
         faintedUnit.Setup(incomingMonster);
-        faintedtHud.SetData(incomingMonster);
         battleDialogueBox.SetMoveNames(incomingMonster.Moves);
         yield return battleDialogueBox.TypeDialog($"Go  {incomingMonster.Base.MonsterName}!");
         selectedSwitch.Clear();
@@ -576,7 +563,7 @@ public class BattleSystem : MonoBehaviour
 
 
 
-    void FindNewTarget(BattleUnit attackingUnit, ref Monster targetMonster, ref BattleHud targetHud, ref BattleUnit targetUnit)
+    void FindNewTarget(BattleUnit attackingUnit, ref Monster targetMonster, ref BattleUnit targetUnit)
     {
         
         if (attackingUnit.IsPlayerMonster && !targetUnit.IsPlayerMonster) //player attacking enemy
@@ -589,7 +576,6 @@ public class BattleSystem : MonoBehaviour
                     
                     targetUnit = unit;
                     targetMonster = unit.Monster;
-                    targetHud = battleHuds[battleUnits.IndexOf(unit)];
                     return; //we use return to exit the method completly
                 }
                 else
@@ -610,7 +596,6 @@ public class BattleSystem : MonoBehaviour
                 {
                     targetUnit = unit;
                     targetMonster = unit.Monster;
-                    targetHud = battleHuds[battleUnits.IndexOf(unit)];
                     return;
                 }
                 else

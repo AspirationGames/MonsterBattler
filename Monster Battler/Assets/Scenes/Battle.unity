@@ -2162,11 +2162,6 @@ MonoBehaviour:
   - {fileID: 321786338}
   - {fileID: 673240241}
   - {fileID: 1993355020}
-  battleHuds:
-  - {fileID: 1991560097}
-  - {fileID: 1088208867}
-  - {fileID: 2003567666}
-  - {fileID: 1999086442}
   battleDialogueBox: {fileID: 833896325}
   partyScreen: {fileID: 1995945269}
   turnOrder: []
@@ -4040,7 +4035,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 680127114}
         m_TargetAssemblyTypeName: BattleSystem, Assembly-CSharp
-        m_MethodName: Fight
+        m_MethodName: SelectMove
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4210,6 +4205,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerUnit2
       objectReference: {fileID: 0}
+    - target: {fileID: 2961134707768608536, guid: a6919f00e7a3f634ab132e2423d58985, type: 3}
+      propertyPath: hud
+      value: 
+      objectReference: {fileID: 1088208867}
     - target: {fileID: 2961134707768608536, guid: a6919f00e7a3f634ab132e2423d58985, type: 3}
       propertyPath: _base
       value: 
@@ -4406,6 +4405,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyUnit1
       objectReference: {fileID: 0}
+    - target: {fileID: 2961134707768608536, guid: a6919f00e7a3f634ab132e2423d58985, type: 3}
+      propertyPath: hud
+      value: 
+      objectReference: {fileID: 2003567666}
     - target: {fileID: 2961134707768608536, guid: a6919f00e7a3f634ab132e2423d58985, type: 3}
       propertyPath: _base
       value: 
@@ -4729,6 +4732,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyUnit2
       objectReference: {fileID: 0}
+    - target: {fileID: 2961134707768608536, guid: a6919f00e7a3f634ab132e2423d58985, type: 3}
+      propertyPath: hud
+      value: 
+      objectReference: {fileID: 1999086442}
     - target: {fileID: 2961134707768608536, guid: a6919f00e7a3f634ab132e2423d58985, type: 3}
       propertyPath: _base
       value: 
@@ -5826,7 +5833,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 680127114}
         m_TargetAssemblyTypeName: BattleSystem, Assembly-CSharp
-        m_MethodName: Switch
+        m_MethodName: SelectSwitch
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6794,6 +6801,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerUnit1
       objectReference: {fileID: 0}
+    - target: {fileID: 2961134707768608536, guid: a6919f00e7a3f634ab132e2423d58985, type: 3}
+      propertyPath: hud
+      value: 
+      objectReference: {fileID: 1991560097}
     - target: {fileID: 2961134707768608536, guid: a6919f00e7a3f634ab132e2423d58985, type: 3}
       propertyPath: _base
       value: 

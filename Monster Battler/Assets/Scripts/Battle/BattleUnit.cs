@@ -7,6 +7,12 @@ using TMPro;
 public class BattleUnit : MonoBehaviour
 {
     [SerializeField] bool isPlayerMonster;
+    [SerializeField] BattleHud hud;
+
+    public BattleHud Hud 
+    {
+        get { return hud;}
+    }
     public bool IsPlayerMonster
     {
         get { return isPlayerMonster; }
@@ -32,6 +38,9 @@ public class BattleUnit : MonoBehaviour
        {
            GetComponent<Image>().sprite = Monster.Base.FrontSprite;
        }
+
+        hud.SetData(monster);
+
     }
 
 
