@@ -24,13 +24,11 @@ public class Monster
 
     public int HP {get; set;} //our monsters current HP, we are using a property
     public List<Move> Moves{ get; set;} //we are using a property for the moves
-    
+    public Dictionary<Stat, int> Stats {get; private set;} //we can get stats publically but only set stats in the monster class
     bool inBattle;
     public bool InBattle {get; set;} //flag for if monster is actively in battle
     public void Init() //this method creates our pokemon
     {
-        HP = MaxHP;
-
         //Generate Moves
         Moves = new List<Move>();
         foreach (var move in Base.LearnableMoves)
@@ -44,35 +42,56 @@ public class Monster
                 break;
             }
         }
+
+        CalculateStats();
+        HP = MaxHP;
+    }
+
+    void CalculateStats()
+    {
+        Stats = new Dictionary<Stat, int>();
+        Stats.Add(Stat.Attack, Mathf.FloorToInt( (Base.Attack * Level) / 100f ) + 5);
+        Stats.Add(Stat.Defense,Mathf.FloorToInt( (Base.Defense * Level) / 100f ) + 5 );
+        Stats.Add(Stat.SpAttack,Mathf.FloorToInt( (Base.SpAttack * Level) / 100f ) + 5 );
+        Stats.Add(Stat.SpDefense,Mathf.FloorToInt( (Base.SpDefense * Level) / 100f ) + 5 );
+        Stats.Add(Stat.Speed,Mathf.FloorToInt( (Base.Speed * Level) / 100f ) + 5 );
+
+        MaxHP = Mathf.FloorToInt( (Base.MaxHP * Level) / 100f ) + 10;
+    }
+
+    int GetStat(Stat stat)
+    {
+       int statValue = Stats[stat];
+
+       // TODO: Apply stat boost
+
+       return statValue; 
     }
 
     
 
     //Stat Properties
     
-    public int MaxHP
-    {
-        get { return Mathf.FloorToInt( (Base.MaxHP * Level) / 100f ) + 10; }
-    }
+    public int MaxHP {get; private set;}
     public int Attack
     {
-        get { return Mathf.FloorToInt( (Base.Attack * Level) / 100f ) + 5; }
+        get { return GetStat(Stat.Attack); }
     }
     public int Defense
     {
-        get { return Mathf.FloorToInt( (Base.Defense * Level) / 100f ) + 5; }
+        get { return GetStat(Stat.Defense); }
     }
     public int SpAttack
     {
-        get { return Mathf.FloorToInt( (Base.SpAttack * Level) / 100f ) + 5; }
+        get { return GetStat(Stat.SpAttack); }
     } 
     public int SpDefense
     {
-        get { return Mathf.FloorToInt( (Base.SpDefense * Level) / 100f ) + 5; }
+        get { return GetStat(Stat.SpDefense); }
     }
     public int Speed
     {
-        get { return Mathf.FloorToInt( (Base.Speed * Level) / 100f ) + 5; }
+        get { return GetStat(Stat.Speed); }
     }
     
     public DamageDetails TakeDamage(Move move, Monster attacker)
