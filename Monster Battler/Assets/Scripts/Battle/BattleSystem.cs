@@ -77,7 +77,7 @@ public class BattleSystem : MonoBehaviour
 
         turnOrder.Sort(SpeedComparison);
         battleState = BattleState.PlayerAction1; //changing the battle state
-        PlayerAction();
+        SelectAction();
     }
 
     int SpeedComparison(BattleUnit a, BattleUnit b)
@@ -93,7 +93,7 @@ public class BattleSystem : MonoBehaviour
         return 0;
     }
 
-   void PlayerAction()
+   void SelectAction()
     {
         
         StartCoroutine(battleDialogueBox.TypeDialog("What will you do?"));
@@ -102,7 +102,7 @@ public class BattleSystem : MonoBehaviour
         if(battleState == BattleState.PlayerAction2) battleDialogueBox.EnableBackButton(true);
     }
 
-    public void Fight()
+    public void SelectMove()
     {
 
         battleDialogueBox.EnableMoveSelector(true);
@@ -122,7 +122,7 @@ public class BattleSystem : MonoBehaviour
         
     }
 
-    public void Switch()
+    public void SelectSwitch()
     {
 
         if(battleState == BattleState.PlayerAction1) battleState = BattleState.PlayerSwitch1;
@@ -145,19 +145,19 @@ public class BattleSystem : MonoBehaviour
             case BattleState.PlayerMove1:
                 battleState = BattleState.PlayerAction1;
                 battleDialogueBox.EnableMoveSelector(false);
-                PlayerAction();
+                SelectAction();
                 break;
             case BattleState.PlayerSwitch1:
                 battleState = BattleState.PlayerAction1;
                 partyScreen.gameObject.SetActive(false);
-                PlayerAction();
+                SelectAction();
                 break;
             case BattleState.PlayerTarget1:
                 battleState = BattleState.PlayerAction1; //note our if statment in Fight() method actually changes our battle state again
                 selectedMoves.RemoveAt(0);
                 selectedSwitch.RemoveAt(0); //clears skip index for switch list
                 battleDialogueBox.EnableTargetSelector(false);
-                Fight();
+                SelectMove();
                 break;
             case BattleState.PlayerAction2: 
                 switch (selectedMoves[0])
@@ -168,7 +168,7 @@ public class BattleSystem : MonoBehaviour
                         selectedMoves.RemoveAt(0);
                         selectedTargets.RemoveAt(0);
                         battleDialogueBox.EnableActionSelector(false);
-                        Switch();
+                        SelectSwitch();
                         break;
                     default: //re-select your target
                         battleState = BattleState.PlayerTarget1;
@@ -181,19 +181,19 @@ public class BattleSystem : MonoBehaviour
             case BattleState.PlayerMove2:
                 battleState = BattleState.PlayerAction2;
                 battleDialogueBox.EnableMoveSelector(false);
-                PlayerAction();
+                SelectAction();
                 break;
             case BattleState.PlayerSwitch2:
                 battleState = BattleState.PlayerAction2;
                 partyScreen.gameObject.SetActive(false);
-                PlayerAction();
+                SelectAction();
                 break;
             case BattleState.PlayerTarget2:
                 battleState = BattleState.PlayerAction2; //note our if statment in Fight() method actually changes our battle state again
                 selectedMoves.RemoveAt(1);
                 selectedSwitch.RemoveAt(1); //clears skip index for switch list
                 battleDialogueBox.EnableTargetSelector(false);
-                Fight();
+                SelectMove();
                 break;
             case BattleState.PlayerFaintedSwitching:
                 StartCoroutine(battleDialogueBox.TypeDialog($"You must select a monster to send out into battle."));
@@ -251,7 +251,7 @@ public class BattleSystem : MonoBehaviour
             selectedTargets.Insert(0,targetIndex);
             battleDialogueBox.EnableTargetSelector(false);
             battleState = BattleState.PlayerAction2;
-            PlayerAction();
+            SelectAction();
             
             
             
@@ -291,7 +291,7 @@ public class BattleSystem : MonoBehaviour
 
             partyScreen.gameObject.SetActive(false);
             battleState = BattleState.PlayerAction2;
-            PlayerAction();
+            SelectAction();
             
         }
         else if(battleState == BattleState.PlayerSwitch2)
@@ -439,6 +439,7 @@ public class BattleSystem : MonoBehaviour
             if(targetMonster.HP <= 0) // check if target is alive
             {
                 FindNewTarget(attackingUnit, ref targetMonster, ref targetHud, ref targetUnit);
+                
             }
 
             if(targetMonster == null) //if no new valid target can be found
@@ -450,7 +451,6 @@ public class BattleSystem : MonoBehaviour
             }
             else //Perform Attack
             {
-                
                 attackingMove.AP--; 
                 yield return battleDialogueBox.TypeDialog
                 ($"{attackingMonster.Base.MonsterName} use {attackingMove.Base.MoveName} on {targetMonster.Base.MonsterName}");
@@ -537,7 +537,7 @@ public class BattleSystem : MonoBehaviour
     IEnumerator FaintedSwitch(BattleUnit faintedUnit)
     {
         battleState = BattleState.PlayerFaintedSwitching;
-        Switch();
+        SelectSwitch();
 
         while(battleState == BattleState.PlayerFaintedSwitching)
         {
@@ -571,10 +571,12 @@ public class BattleSystem : MonoBehaviour
         
         if (attackingUnit.isPlayerMonster && !targetUnit.isPlayerMonster) //player attacking enemy
         {
+
             foreach (BattleUnit unit in battleUnits)
             {
                 if (!unit.isPlayerMonster && unit.Monster.HP > 0)
                 {
+                    
                     targetUnit = unit;
                     targetMonster = unit.Monster;
                     targetHud = battleHuds[battleUnits.IndexOf(unit)];
@@ -582,10 +584,13 @@ public class BattleSystem : MonoBehaviour
                 }
                 else
                 {
-                    targetMonster = null;
-                    return;
+                    continue;
                 }
             }
+
+            targetMonster = null;
+            return;
+
         }
         else if(!attackingUnit.isPlayerMonster && targetUnit.isPlayerMonster) //enemy attacking player
         {
@@ -600,10 +605,12 @@ public class BattleSystem : MonoBehaviour
                 }
                 else
                 {
-                    targetMonster = null;
-                    return;
+                    continue;
                 }
             }
+            
+            targetMonster = null;
+            return;
         }
         else                                                                //targeted ally
         {
