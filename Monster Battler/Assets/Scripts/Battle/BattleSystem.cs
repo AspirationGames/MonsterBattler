@@ -475,48 +475,54 @@ public class BattleSystem : MonoBehaviour
         selectedMoves.Clear(); 
         selectedTargets.Clear(); 
 
-
         //Check for Battle Over
 
         if (faintedUnits.Count > 0)
         {
-            if(!playerParty.HasHealthyMonster()) //player has no healthy monsters
-            {
-                Debug.Log("you lose");
-            }
-            else if(!enemyParty.HasHealthyMonster()) //enemyu has no healthy monsters
-            {
-                Debug.Log("you win");
-            }
-            else
-            {
-                foreach (BattleUnit faintedUnit in faintedUnits)
-                {
-                    if (faintedUnit.IsPlayerMonster && playerParty.CanSwitch())
-                    {
-
-                        yield return FaintedSwitch(faintedUnit);
-
-                    }
-                    else if(!faintedUnit.IsPlayerMonster && enemyParty.CanSwitch())
-                    {
-                       yield return EnemyFaintedSwitch(faintedUnit);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-
-                NewTurn(); //after for loop is complete
-            }
+            yield return CheckForBattleOver(faintedUnits);
+            faintedUnits.Clear(); //clear list of fainted units after checking for battle over
+            
         }
         else
         {
+            Debug.Log("ERROR");
             NewTurn();
         }
         
         
+    }
+
+    IEnumerator CheckForBattleOver(List<BattleUnit> faintedUnits)
+    {
+        if(!playerParty.HasHealthyMonster()) //player has no healthy monsters
+        {
+            Debug.Log("you lose");
+        }
+        else if(!enemyParty.HasHealthyMonster()) //enemyu has no healthy monsters
+        {
+            Debug.Log("you win");
+        }
+        else
+        {
+            foreach (BattleUnit faintedUnit in faintedUnits)
+            {
+                if (faintedUnit.IsPlayerMonster && playerParty.CanSwitch())
+                {
+
+                    yield return FaintedSwitch(faintedUnit); //pretty sure both of these need to be couroutines or text gets messed up
+
+                }
+                else if(!faintedUnit.IsPlayerMonster && enemyParty.CanSwitch())
+                {
+                    yield return EnemyFaintedSwitch(faintedUnit);
+                }
+                else
+                {
+                        break;
+                }
+            } 
+                NewTurn(); //new turn once you break out of loop
+        }
     }
 
     IEnumerator EnemyFaintedSwitch(BattleUnit faintedUnit)
@@ -527,6 +533,7 @@ public class BattleSystem : MonoBehaviour
         
 
         faintedMonster.InBattle = false;
+        incomingMonster.InBattle = true;
         faintedUnit.Setup(incomingMonster);
         faintedtHud.SetData(incomingMonster);
         battleDialogueBox.SetMoveNames(incomingMonster.Moves);
