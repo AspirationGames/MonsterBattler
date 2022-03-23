@@ -16,8 +16,8 @@ public class BattleSystem : MonoBehaviour
 
     [SerializeField] List<BattleUnit> turnOrder = new List<BattleUnit>();
     List<int> selectedMoves =  new List<int>();
-    List<int> selectedTargets = new List<int>();
     List<int> selectedSwitch = new List<int>();
+    List<BattleUnit> selectedTargets = new List<BattleUnit>();
 
     [SerializeField] MonsterParty playerParty;
     [SerializeField] MonsterParty enemyParty;
@@ -204,8 +204,6 @@ public class BattleSystem : MonoBehaviour
 
     }
 
-
-
     public void OnMoveSelected(int moveIndex)
     {
 
@@ -238,13 +236,13 @@ public class BattleSystem : MonoBehaviour
 
     }
 
-    public void OnTargetSelected(int targetIndex)
+    public void OnTargetSelected(BattleUnit targetUnit)
     {
         //save selected targets
         if(battleState == BattleState.PlayerTarget1)
         {
 
-            selectedTargets.Insert(0,targetIndex);
+            selectedTargets.Insert(0,targetUnit);
             battleDialogueBox.EnableTargetSelector(false);
             battleState = BattleState.PlayerAction2;
             SelectAction();
@@ -254,7 +252,7 @@ public class BattleSystem : MonoBehaviour
         }
         else if(battleState == BattleState.PlayerTarget2)
         {
-            selectedTargets.Insert(1,targetIndex);
+            selectedTargets.Insert(1,targetUnit);
             battleDialogueBox.EnableTargetSelector(false);
             battleState = BattleState.EnemyAction1;
             EnemyActionSelection();
@@ -281,7 +279,7 @@ public class BattleSystem : MonoBehaviour
             selectedSwitch.Insert(0,switchMonsterIndex);
             // dummy numbers  to allow code to work
             selectedMoves.Insert(0,skipIndex);
-            selectedTargets.Insert(0,skipIndex);
+            selectedTargets.Insert(0,null);
 
             selectedMonster.InBattle = true; //We set the selected monster inbattle to prevent it from being selected again
 
@@ -295,7 +293,7 @@ public class BattleSystem : MonoBehaviour
             selectedSwitch.Insert(1,switchMonsterIndex);
             // dummy numbers  to allow code to work
             selectedMoves.Insert(1,skipIndex);
-            selectedTargets.Insert(1,skipIndex);
+            selectedTargets.Insert(1,null);
 
             selectedMonster.InBattle = true;
 
@@ -327,7 +325,7 @@ public class BattleSystem : MonoBehaviour
             int randmomMoveIndex = UnityEngine.Random.Range(0, battleUnits[i].Monster.Moves.Count);
             int randomTargetIndex = UnityEngine.Random.Range(0,1);
             selectedMoves.Insert(i, randmomMoveIndex);
-            selectedTargets.Insert(i, randomTargetIndex);
+            selectedTargets.Insert(i, battleUnits[randomTargetIndex]);
             selectedSwitch.Insert(i,skipIndex);
         }
 
@@ -393,20 +391,12 @@ public class BattleSystem : MonoBehaviour
                 
 
             }
-
-
-
-            
-
-            
+                   
         }
 
         selectedSwitch.Clear(); //clear swtichqueue 
         yield return PerformMoves();
-
-        
     }
-
     
 
     IEnumerator PerformMoves()
@@ -415,8 +405,9 @@ public class BattleSystem : MonoBehaviour
 
         for(int i=0; i < turnOrder.Count; i++)
         {
-            Monster attackingMonster = turnOrder[i].Monster;
             BattleUnit attackingUnit = turnOrder[i];
+            Monster attackingMonster = attackingUnit.Monster;
+            
         
             if(selectedMoves[battleUnits.IndexOf(attackingUnit)] == skipIndex || attackingMonster.HP <= 0) //Skip attack check
             {
@@ -425,8 +416,9 @@ public class BattleSystem : MonoBehaviour
 
                 
             Move attackingMove = attackingMonster.Moves[ selectedMoves[battleUnits.IndexOf(attackingUnit)] ]; 
-            Monster targetMonster = battleUnits[ selectedTargets[battleUnits.IndexOf(attackingUnit)] ].Monster;
-            BattleUnit targetUnit = battleUnits[ selectedTargets[battleUnits.IndexOf(attackingUnit)] ];
+            //targets
+            BattleUnit targetUnit = selectedTargets[battleUnits.IndexOf(attackingUnit)];
+            Monster targetMonster = targetUnit.Monster;
 
             if(targetMonster.HP <= 0) // check if target is alive
             {
