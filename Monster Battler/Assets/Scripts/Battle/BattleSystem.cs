@@ -298,6 +298,7 @@ public class BattleSystem : MonoBehaviour
             selectedMonster.InBattle = true;
 
             partyScreen.gameObject.SetActive(false);
+            battleDialogueBox.EnableBackButton(false);
             battleState = BattleState.EnemyAction1;
             EnemyActionSelection();
 
