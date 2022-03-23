@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public enum BattleState {PlayerAction1, PlayerAction2, EnemyMove1, EnemmyMove2, Busy, Switching}
+public enum BattleState 
+{PlayerAction1, PlayerAction2, PlayerMove1, PlayerMove2, PlayerTarget1, PlayerTarget2, PlayerSwitch1, PlayerSwitch2, EnemyAction1, EnemyAction2, Busy, PlayerFaintedSwitching}
 public class BattleSystem : MonoBehaviour
 {
     [SerializeField] List<BattleUnit> battleUnits;
@@ -23,7 +24,7 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] MonsterParty playerParty;
     [SerializeField] MonsterParty enemyParty;
 
-    int skipIndex = 99;
+    const int skipIndex = 99;
 
 
     void Start()
@@ -97,6 +98,8 @@ public class BattleSystem : MonoBehaviour
         
         StartCoroutine(battleDialogueBox.TypeDialog("What will you do?"));
         battleDialogueBox.EnableActionSelector(true);
+
+        if(battleState == BattleState.PlayerAction2) battleDialogueBox.EnableBackButton(true);
     }
 
     public void Fight()
@@ -106,11 +109,13 @@ public class BattleSystem : MonoBehaviour
         
         if(battleState == BattleState.PlayerAction1)
         {
+            battleState = BattleState.PlayerMove1;
             battleDialogueBox.EnableActionSelector(false);
             battleDialogueBox.SetMoveNames(battleUnits[0].Monster.Moves);
         } 
         else if(battleState == BattleState.PlayerAction2)
         {
+            battleState = BattleState.PlayerMove2;
             battleDialogueBox.EnableActionSelector(false);
             battleDialogueBox.SetMoveNames(battleUnits[1].Monster.Moves);
         } 
@@ -120,6 +125,9 @@ public class BattleSystem : MonoBehaviour
     public void Switch()
     {
 
+        if(battleState == BattleState.PlayerAction1) battleState = BattleState.PlayerSwitch1;
+
+        else if(battleState == BattleState.PlayerAction2) battleState = BattleState.PlayerSwitch2;
         
         partyScreen.SetPartyData(playerParty.Monsters);
         partyScreen.gameObject.SetActive(true);
@@ -129,20 +137,93 @@ public class BattleSystem : MonoBehaviour
         
     }
 
+    public void Back()
+    {
+
+        switch(battleState)
+        {
+            case BattleState.PlayerMove1:
+                battleState = BattleState.PlayerAction1;
+                battleDialogueBox.EnableMoveSelector(false);
+                PlayerAction();
+                break;
+            case BattleState.PlayerSwitch1:
+                battleState = BattleState.PlayerAction1;
+                partyScreen.gameObject.SetActive(false);
+                PlayerAction();
+                break;
+            case BattleState.PlayerTarget1:
+                battleState = BattleState.PlayerAction1; //note our if statment in Fight() method actually changes our battle state again
+                selectedMoves.RemoveAt(0);
+                selectedSwitch.RemoveAt(0); //clears skip index for switch list
+                battleDialogueBox.EnableTargetSelector(false);
+                Fight();
+                break;
+            case BattleState.PlayerAction2: 
+                switch (selectedMoves[0])
+                {
+                    case skipIndex: //you selected switch during phase 1
+                        battleState = BattleState.PlayerSwitch1;
+                        selectedSwitch.RemoveAt(0);
+                        selectedMoves.RemoveAt(0);
+                        selectedTargets.RemoveAt(0);
+                        battleDialogueBox.EnableActionSelector(false);
+                        Switch();
+                        break;
+                    default: //re-select your target
+                        battleState = BattleState.PlayerTarget1;
+                        selectedTargets.RemoveAt(0);
+                        battleDialogueBox.EnableActionSelector(false);
+                        SelectTarget();
+                        break;
+                }
+                break;
+            case BattleState.PlayerMove2:
+                battleState = BattleState.PlayerAction2;
+                battleDialogueBox.EnableMoveSelector(false);
+                PlayerAction();
+                break;
+            case BattleState.PlayerSwitch2:
+                battleState = BattleState.PlayerAction2;
+                partyScreen.gameObject.SetActive(false);
+                PlayerAction();
+                break;
+            case BattleState.PlayerTarget2:
+                battleState = BattleState.PlayerAction2; //note our if statment in Fight() method actually changes our battle state again
+                selectedMoves.RemoveAt(1);
+                selectedSwitch.RemoveAt(1); //clears skip index for switch list
+                battleDialogueBox.EnableTargetSelector(false);
+                Fight();
+                break;
+            case BattleState.PlayerFaintedSwitching:
+                StartCoroutine(battleDialogueBox.TypeDialog($"You must select a monster to send out into battle."));
+                break;
+            default:
+                Debug.Log("Something went wrong check your back button method");
+                break;
+
+
+        }
+
+
+    }
+
 
 
     public void OnMoveSelected(int moveIndex)
     {
 
         //save selected moves
-        if(battleState == BattleState.PlayerAction1)
+        if(battleState == BattleState.PlayerMove1)
         {
+            battleState = BattleState.PlayerTarget1;
             selectedMoves.Insert(0,moveIndex);
             //skip value for switch
             selectedSwitch.Insert(0,skipIndex);
         }
-        else if(battleState == BattleState.PlayerAction2)
+        else if(battleState == BattleState.PlayerMove2)
         { 
+            battleState = BattleState.PlayerTarget2;
             selectedMoves.Insert(1,moveIndex);
             //skip value for switch
             selectedSwitch.Insert(1,skipIndex);
@@ -164,7 +245,7 @@ public class BattleSystem : MonoBehaviour
     public void OnTargetSelected(int targetIndex)
     {
         //save selected targets
-        if(battleState == BattleState.PlayerAction1)
+        if(battleState == BattleState.PlayerTarget1)
         {
 
             selectedTargets.Insert(0,targetIndex);
@@ -175,11 +256,11 @@ public class BattleSystem : MonoBehaviour
             
             
         }
-        else if(battleState == BattleState.PlayerAction2)
+        else if(battleState == BattleState.PlayerTarget2)
         {
             selectedTargets.Insert(1,targetIndex);
             battleDialogueBox.EnableTargetSelector(false);
-            battleState = BattleState.EnemyMove1;
+            battleState = BattleState.EnemyAction1;
             EnemyActionSelection();
 
         }
@@ -199,7 +280,7 @@ public class BattleSystem : MonoBehaviour
             StartCoroutine(battleDialogueBox.TypeDialog($"{selectedMonster} is already selected for battle."));
             return;
         }
-        else if(battleState == BattleState.PlayerAction1)
+        else if(battleState == BattleState.PlayerSwitch1)
         {
             selectedSwitch.Insert(0,switchMonsterIndex);
             // dummy numbers  to allow code to work
@@ -213,7 +294,7 @@ public class BattleSystem : MonoBehaviour
             PlayerAction();
             
         }
-        else if(battleState == BattleState.PlayerAction2)
+        else if(battleState == BattleState.PlayerSwitch2)
         {
             selectedSwitch.Insert(1,switchMonsterIndex);
             // dummy numbers  to allow code to work
@@ -223,11 +304,11 @@ public class BattleSystem : MonoBehaviour
             selectedMonster.InBattle = true;
 
             partyScreen.gameObject.SetActive(false);
-            battleState = BattleState.EnemyMove1;
+            battleState = BattleState.EnemyAction1;
             EnemyActionSelection();
 
         }
-        else if(battleState == BattleState.Switching)
+        else if(battleState == BattleState.PlayerFaintedSwitching)
         {
             selectedSwitch.Add(switchMonsterIndex);
             selectedMonster.InBattle = true;
@@ -446,7 +527,7 @@ public class BattleSystem : MonoBehaviour
         faintedUnit.Setup(incomingMonster);
         faintedtHud.SetData(incomingMonster);
         battleDialogueBox.SetMoveNames(incomingMonster.Moves);
-        StartCoroutine(battleDialogueBox.TypeDialog($"Enemy sent out  {incomingMonster.Base.MonsterName}!"));
+        StartCoroutine(battleDialogueBox.TypeDialog($"Enemy sent out  {incomingMonster.Base.MonsterName}!")); //Dialoge not working
         selectedSwitch.Clear();
         
         //re-order position in party screen
@@ -455,10 +536,10 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator FaintedSwitch(BattleUnit faintedUnit)
     {
-        battleState = BattleState.Switching;
+        battleState = BattleState.PlayerFaintedSwitching;
         Switch();
 
-        while(battleState == BattleState.Switching)
+        while(battleState == BattleState.PlayerFaintedSwitching)
         {
             yield return null;
         }

@@ -15,8 +15,11 @@ public class BattleDialogBox : MonoBehaviour
 
     [SerializeField] GameObject targetSelector;
 
+    [SerializeField] GameObject backButton;
+
     Button[] moveButtons; 
     Button[] targetButtons;
+    
     void Awake() 
     {
       moveButtons  = moveSelector.GetComponentsInChildren<Button>(); //get our move buttons
@@ -40,11 +43,13 @@ public class BattleDialogBox : MonoBehaviour
     public void EnableActionSelector(bool enabled)
     {
         actionSelector.SetActive(enabled);
+        
     }
 
     public void EnableMoveSelector(bool enabled)
     {
         moveSelector.SetActive(enabled);
+        EnableBackButton(enabled);
     }
 
     public void EnableMoveDetails(bool enabled)
@@ -55,6 +60,12 @@ public class BattleDialogBox : MonoBehaviour
     public void EnableTargetSelector(bool enabled)
     {
         targetSelector.SetActive(enabled);
+        EnableBackButton(enabled);
+    }
+
+    public void EnableBackButton(bool enabled)
+    {
+        backButton.SetActive(enabled);
     }
 
     public void SetMoveNames(List<Move> moves)
