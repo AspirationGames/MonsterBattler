@@ -91,7 +91,9 @@ public class BattleSystem : MonoBehaviour
 
    void SelectAction()
     {
-        
+        Debug.Log(battleUnits[0].Monster.Attack);
+        Debug.Log(battleUnits[0].Monster.HP);
+
         StartCoroutine(battleDialogueBox.TypeDialog("What will you do?"));
         battleDialogueBox.EnableActionSelector(true);
 

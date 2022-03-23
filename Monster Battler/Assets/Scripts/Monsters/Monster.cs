@@ -7,6 +7,27 @@ public class Monster
 {
     [SerializeField] MonsterBase _base;
     [SerializeField] int level;
+
+    [SerializeField] Personality personality;
+
+    float personalityStatIncrease = 1.10f;
+    float personalityStatDecrease = 0.90f;
+
+    [Header("IVs")]
+    [SerializeField][Range(0, 31)] int naturalSkillMaxHP; //IVs
+    [SerializeField][Range(0, 31)] int naturalSkillAttack; //IVs
+    [SerializeField][Range(0, 31)] int naturalSkillDefense; //IVs
+    [SerializeField][Range(0, 31)] int naturalSkillSpAttack; //IVs
+    [SerializeField][Range(0, 31)] int naturalSkillSpDefense; //IVs
+    [SerializeField][Range(0, 31)] int naturalSkillSpeed; //IVs
+
+    [Header("EVs")]
+    [SerializeField][Range(0, 252)] int developedSkillMaxHP; //EVs
+    [SerializeField][Range(0, 252)] int developedSkillAttack; //EVs
+    [SerializeField][Range(0, 252)] int developedSkillDefense; //EVs
+    [SerializeField][Range(0, 252)] int developedSkillSpAttack; //EVs
+    [SerializeField][Range(0, 252)] int developedSkillSpDefense; //EVs
+    [SerializeField][Range(0, 252)] int developedSkillSpeed; //EVs
     public MonsterBase Base 
     {
         get
@@ -27,6 +48,7 @@ public class Monster
     public Dictionary<Stat, int> Stats {get; private set;} //we can get stats publically but only set stats in the monster class
     bool inBattle;
     public bool InBattle {get; set;} //flag for if monster is actively in battle
+
     public void Init() //this method creates our pokemon
     {
         //Generate Moves
@@ -47,16 +69,81 @@ public class Monster
         HP = MaxHP;
     }
 
+    float PersonalityValue(Stat stat)
+    {   //TO DO ADD FULL LIST OF PERSONALITY VALUES
+        switch(stat)
+        {
+            case Stat.Attack:
+                switch(personality)
+                {
+                    case Personality.Lonely:
+                    case Personality.Brave:
+                        return personalityStatIncrease;
+                    case Personality.Bold:
+                    case Personality.Timid:
+                        return personalityStatDecrease;
+                }
+                break;
+            default:
+                return 1f;
+        }
+
+        return 1f;  //for some stupid reason we need this here even though the switch should always return a value
+    }
+
     void CalculateStats()
     {
         Stats = new Dictionary<Stat, int>();
-        Stats.Add(Stat.Attack, Mathf.FloorToInt( (Base.Attack * Level) / 100f ) + 5);
-        Stats.Add(Stat.Defense,Mathf.FloorToInt( (Base.Defense * Level) / 100f ) + 5 );
-        Stats.Add(Stat.SpAttack,Mathf.FloorToInt( (Base.SpAttack * Level) / 100f ) + 5 );
-        Stats.Add(Stat.SpDefense,Mathf.FloorToInt( (Base.SpDefense * Level) / 100f ) + 5 );
-        Stats.Add(Stat.Speed,Mathf.FloorToInt( (Base.Speed * Level) / 100f ) + 5 );
 
-        MaxHP = Mathf.FloorToInt( (Base.MaxHP * Level) / 100f ) + 10;
+        //HP has unique formula and is not effected by personality
+        MaxHP = Mathf.FloorToInt
+            (
+                ( ( (2*Base.MaxHP + naturalSkillMaxHP + developedSkillMaxHP/4)* Level / 100  ) + Level + 10 ) 
+            ); 
+
+        //OtherStats
+
+        Stats.Add
+            (Stat.Attack, 
+                Mathf.FloorToInt
+                ( 
+                    ( ( (2*Base.Attack + naturalSkillAttack + developedSkillAttack/4)* Level / 100  ) + 5 ) 
+                    * PersonalityValue(Stat.Attack)
+                )
+        );
+        Stats.Add
+            (Stat.Defense, 
+                Mathf.FloorToInt
+                ( 
+                    ( ( (2*Base.Defense + naturalSkillDefense + developedSkillDefense/4)* Level / 100  ) + 5 ) 
+                    * PersonalityValue(Stat.Defense)
+                )
+        );
+        Stats.Add
+            (Stat.SpAttack, 
+                Mathf.FloorToInt
+                ( 
+                    ( ( (2*Base.SpAttack + naturalSkillSpAttack + developedSkillSpAttack/4)* Level / 100  ) + 5 ) 
+                    * PersonalityValue(Stat.SpAttack)
+                )
+        );
+        Stats.Add
+            (Stat.SpDefense, 
+                Mathf.FloorToInt
+                ( 
+                    ( ( (2*Base.SpDefense + naturalSkillSpDefense + developedSkillSpDefense/4)* Level / 100  ) + 5 ) 
+                    * PersonalityValue(Stat.SpDefense)
+                )
+        );
+        Stats.Add
+            (Stat.Speed, 
+                Mathf.FloorToInt
+                ( 
+                    ( ( (2*Base.Speed + naturalSkillSpeed + developedSkillSpeed/4)* Level / 100  ) + 5 ) 
+                    * PersonalityValue(Stat.Speed)
+                )
+        );
+
     }
 
     int GetStat(Stat stat)
