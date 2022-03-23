@@ -6,7 +6,11 @@ using TMPro;
 
 public class BattleUnit : MonoBehaviour
 {
-    [SerializeField] public bool isPlayerMonster;
+    [SerializeField] bool isPlayerMonster;
+    public bool IsPlayerMonster
+    {
+        get { return isPlayerMonster; }
+    }
 
     public Monster Monster {get; set;} //We create a property to store the monster we created in the setup
 

@@ -44,7 +44,7 @@ public class BattleSystem : MonoBehaviour
     {
         foreach(BattleUnit unit in battleUnits) //set up player
         {
-            if(unit.isPlayerMonster)
+            if(unit.IsPlayerMonster)
             {
                 unit.Setup(playerParty.Monsters[battleUnits.IndexOf(unit)]); //returns monsters at index 0 and 1
                 battleHuds[battleUnits.IndexOf(unit)].SetData(unit.Monster);
@@ -361,7 +361,7 @@ public class BattleSystem : MonoBehaviour
             }
             else
             {
-                if(currentUnit.isPlayerMonster)
+                if(currentUnit.IsPlayerMonster)
                 {
                     Monster incomingMonster = playerParty.Monsters[ selectedSwitch[battleUnits.IndexOf(turnOrder[i])] ];
 
@@ -379,7 +379,7 @@ public class BattleSystem : MonoBehaviour
                     playerParty.SwapPartyPositions(currentMonster, incomingMonster);
                     
                 }
-                else if(!currentUnit.isPlayerMonster)
+                else if(!currentUnit.IsPlayerMonster)
                 {
                     Monster incomingMonster = enemyParty.Monsters[ selectedSwitch[battleUnits.IndexOf(turnOrder[i])] ];
 
@@ -439,7 +439,7 @@ public class BattleSystem : MonoBehaviour
             if(targetMonster.HP <= 0) // check if target is alive
             {
                 FindNewTarget(attackingUnit, ref targetMonster, ref targetHud, ref targetUnit);
-                
+
             }
 
             if(targetMonster == null) //if no new valid target can be found
@@ -472,8 +472,11 @@ public class BattleSystem : MonoBehaviour
             
         }
         //attack phase over
-        selectedMoves.Clear(); //clear move queu
-        selectedTargets.Clear(); //clear target queu
+        selectedMoves.Clear(); 
+        selectedTargets.Clear(); 
+
+
+        //Check for Battle Over
 
         if (faintedUnits.Count > 0)
         {
@@ -489,15 +492,15 @@ public class BattleSystem : MonoBehaviour
             {
                 foreach (BattleUnit faintedUnit in faintedUnits)
                 {
-                    if (faintedUnit.isPlayerMonster && playerParty.CanSwitch())
+                    if (faintedUnit.IsPlayerMonster && playerParty.CanSwitch())
                     {
 
                         yield return FaintedSwitch(faintedUnit);
 
                     }
-                    else if(!faintedUnit.isPlayerMonster && enemyParty.CanSwitch())
+                    else if(!faintedUnit.IsPlayerMonster && enemyParty.CanSwitch())
                     {
-                        EnemyFaintedSwitch(faintedUnit);
+                       yield return EnemyFaintedSwitch(faintedUnit);
                     }
                     else
                     {
@@ -516,7 +519,7 @@ public class BattleSystem : MonoBehaviour
         
     }
 
-    void EnemyFaintedSwitch(BattleUnit faintedUnit)
+    IEnumerator EnemyFaintedSwitch(BattleUnit faintedUnit)
     {
         Monster faintedMonster = faintedUnit.Monster;
         BattleHud faintedtHud = battleHuds[battleUnits.IndexOf(faintedUnit)];
@@ -527,7 +530,7 @@ public class BattleSystem : MonoBehaviour
         faintedUnit.Setup(incomingMonster);
         faintedtHud.SetData(incomingMonster);
         battleDialogueBox.SetMoveNames(incomingMonster.Moves);
-        StartCoroutine(battleDialogueBox.TypeDialog($"Enemy sent out  {incomingMonster.Base.MonsterName}!")); //Dialoge not working
+        yield return battleDialogueBox.TypeDialog($"Enemy sent out  {incomingMonster.Base.MonsterName}!"); 
         selectedSwitch.Clear();
         
         //re-order position in party screen
@@ -569,12 +572,12 @@ public class BattleSystem : MonoBehaviour
     void FindNewTarget(BattleUnit attackingUnit, ref Monster targetMonster, ref BattleHud targetHud, ref BattleUnit targetUnit)
     {
         
-        if (attackingUnit.isPlayerMonster && !targetUnit.isPlayerMonster) //player attacking enemy
+        if (attackingUnit.IsPlayerMonster && !targetUnit.IsPlayerMonster) //player attacking enemy
         {
 
             foreach (BattleUnit unit in battleUnits)
             {
-                if (!unit.isPlayerMonster && unit.Monster.HP > 0)
+                if (!unit.IsPlayerMonster && unit.Monster.HP > 0)
                 {
                     
                     targetUnit = unit;
@@ -592,11 +595,11 @@ public class BattleSystem : MonoBehaviour
             return;
 
         }
-        else if(!attackingUnit.isPlayerMonster && targetUnit.isPlayerMonster) //enemy attacking player
+        else if(!attackingUnit.IsPlayerMonster && targetUnit.IsPlayerMonster) //enemy attacking player
         {
             foreach (BattleUnit unit in battleUnits)
             {
-                if (unit.isPlayerMonster && unit.Monster.HP > 0)
+                if (unit.IsPlayerMonster && unit.Monster.HP > 0)
                 {
                     targetUnit = unit;
                     targetMonster = unit.Monster;
