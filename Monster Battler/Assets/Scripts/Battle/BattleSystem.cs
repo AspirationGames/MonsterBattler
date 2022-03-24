@@ -407,16 +407,23 @@ public class BattleSystem : MonoBehaviour
         {
             BattleUnit attackingUnit = turnOrder[i];
             Monster attackingMonster = attackingUnit.Monster;
-            
+            bool canAttack = attackingMonster.OnBeforeMove();
         
             if(selectedMoves[battleUnits.IndexOf(attackingUnit)] == skipIndex || attackingMonster.HP <= 0) //Skip attack check
             {
                 continue;
             }
+            if(!canAttack)
+            {
+                yield return ShowStatusChanges(attackingMonster);
+                continue;
+            }
+            yield return ShowStatusChanges(attackingMonster); //expirments add a show status change here too for some reason.
             
             Move attackingMove = attackingMonster.Moves[ selectedMoves[battleUnits.IndexOf(attackingUnit)] ]; 
             BattleUnit targetUnit = selectedTargets[battleUnits.IndexOf(attackingUnit)];
             Monster targetMonster = targetUnit.Monster;
+            attackingMove.AP--; 
 
             if(attackingMove.Base.Category == MoveCategory.Status) //If move is a status move
             {
@@ -438,7 +445,7 @@ public class BattleSystem : MonoBehaviour
             }
             else //Perform Attack
             {
-                attackingMove.AP--; 
+
                 yield return battleDialogueBox.TypeDialog
                 ($"{attackingMonster.Base.MonsterName} use {attackingMove.Base.MoveName} on {targetMonster.Base.MonsterName}");
 

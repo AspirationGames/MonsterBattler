@@ -272,6 +272,15 @@ public class Monster
         StatusChangeMessages.Enqueue($"{Base.MonsterName} {Status.StartMessage}");
     }
 
+    public bool OnBeforeMove()
+    {
+       if(Status?.OnBeforeMove != null)
+        {
+            return Status.OnBeforeMove(this); //if the pokemon has a status the OnBeforeMove method will run and deterime if mon can move
+        }
+
+        return true;
+    }
     public void OnAfterTurn()
     {
         Status?.OnAfterTurn?.Invoke(this); //addomg a question mark after action will make sure that on after turn is not null

@@ -11,6 +11,7 @@ public class Condition
 
     public string StartMessage {get; set;}
 
-    public Action<Monster> OnAfterTurn {get; set;}
+    public Func<Monster, bool> OnBeforeMove{get; set;} //works like a method with a specified return type. i.e. bool
+    public Action<Monster> OnAfterTurn {get; set;} //works like a void method
 
 }
