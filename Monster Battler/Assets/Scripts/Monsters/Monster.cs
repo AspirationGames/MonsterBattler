@@ -10,8 +10,8 @@ public class Monster
 
     [SerializeField] Personality personality;
 
-    float personalityStatIncrease = 1.10f;
-    float personalityStatDecrease = 0.90f;
+    const float personalityStatIncrease = 1.10f;
+    const float personalityStatDecrease = 0.90f;
 
     [Header("IVs")]
     [SerializeField][Range(0, 31)] int naturalSkillMaxHP; //IVs
@@ -78,9 +78,73 @@ public class Monster
                 {
                     case Personality.Lonely:
                     case Personality.Brave:
+                    case Personality.Adamant:
+                    case Personality.Naughty:
                         return personalityStatIncrease;
                     case Personality.Bold:
                     case Personality.Timid:
+                    case Personality.Modest:
+                    case Personality.Calm:
+                        return personalityStatDecrease;
+                }
+                break;
+            case Stat.Defense:
+                switch(personality)
+                {
+                    case Personality.Bold:
+                    case Personality.Relaxed:
+                    case Personality.Impish:
+                    case Personality.Lax:
+                        return personalityStatIncrease;
+                    case Personality.Lonely:
+                    case Personality.Hasty:
+                    case Personality.Mild:
+                    case Personality.Gentle:
+                        return personalityStatDecrease;
+                }
+                break;
+            case Stat.SpAttack:
+                switch(personality)
+                {
+                    case Personality.Modest:
+                    case Personality.Mild:
+                    case Personality.Quiet:
+                    case Personality.Rash:
+                        return personalityStatIncrease;
+                    case Personality.Adamant:
+                    case Personality.Impish:
+                    case Personality.Jolly:
+                    case Personality.Careful:
+                        return personalityStatDecrease;
+                }
+                break;
+            case Stat.SpDefense:
+                switch(personality)
+                {
+                    case Personality.Calm:
+                    case Personality.Gentle:
+                    case Personality.Sassy:
+                    case Personality.Careful:
+                        return personalityStatIncrease;
+                    case Personality.Naughty:
+                    case Personality.Lax:
+                    case Personality.Naive:
+                    case Personality.Rash:
+                        return personalityStatDecrease;
+                }
+                break;
+            case Stat.Speed:
+                switch(personality)
+                {
+                    case Personality.Timid:
+                    case Personality.Hasty:
+                    case Personality.Jolly:
+                    case Personality.Naive:
+                        return personalityStatIncrease;
+                    case Personality.Brave:
+                    case Personality.Relaxed:
+                    case Personality.Quiet:
+                    case Personality.Sassy:
                         return personalityStatDecrease;
                 }
                 break;
