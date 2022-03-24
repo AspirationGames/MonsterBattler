@@ -70,7 +70,6 @@ public class BattleSystem : MonoBehaviour
 
     void NewTurn()
     {
-
         turnOrder.Sort(SpeedComparison);
         battleState = BattleState.PlayerAction1; //changing the battle state
         SelectAction();
@@ -451,7 +450,6 @@ public class BattleSystem : MonoBehaviour
                 {
                     yield return battleDialogueBox.TypeDialog($"{targetMonster.Base.MonsterName} fainted");
                     faintedUnits.Add(targetUnit);
-
                 }
             }
 
@@ -463,8 +461,25 @@ public class BattleSystem : MonoBehaviour
         selectedMoves.Clear(); 
         selectedTargets.Clear(); 
 
-        //Check for Battle Over
+        //After Turn Effects
+        foreach(BattleUnit unit in battleUnits)
+        {
+            if(unit.Monster.HP > 0)
+            {
+                unit.Monster.OnAfterTurn();
+                yield return ShowStatusChanges(unit.Monster);
+                yield return unit.Hud.UpdateHP();
 
+                if(unit.Monster.HP <= 0)//if the monster FAINTS
+                {
+                    yield return battleDialogueBox.TypeDialog($"{unit.Monster.Base.MonsterName} fainted");
+                    faintedUnits.Add(unit);
+                }
+            }
+            else continue;
+        }
+
+        //Check for Battle Over
         if (faintedUnits.Count > 0)
         {
             yield return CheckForBattleOver(faintedUnits);
@@ -472,7 +487,7 @@ public class BattleSystem : MonoBehaviour
             
         }
         else
-        {
+        {   
             NewTurn();
         }
         

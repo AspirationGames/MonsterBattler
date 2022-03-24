@@ -49,10 +49,10 @@ public class Monster
     public Dictionary<Stat, int> StatStages {get; private set;} //integer values in this dictionary are between minus 6 and plus 6
     public Queue<string> StatusChangeMessages {get; private set;} = new Queue<string>();
     
-    public Condition status;
-    bool inBattle;
+    public Condition Status{get; private set;}
     public bool InBattle {get; set;} //flag for if monster is actively in battle
-    
+    public bool HpChanged {get; set;}
+
 
     public void Init() //this method creates our pokemon
     {
@@ -268,8 +268,13 @@ public class Monster
 
     public void SetStatus(ConditionID conditionID)
     {
-        status = ConditionsDB.Conditions[conditionID];
-        StatusChangeMessages.Enqueue($"{Base.MonsterName} {status.StartMessage}");
+        Status = ConditionsDB.Conditions[conditionID];
+        StatusChangeMessages.Enqueue($"{Base.MonsterName} {Status.StartMessage}");
+    }
+
+    public void OnAfterTurn()
+    {
+        Status?.OnAfterTurn?.Invoke(this); //addomg a question mark after action will make sure that on after turn is not null
     }
 
     
@@ -328,17 +333,17 @@ public class Monster
 
         
 
-        HP -= damage;
-        if(HP <= 0)
-        {
-            HP = 0;
-            damageDetails.Fainted = true;
-            
-        }
+        UpdateHP(damage);
         
         return damageDetails;
 
         
+    }
+
+    public void UpdateHP(int damage)
+    {
+        HP = Mathf.Clamp(HP - damage, 0, MaxHP);
+        HpChanged = true;
     }
 
     public void OnBattleOver() //used to reset values after battle is over
