@@ -5421,46 +5421,46 @@ MonoBehaviour:
     personality: 2
     naturalSkillMaxHP: 31
     naturalSkillAttack: 31
-    naturalSkillDefense: 0
-    naturalSkillSpAttack: 0
-    naturalSkillSpDefense: 0
-    naturalSkillSpeed: 0
-    developedSkillMaxHP: 252
+    naturalSkillDefense: 31
+    naturalSkillSpAttack: 31
+    naturalSkillSpDefense: 31
+    naturalSkillSpeed: 31
+    developedSkillMaxHP: 4
     developedSkillAttack: 252
     developedSkillDefense: 0
     developedSkillSpAttack: 0
     developedSkillSpDefense: 0
-    developedSkillSpeed: 0
+    developedSkillSpeed: 252
   - _base: {fileID: 11400000, guid: 57d0a29cc67460745b766488d455f982, type: 2}
     level: 5
-    personality: 0
-    naturalSkillMaxHP: 0
-    naturalSkillAttack: 0
-    naturalSkillDefense: 0
-    naturalSkillSpAttack: 0
-    naturalSkillSpDefense: 0
-    naturalSkillSpeed: 0
-    developedSkillMaxHP: 0
+    personality: 15
+    naturalSkillMaxHP: 31
+    naturalSkillAttack: 31
+    naturalSkillDefense: 31
+    naturalSkillSpAttack: 31
+    naturalSkillSpDefense: 31
+    naturalSkillSpeed: 31
+    developedSkillMaxHP: 4
     developedSkillAttack: 0
     developedSkillDefense: 0
-    developedSkillSpAttack: 0
+    developedSkillSpAttack: 252
     developedSkillSpDefense: 0
-    developedSkillSpeed: 0
+    developedSkillSpeed: 252
   - _base: {fileID: 11400000, guid: e517362a48ec6f24da07555dc4a1f493, type: 2}
     level: 5
-    personality: 0
-    naturalSkillMaxHP: 0
-    naturalSkillAttack: 0
-    naturalSkillDefense: 0
-    naturalSkillSpAttack: 0
-    naturalSkillSpDefense: 0
-    naturalSkillSpeed: 0
-    developedSkillMaxHP: 0
+    personality: 2
+    naturalSkillMaxHP: 31
+    naturalSkillAttack: 31
+    naturalSkillDefense: 31
+    naturalSkillSpAttack: 31
+    naturalSkillSpDefense: 31
+    naturalSkillSpeed: 4
+    developedSkillMaxHP: 252
     developedSkillAttack: 0
     developedSkillDefense: 0
     developedSkillSpAttack: 0
     developedSkillSpDefense: 0
-    developedSkillSpeed: 0
+    developedSkillSpeed: 252
 --- !u!4 &1844712394
 Transform:
   m_ObjectHideFlags: 0
@@ -5508,28 +5508,28 @@ MonoBehaviour:
   monsters:
   - _base: {fileID: 11400000, guid: 424fb588cf7627c4f9b0c80bc5b7d64f, type: 2}
     level: 5
-    personality: 0
-    naturalSkillMaxHP: 0
-    naturalSkillAttack: 0
-    naturalSkillDefense: 0
-    naturalSkillSpAttack: 0
-    naturalSkillSpDefense: 0
-    naturalSkillSpeed: 0
+    personality: 3
+    naturalSkillMaxHP: 31
+    naturalSkillAttack: 31
+    naturalSkillDefense: 31
+    naturalSkillSpAttack: 31
+    naturalSkillSpDefense: 31
+    naturalSkillSpeed: 31
     developedSkillMaxHP: 0
-    developedSkillAttack: 0
+    developedSkillAttack: 252
     developedSkillDefense: 0
     developedSkillSpAttack: 0
     developedSkillSpDefense: 0
-    developedSkillSpeed: 0
+    developedSkillSpeed: 252
   - _base: {fileID: 11400000, guid: d63bf37dc82034448bb8d1234f4d8a31, type: 2}
     level: 5
-    personality: 0
-    naturalSkillMaxHP: 0
-    naturalSkillAttack: 0
-    naturalSkillDefense: 0
-    naturalSkillSpAttack: 0
-    naturalSkillSpDefense: 0
-    naturalSkillSpeed: 0
+    personality: 4
+    naturalSkillMaxHP: 31
+    naturalSkillAttack: 31
+    naturalSkillDefense: 31
+    naturalSkillSpAttack: 31
+    naturalSkillSpDefense: 31
+    naturalSkillSpeed: 4
     developedSkillMaxHP: 0
     developedSkillAttack: 0
     developedSkillDefense: 0
@@ -5538,34 +5538,34 @@ MonoBehaviour:
     developedSkillSpeed: 0
   - _base: {fileID: 11400000, guid: 149c32699cedbe04c8af6b598da1c975, type: 2}
     level: 5
-    personality: 0
-    naturalSkillMaxHP: 0
-    naturalSkillAttack: 0
-    naturalSkillDefense: 0
-    naturalSkillSpAttack: 0
-    naturalSkillSpDefense: 0
-    naturalSkillSpeed: 0
-    developedSkillMaxHP: 0
-    developedSkillAttack: 0
+    personality: 10
+    naturalSkillMaxHP: 31
+    naturalSkillAttack: 31
+    naturalSkillDefense: 31
+    naturalSkillSpAttack: 31
+    naturalSkillSpDefense: 31
+    naturalSkillSpeed: 31
+    developedSkillMaxHP: 4
+    developedSkillAttack: 252
     developedSkillDefense: 0
     developedSkillSpAttack: 0
     developedSkillSpDefense: 0
-    developedSkillSpeed: 0
+    developedSkillSpeed: 252
   - _base: {fileID: 11400000, guid: 57d0a29cc67460745b766488d455f982, type: 2}
     level: 5
     personality: 0
-    naturalSkillMaxHP: 0
-    naturalSkillAttack: 0
-    naturalSkillDefense: 0
-    naturalSkillSpAttack: 0
-    naturalSkillSpDefense: 0
-    naturalSkillSpeed: 0
-    developedSkillMaxHP: 0
+    naturalSkillMaxHP: 31
+    naturalSkillAttack: 31
+    naturalSkillDefense: 31
+    naturalSkillSpAttack: 31
+    naturalSkillSpDefense: 31
+    naturalSkillSpeed: 31
+    developedSkillMaxHP: 252
     developedSkillAttack: 0
     developedSkillDefense: 0
-    developedSkillSpAttack: 0
+    developedSkillSpAttack: 252
     developedSkillSpDefense: 0
-    developedSkillSpeed: 0
+    developedSkillSpeed: 4
 --- !u!4 &1891973317
 Transform:
   m_ObjectHideFlags: 0

@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3fee88d74ad48c46bf8e228de80dbab, type: 3}
   m_Name: PoisonPowder
   m_EditorClassIdentifier: 
-  moveName: 
+  moveName: Poison Powder
   description: 
-  type: 0
+  type: 2
   power: 0
-  accuracy: 0
-  ap: 0
-  category: 0
+  accuracy: 95
+  ap: 15
+  category: 2
   effects:
     stageChange: []
-    statusEffect: 0
+    statusEffect: 1
   target: 0

@@ -15,7 +15,11 @@ MonoBehaviour:
   moveName: Water Gun
   description: 
   type: 4
-  isSpecial: 1
   power: 45
   accuracy: 100
-  ap: 0
+  ap: 25
+  category: 1
+  effects:
+    stageChange: []
+    statusEffect: 0
+  target: 0

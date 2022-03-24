@@ -15,7 +15,11 @@ MonoBehaviour:
   moveName: Ember
   description: 
   type: 3
-  isSpecial: 0
   power: 45
   accuracy: 100
-  pp: 20
+  ap: 25
+  category: 1
+  effects:
+    stageChange: []
+    statusEffect: 0
+  target: 0

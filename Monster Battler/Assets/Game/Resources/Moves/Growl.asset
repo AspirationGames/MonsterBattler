@@ -15,7 +15,13 @@ MonoBehaviour:
   moveName: Growl
   description: 
   type: 1
-  isSpecial: 0
   power: 0
   accuracy: 100
-  pp: 20
+  ap: 30
+  category: 2
+  effects:
+    stageChange:
+    - stat: 1
+      stage: -1
+    statusEffect: 0
+  target: 0
