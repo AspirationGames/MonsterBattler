@@ -50,6 +50,7 @@ public class Monster
     public Queue<string> StatusChangeMessages {get; private set;} = new Queue<string>();
     
     public Condition Status{get; private set;}
+    public int StatusTime{get; set;}
     public bool InBattle {get; set;} //flag for if monster is actively in battle
     public bool HpChanged {get; set;}
 
@@ -269,7 +270,13 @@ public class Monster
     public void SetStatus(ConditionID conditionID)
     {
         Status = ConditionsDB.Conditions[conditionID];
+        Status?.OnStart?.Invoke(this); //if the status has an on start method we will call it i.e. sleep
         StatusChangeMessages.Enqueue($"{Base.MonsterName} {Status.StartMessage}");
+    }
+
+    public void CureStatus()
+    {
+        Status = null;
     }
 
     public bool OnBeforeMove()

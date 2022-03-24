@@ -41,15 +41,22 @@ public class ConditionsDB
                 Name = "Sleep",
                 Description = "Puts the target to sleep",
                 StartMessage = "fell asleep.",
+                OnStart = (Monster monster) =>
+                {
+                    monster.StatusTime = Random.Range(1,3);
+                    Debug.Log($"Monster will be asleep for {monster.StatusTime} turns");
+                },
                 OnBeforeMove = (Monster monster) =>
                 {
-                    if (Random.Range(1, 5) == 1) //monster can't move
+                    if(monster.StatusTime == 0)
                     {
-                        monster.StatusChangeMessages.Enqueue($"{monster.Base.MonsterName} is fast asleep.");
-                        return false;
+                        monster.CureStatus();
+                        monster.StatusChangeMessages.Enqueue($"{monster.Base.MonsterName} woke up!");
+                        return true;
                     }
-
-                    return true;
+                    monster.StatusTime--; //since this is called each turn we are decrementing our timer for sleep
+                    monster.StatusChangeMessages.Enqueue($"{monster.Base.MonsterName} is fast asleep.");
+                    return false;
                 }
             }
         },
@@ -59,7 +66,7 @@ public class ConditionsDB
             {
                 Name = "Paralyze",
                 Description = "Paralyzes the target",
-                StartMessage = "was Paralyzed",
+                StartMessage = "was Paralyzed.",
                 OnBeforeMove = (Monster monster) =>
                 {
                     if (Random.Range(1, 5) == 1) //monster can't move
@@ -69,6 +76,26 @@ public class ConditionsDB
                     }
 
                     return true;
+                }
+            }
+        },
+        {   //Freeze
+            ConditionID.frz, 
+            new Condition()
+            {
+                Name = "Freeze",
+                Description = "Freezes the target",
+                StartMessage = "was Frozen.",
+                OnBeforeMove = (Monster monster) =>
+                {
+                    if (Random.Range(1, 5) == 1)
+                    {
+                        monster.CureStatus();
+                        monster.StatusChangeMessages.Enqueue($"{monster.Base.MonsterName} thawed out");
+                        return true;
+                    }
+
+                    return false;
                 }
             }
         }
