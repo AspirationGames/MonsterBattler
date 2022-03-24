@@ -46,8 +46,11 @@ public class Monster
     public int HP {get; set;} //our monsters current HP, we are using a property
     public List<Move> Moves{ get; set;} //we are using a property for the moves
     public Dictionary<Stat, int> Stats {get; private set;} //we can get stats publically but only set stats in the monster class
+    public Dictionary<Stat, int> StatStages {get; private set;} //integer values in this dictionary are between minus 6 and plus 6
+    public Queue<string> StatusChangeMessages {get; private set;} = new Queue<string>();
     bool inBattle;
     public bool InBattle {get; set;} //flag for if monster is actively in battle
+    
 
     public void Init() //this method creates our pokemon
     {
@@ -67,6 +70,9 @@ public class Monster
 
         CalculateStats();
         HP = MaxHP;
+
+        ResetStatStages();
+        
     }
 
     float PersonalityValue(Stat stat)
@@ -210,13 +216,52 @@ public class Monster
 
     }
 
+    void ResetStatStages()
+    {
+        StatStages = new Dictionary<Stat, int>()
+        {
+            {Stat.Attack, 0},
+            {Stat.Defense, 0},
+            {Stat.SpAttack, 0},
+            {Stat.SpDefense, 0},
+            {Stat.Speed, 0}
+        };
+    }
+
     int GetStat(Stat stat)
     {
        int statValue = Stats[stat];
 
-       // TODO: Apply stat boost
+       int statStage = StatStages[stat];
+       var stageModifiers = new float[] {1f, 1.5f, 2f, 2.5f, 3f, 3.5f, 4f}; //note that decreases are divided and boost are multiplies)
+
+       if(statStage >= 0)
+       {
+            statValue = Mathf.FloorToInt(statValue * stageModifiers[statStage]);    
+       }
+       else if(statStage <0 )
+       {
+           statValue = Mathf.FloorToInt(statValue / stageModifiers[-statStage]);//stat stage is negative so we negate in order to have valid index
+       }
 
        return statValue; 
+    }
+
+    public void ApplyStageChange(List<StatStageChange> stageChanges)
+    {
+        foreach(StatStageChange stageChange in stageChanges)
+        {
+           var stat = stageChange.stat;
+           var stage = stageChange.stage;
+
+           StatStages[stat] = Mathf.Clamp(StatStages[stat] + stage, -6, 6); //applies stage change to current StatStages
+
+           if(stage > 0) StatusChangeMessages.Enqueue($"{Base.MonsterName}'s {stat} increased!");
+           else if(stage < 0) StatusChangeMessages.Enqueue($"{Base.MonsterName}'s {stat} fell!");
+
+
+        }
+        
     }
 
     
@@ -265,8 +310,8 @@ public class Monster
             
         };
 
-        float attack = (move.Base.IsSpecial) ? attacker.SpAttack : attacker.Attack; //checks to see if move is special to determine attack type. This is a shorthand if statement
-        float defense = (move.Base.IsSpecial)? SpDefense : Defense;
+        float attack = (move.Base.Category == MoveCategory.Special) ? attacker.SpAttack : attacker.Attack; //checks to see if move is special to determine attack type. This is a shorthand if statement
+        float defense = (move.Base.Category == MoveCategory.Special)? SpDefense : Defense;
 
         float modifiers = Random.Range(0.85f, 1f) * typeEffectiveness * critical * stab;
         float a = (2*attacker.Level + 10)/ 250f;
@@ -286,6 +331,11 @@ public class Monster
         return damageDetails;
 
         
+    }
+
+    public void OnBattleOver() //used to reset values after battle is over
+    {
+        ResetStatStages();
     }
 }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public enum BattleState 
-{PlayerAction1, PlayerAction2, PlayerMove1, PlayerMove2, PlayerTarget1, PlayerTarget2, PlayerSwitch1, PlayerSwitch2, EnemyAction1, EnemyAction2, Busy, PlayerFaintedSwitching}
+{PlayerAction1, PlayerAction2, PlayerMove1, PlayerMove2, PlayerTarget1, PlayerTarget2, PlayerSwitch1, PlayerSwitch2, EnemyAction1, EnemyAction2, Busy, PlayerFaintedSwitching, BattleOver}
 public class BattleSystem : MonoBehaviour
 {
     [SerializeField] List<BattleUnit> battleUnits;
@@ -91,8 +91,6 @@ public class BattleSystem : MonoBehaviour
 
    void SelectAction()
     {
-        Debug.Log(battleUnits[0].Monster.Attack);
-        Debug.Log(battleUnits[0].Monster.HP);
 
         StartCoroutine(battleDialogueBox.TypeDialog("What will you do?"));
         battleDialogueBox.EnableActionSelector(true);
@@ -416,17 +414,20 @@ public class BattleSystem : MonoBehaviour
             {
                 continue;
             }
-
-                
+            
             Move attackingMove = attackingMonster.Moves[ selectedMoves[battleUnits.IndexOf(attackingUnit)] ]; 
-            //targets
             BattleUnit targetUnit = selectedTargets[battleUnits.IndexOf(attackingUnit)];
             Monster targetMonster = targetUnit.Monster;
+
+            if(attackingMove.Base.Category == MoveCategory.Status) //If move is a status move
+            {
+                yield return PerformStatusMove(attackingMove, attackingMonster, targetMonster);
+                continue;
+            }
 
             if(targetMonster.HP <= 0) // check if target is alive
             {
                 FindNewTarget(attackingUnit, ref targetMonster, ref targetUnit);
-
             }
 
             if(targetMonster == null) //if no new valid target can be found
@@ -446,7 +447,7 @@ public class BattleSystem : MonoBehaviour
                 yield return targetUnit.Hud.UpdateHP();
                 yield return ShowDamageDetails(damageDetails);
 
-                if(damageDetails.Fainted)//if the monster FAINTS
+                if(targetUnit.Monster.HP <= 0)//if the monster FAINTS
                 {
                     yield return battleDialogueBox.TypeDialog($"{targetMonster.Base.MonsterName} fainted");
                     faintedUnits.Add(targetUnit);
@@ -476,6 +477,37 @@ public class BattleSystem : MonoBehaviour
         }
         
         
+    }
+
+    IEnumerator PerformStatusMove(Move attackingMove, Monster attackingMonster, Monster targetMonster)
+    {
+        var effects = attackingMove.Base.Effects;
+                if(effects != null)
+                {
+                    if(attackingMove.Base.Target == MoveTarget.Self)
+                    {
+                        yield return battleDialogueBox.TypeDialog
+                        ($"{attackingMonster.Base.MonsterName} use {attackingMove.Base.MoveName}");
+                        attackingMonster.ApplyStageChange(effects.StageChanges);
+                        yield return ShowStatusChanges(attackingMonster);
+                    }
+                    else
+                    {
+                        yield return battleDialogueBox.TypeDialog
+                        ($"{attackingMonster.Base.MonsterName} use {attackingMove.Base.MoveName}");
+                        targetMonster.ApplyStageChange(effects.StageChanges);
+                        yield return ShowStatusChanges(targetMonster);
+                    }
+                }
+    }
+
+    IEnumerator ShowStatusChanges(Monster monster)
+    {
+        while (monster.StatusChangeMessages.Count > 0)
+        {
+            var message = monster.StatusChangeMessages.Dequeue(); //takes message from Queue
+            yield return battleDialogueBox.TypeDialog(message);
+        }
     }
 
     IEnumerator CheckForBattleOver(List<BattleUnit> faintedUnits)
@@ -622,7 +654,13 @@ public class BattleSystem : MonoBehaviour
     }
     
 
-    
+    void BattleOver(bool won)
+    {
+        battleState = BattleState.BattleOver;
+        playerParty.Monsters.ForEach(m => m.OnBattleOver()); //rests for each monster in party
+        //OnBattleOver(won);
+
+    }
 
     
 

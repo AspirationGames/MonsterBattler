@@ -7,16 +7,20 @@ public class MoveBase : ScriptableObject
 {
      [Header("General")]
     [SerializeField] string moveName;
-    
+
     [TextArea]
     [SerializeField] string description;
     [SerializeField] MonsterType type;
-    [SerializeField] bool isSpecial;
 
     [Header("Stats")]
     [SerializeField] int power;
     [SerializeField] int accuracy;
     [SerializeField] int ap;
+    [SerializeField] MoveCategory category;
+    [SerializeField] MoveEffects effects;
+    [SerializeField] MoveTarget target;
+
+    
 
     //Properties
     public string MoveName
@@ -40,14 +44,6 @@ public class MoveBase : ScriptableObject
         {
             return type;
         }
-    }
-    public bool IsSpecial
-    {
-        get
-        {
-            return isSpecial;
-        }
-        
     }
     public int Power
     {
@@ -73,5 +69,57 @@ public class MoveBase : ScriptableObject
         }
     
     }
+    public MoveCategory Category
+    {
+        get
+        {
+            return category;
+        }
+    }
+
+    public MoveEffects Effects
+    {
+        get
+        {
+            return effects;
+        }
+    }
+
+    public MoveTarget Target 
+    {
+        get {return target;}
+    }
 
 }
+
+[System.Serializable]
+    public class MoveEffects
+    {
+        [SerializeField] List<StatStageChange> stageChange;
+
+        public List<StatStageChange> StageChanges
+        {
+            get{return stageChange;}
+        }
+
+    }
+
+    [System.Serializable]
+    public class StatStageChange
+    {
+        public Stat stat;
+        public int stage;
+    }
+
+    public enum MoveCategory
+    {
+        Physical,
+        Special,
+        Status
+
+    }
+
+    public enum MoveTarget
+    {
+        Enemy, Self
+    }
