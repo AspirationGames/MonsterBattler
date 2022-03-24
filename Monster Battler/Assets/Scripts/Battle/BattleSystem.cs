@@ -421,7 +421,7 @@ public class BattleSystem : MonoBehaviour
 
             if(attackingMove.Base.Category == MoveCategory.Status) //If move is a status move
             {
-                yield return PerformStatusMove(attackingMove, attackingMonster, targetMonster);
+                yield return PerformEffects(attackingMove, attackingMonster, targetMonster);
                 continue;
             }
 
@@ -479,26 +479,31 @@ public class BattleSystem : MonoBehaviour
         
     }
 
-    IEnumerator PerformStatusMove(Move attackingMove, Monster attackingMonster, Monster targetMonster)
+    IEnumerator PerformEffects(Move attackingMove, Monster attackingMonster, Monster targetMonster)
     {
+        yield return battleDialogueBox.TypeDialog
+        ($"{attackingMonster.Base.MonsterName} use {attackingMove.Base.MoveName}");
+        
         var effects = attackingMove.Base.Effects;
-                if(effects != null)
+                if(effects.StageChanges != null)
                 {
                     if(attackingMove.Base.Target == MoveTarget.Self)
                     {
-                        yield return battleDialogueBox.TypeDialog
-                        ($"{attackingMonster.Base.MonsterName} use {attackingMove.Base.MoveName}");
                         attackingMonster.ApplyStageChange(effects.StageChanges);
                         yield return ShowStatusChanges(attackingMonster);
                     }
                     else
                     {
-                        yield return battleDialogueBox.TypeDialog
-                        ($"{attackingMonster.Base.MonsterName} use {attackingMove.Base.MoveName}");
                         targetMonster.ApplyStageChange(effects.StageChanges);
                         yield return ShowStatusChanges(targetMonster);
                     }
                 }
+                if(effects.StatusEffect != ConditionID.none)
+                {
+                    targetMonster.SetStatus(effects.StatusEffect);
+                    yield return ShowStatusChanges(targetMonster);
+                }
+
     }
 
     IEnumerator ShowStatusChanges(Monster monster)

@@ -96,10 +96,16 @@ public class MoveBase : ScriptableObject
     public class MoveEffects
     {
         [SerializeField] List<StatStageChange> stageChange;
+        [SerializeField] ConditionID statusEffect;
 
         public List<StatStageChange> StageChanges
         {
             get{return stageChange;}
+        }
+
+        public ConditionID StatusEffect
+        {
+            get{return statusEffect;}
         }
 
     }

@@ -48,6 +48,8 @@ public class Monster
     public Dictionary<Stat, int> Stats {get; private set;} //we can get stats publically but only set stats in the monster class
     public Dictionary<Stat, int> StatStages {get; private set;} //integer values in this dictionary are between minus 6 and plus 6
     public Queue<string> StatusChangeMessages {get; private set;} = new Queue<string>();
+    
+    public Condition status;
     bool inBattle;
     public bool InBattle {get; set;} //flag for if monster is actively in battle
     
@@ -262,6 +264,12 @@ public class Monster
 
         }
         
+    }
+
+    public void SetStatus(ConditionID conditionID)
+    {
+        status = ConditionsDB.Conditions[conditionID];
+        StatusChangeMessages.Enqueue($"{Base.MonsterName} {status.StartMessage}");
     }
 
     
