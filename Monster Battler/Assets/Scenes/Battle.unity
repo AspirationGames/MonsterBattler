@@ -5475,6 +5475,21 @@ MonoBehaviour:
     developedSkillSpAttack: 0
     developedSkillSpDefense: 0
     developedSkillSpeed: 252
+  - _base: {fileID: 11400000, guid: 424fb588cf7627c4f9b0c80bc5b7d64f, type: 2}
+    level: 5
+    personality: 2
+    naturalSkillMaxHP: 31
+    naturalSkillAttack: 31
+    naturalSkillDefense: 31
+    naturalSkillSpAttack: 31
+    naturalSkillSpDefense: 31
+    naturalSkillSpeed: 4
+    developedSkillMaxHP: 252
+    developedSkillAttack: 0
+    developedSkillDefense: 0
+    developedSkillSpAttack: 0
+    developedSkillSpDefense: 0
+    developedSkillSpeed: 252
   - _base: {fileID: 11400000, guid: 57d0a29cc67460745b766488d455f982, type: 2}
     level: 5
     personality: 15
@@ -5558,13 +5573,13 @@ MonoBehaviour:
     naturalSkillDefense: 31
     naturalSkillSpAttack: 31
     naturalSkillSpDefense: 31
-    naturalSkillSpeed: 31
-    developedSkillMaxHP: 0
+    naturalSkillSpeed: 0
+    developedSkillMaxHP: 252
     developedSkillAttack: 252
     developedSkillDefense: 0
     developedSkillSpAttack: 0
     developedSkillSpDefense: 0
-    developedSkillSpeed: 252
+    developedSkillSpeed: 0
   - _base: {fileID: 11400000, guid: d63bf37dc82034448bb8d1234f4d8a31, type: 2}
     level: 5
     personality: 4

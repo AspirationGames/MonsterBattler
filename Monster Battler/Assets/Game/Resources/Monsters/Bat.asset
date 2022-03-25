@@ -15,7 +15,7 @@ MonoBehaviour:
   monsterName: Bat
   description: 
   frontSprite: {fileID: 21300000, guid: 69dfeacba8fdfa04aa7f59dc45b2f70f, type: 3}
-  backSprite: {fileID: 0}
+  backSprite: {fileID: 21300000, guid: 11853c6ea6bbb9e46ac5a65759fdf0a2, type: 3}
   type1: 9
   type2: 5
   maxHP: 40
@@ -31,3 +31,5 @@ MonoBehaviour:
     moveLevel: 1
   - moveBase: {fileID: 11400000, guid: 74049db940c3af84eafff293f604b0e0, type: 2}
     moveLevel: 4
+  - moveBase: {fileID: 11400000, guid: 8d4798b4b683e4242bb2b08462595eec, type: 2}
+    moveLevel: 5

@@ -16,10 +16,12 @@ MonoBehaviour:
   description: 
   type: 0
   power: 0
-  accuracy: 95
+  accuracy: 75
+  alwaysHits: 0
   ap: 15
   category: 2
   effects:
     stageChange: []
     statusEffect: 3
+    volatileStatusEffect: 0
   target: 0

@@ -15,6 +15,7 @@ public class MoveBase : ScriptableObject
     [Header("Stats")]
     [SerializeField] int power;
     [SerializeField] int accuracy;
+    [SerializeField] bool alwaysHits;
     [SerializeField] int ap;
     [SerializeField] MoveCategory category;
     [SerializeField] MoveEffects effects;
@@ -58,6 +59,15 @@ public class MoveBase : ScriptableObject
         get
         {
             return accuracy;
+        }
+    
+    }
+
+    public bool AlwaysHits
+    {
+        get
+        {
+            return alwaysHits;
         }
     
     }

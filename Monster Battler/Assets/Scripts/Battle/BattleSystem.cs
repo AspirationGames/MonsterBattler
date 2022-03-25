@@ -425,11 +425,6 @@ public class BattleSystem : MonoBehaviour
             Monster targetMonster = targetUnit.Monster;
             attackingMove.AP--; 
 
-            if(attackingMove.Base.Category == MoveCategory.Status) //If move is a status move
-            {
-                yield return PerformEffects(attackingMove, attackingMonster, targetMonster);
-                continue;
-            }
 
             if(targetMonster.HP <= 0) // check if target is alive
             {
@@ -443,26 +438,40 @@ public class BattleSystem : MonoBehaviour
                 yield return battleDialogueBox.TypeDialog
                 ("But it Failed");
             }
+
+
             else //Perform Attack
             {
 
                 yield return battleDialogueBox.TypeDialog
                 ($"{attackingMonster.Base.MonsterName} use {attackingMove.Base.MoveName} on {targetMonster.Base.MonsterName}");
-
-                var damageDetails = targetMonster.TakeDamage(attackingMove, attackingMonster);
-                yield return targetUnit.Hud.UpdateHP();
-                yield return ShowDamageDetails(damageDetails);
-
-                if(targetUnit.Monster.HP <= 0)//if the monster FAINTS
+                
+                if(AccuracyCheck(attackingMove, attackingMonster, targetMonster)) //accuracy check
                 {
+                    if(attackingMove.Base.Category == MoveCategory.Status) //If move is a status move
+                    {
+                        yield return PerformEffects(attackingMove, attackingMonster, targetMonster);
+                        continue;
+                    }
+
+                    var damageDetails = targetMonster.TakeDamage(attackingMove, attackingMonster);
+                    yield return targetUnit.Hud.UpdateHP();
+                    yield return ShowDamageDetails(damageDetails);
+
+                    if(targetUnit.Monster.HP <= 0)//if the monster FAINTS
+                    {
                     yield return battleDialogueBox.TypeDialog($"{targetMonster.Base.MonsterName} fainted");
                     faintedUnits.Add(targetUnit);
+                    }
                 }
+                else //attack missed
+                {
+                    yield return battleDialogueBox.TypeDialog($"but it missed!");
+
+                }
+   
             }
-
-
-            
-            
+                
         }
         //attack phase over
         selectedMoves.Clear(); 
@@ -501,10 +510,50 @@ public class BattleSystem : MonoBehaviour
         
     }
 
+    bool AccuracyCheck(Move attackingMove, Monster attackingMonster, Monster targetMonster)
+    {   
+
+        if(attackingMove.Base.AlwaysHits)
+        {
+            return true;
+        }
+        
+        int requiredAccuracy = UnityEngine.Random.Range(1, 101);
+        float moveAccuracy = attackingMove.Base.Accuracy;
+        int accuracyStage = attackingMonster.StatStages[Stat.Accuracy];
+        int evasionStage = targetMonster.StatStages[Stat.Evasion];
+
+
+        var stageModifiers = new float[] {1f, 1.5f, 2f, 2.5f, 3f, 3.5f, 4f};
+
+        //Accuracy Stage Modifiers
+        if(accuracyStage > 0)
+        {
+            moveAccuracy *= stageModifiers[accuracyStage];
+            
+        }
+        else if(accuracyStage < 0)
+        {
+            moveAccuracy /= stageModifiers[-accuracyStage];
+            
+        }
+        //Evasion Stage Modifiers
+        if(evasionStage > 0)
+        {
+            moveAccuracy /= stageModifiers[evasionStage];
+        }
+        else if(accuracyStage < 0)
+        {
+            moveAccuracy *= stageModifiers[-evasionStage];
+        }
+        
+
+        return moveAccuracy >= requiredAccuracy; 
+
+    }
+
     IEnumerator PerformEffects(Move attackingMove, Monster attackingMonster, Monster targetMonster)
     {
-        yield return battleDialogueBox.TypeDialog
-        ($"{attackingMonster.Base.MonsterName} use {attackingMove.Base.MoveName}");
         
         var effects = attackingMove.Base.Effects;
                 if(effects.StageChanges != null) //stat change effects

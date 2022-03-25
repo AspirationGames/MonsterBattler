@@ -81,6 +81,8 @@ public class Monster
         HP = MaxHP;
 
         ResetStatStages();
+        Status = null;
+        VolatileStatus = null;
         
     }
 
@@ -233,7 +235,9 @@ public class Monster
             {Stat.Defense, 0},
             {Stat.SpAttack, 0},
             {Stat.SpDefense, 0},
-            {Stat.Speed, 0}
+            {Stat.Speed, 0},
+            {Stat.Accuracy, 0},
+            {Stat.Evasion, 0}
         };
     }
 
@@ -248,7 +252,7 @@ public class Monster
        {
             statValue = Mathf.FloorToInt(statValue * stageModifiers[statStage]);    
        }
-       else if(statStage <0 )
+       else if(statStage < 0 )
        {
            statValue = Mathf.FloorToInt(statValue / stageModifiers[-statStage]);//stat stage is negative so we negate in order to have valid index
        }

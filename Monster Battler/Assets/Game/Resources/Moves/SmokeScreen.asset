@@ -10,18 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d3fee88d74ad48c46bf8e228de80dbab, type: 3}
-  m_Name: SuperSonic
+  m_Name: SmokeScreen
   m_EditorClassIdentifier: 
-  moveName: Super Sonic
+  moveName: SmokeScreen
   description: 
   type: 1
   power: 0
-  accuracy: 55
+  accuracy: 100
   alwaysHits: 0
   ap: 15
   category: 2
   effects:
-    stageChange: []
+    stageChange:
+    - stat: 5
+      stage: -1
     statusEffect: 0
-    volatileStatusEffect: 6
+    volatileStatusEffect: 0
   target: 0

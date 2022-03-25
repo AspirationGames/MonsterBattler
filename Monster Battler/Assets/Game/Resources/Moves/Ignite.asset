@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d3fee88d74ad48c46bf8e228de80dbab, type: 3}
-  m_Name: SuperSonic
+  m_Name: Ignite
   m_EditorClassIdentifier: 
-  moveName: Super Sonic
-  description: 
-  type: 1
+  moveName: Ignite
+  description: burns the target
+  type: 0
   power: 0
-  accuracy: 55
+  accuracy: 75
   alwaysHits: 0
   ap: 15
   category: 2
   effects:
     stageChange: []
-    statusEffect: 0
-    volatileStatusEffect: 6
+    statusEffect: 2
+    volatileStatusEffect: 0
   target: 0

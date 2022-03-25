@@ -168,12 +168,15 @@ public enum MonsterType
 
 public enum Stat
 {
-    HP,
     Attack,
     Defense,
     SpAttack,
     SpDefense,
-    Speed
+    Speed, 
+
+    // Accuracy Related Stats
+    Accuracy,
+    Evasion,
 }
 
 public enum Personality

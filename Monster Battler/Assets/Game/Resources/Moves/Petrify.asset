@@ -16,10 +16,12 @@ MonoBehaviour:
   description: Paralyzes the target with fear
   type: 6
   power: 0
-  accuracy: 95
+  accuracy: 100
+  alwaysHits: 0
   ap: 15
   category: 2
   effects:
     stageChange: []
     statusEffect: 4
+    volatileStatusEffect: 0
   target: 0
