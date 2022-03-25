@@ -507,9 +507,9 @@ public class BattleSystem : MonoBehaviour
         ($"{attackingMonster.Base.MonsterName} use {attackingMove.Base.MoveName}");
         
         var effects = attackingMove.Base.Effects;
-                if(effects.StageChanges != null)
+                if(effects.StageChanges != null) //stat change effects
                 {
-                    if(attackingMove.Base.Target == MoveTarget.Self)
+                    if(attackingMove.Base.Target == MoveTarget.Self) //self inflicted stagechange
                     {
                         attackingMonster.ApplyStageChange(effects.StageChanges);
                         yield return StatusChangeDialog(attackingMonster);
@@ -520,9 +520,14 @@ public class BattleSystem : MonoBehaviour
                         yield return StatusChangeDialog(targetMonster);
                     }
                 }
-                if(effects.StatusEffect != ConditionID.none)
+                if(effects.StatusEffect != ConditionID.none) //status effects
                 {
                     targetMonster.SetStatus(effects.StatusEffect);
+                    yield return StatusChangeDialog(targetMonster);
+                }
+                if(effects.VolatileStatusEffect != ConditionID.none)
+                {
+                    targetMonster.SetVolatileStatus(effects.VolatileStatusEffect);
                     yield return StatusChangeDialog(targetMonster);
                 }
 

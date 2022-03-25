@@ -30,7 +30,7 @@ public class ConditionsDB
                 }
             }
         },
-        {   //Burn
+        {   //Burn NEED TO ADD ATTACK DROP
             ConditionID.brn, 
             new Condition()
             {
@@ -44,7 +44,7 @@ public class ConditionsDB
                 }
             }
         },
-        {   //Sleep NEEDS TO BE CORRECTED
+        {   //Sleep
             ConditionID.slp, 
             new Condition()
             {
@@ -54,11 +54,11 @@ public class ConditionsDB
                 OnStart = (Monster monster) =>
                 {
                     monster.StatusTime = Random.Range(1,3);
-                    Debug.Log($"Monster will be asleep for {monster.StatusTime} turns");
+                    //Debug.Log($"Monster will be asleep for {monster.StatusTime} turns");
                 },
                 OnBeforeMove = (Monster monster) =>
                 {
-                    if(monster.StatusTime == 0)
+                    if(monster.StatusTime <= 0)
                     {
                         monster.CureStatus();
                         monster.StatusChangeMessages.Enqueue($"{monster.Base.MonsterName} woke up!");
@@ -79,7 +79,7 @@ public class ConditionsDB
                 StartMessage = "was Paralyzed.",
                 OnBeforeMove = (Monster monster) =>
                 {
-                    if (Random.Range(1, 5) == 1) //monster can't move
+                    if (Random.Range(1, 5) == 1) //roll to move 25%
                     {
                         monster.StatusChangeMessages.Enqueue($"{monster.Base.MonsterName} is paralyzed and unable to move.");
                         return false;
@@ -98,7 +98,7 @@ public class ConditionsDB
                 StartMessage = "was Frozen.",
                 OnBeforeMove = (Monster monster) =>
                 {
-                    if (Random.Range(1, 5) == 1)
+                    if (Random.Range(1, 6) == 1) //roll to thaw out 20%
                     {
                         monster.CureStatus();
                         monster.StatusChangeMessages.Enqueue($"{monster.Base.MonsterName} thawed out");
@@ -108,7 +108,47 @@ public class ConditionsDB
                     return false;
                 }
             }
-        }
+        },
+
+
+    //Volatile Statuses
+
+        {   //Confusion
+            ConditionID.confusion, 
+            new Condition()
+            {
+                Name = "Confusion",
+                Description = "Confuses the target",
+                StartMessage = "became confused",
+                OnStart = (Monster monster) =>
+                {
+                    monster.VolatileStatusTime = Random.Range(2,6);
+                    //Debug.Log($"Monster will be confused for {monster.VolatileStatusTime} turns");
+                },
+                OnBeforeMove = (Monster monster) =>
+                {
+                    if(monster.VolatileStatusTime <= 0)
+                    {
+                        monster.CureVolatileStatus();
+                        monster.StatusChangeMessages.Enqueue($"{monster.Base.MonsterName} snapped out of confusion!");
+                        return true;
+                    }
+                    monster.VolatileStatusTime--; //since this is called each turn we are decrementing our timer
+                    monster.StatusChangeMessages.Enqueue($"{monster.Base.MonsterName} is confused.");
+
+                    if(Random.Range(1, 4) == 1) //roll to hurt yoruself in confusion 33% chance
+                    {
+                        Move confusionDamage = monster.Moves[Random.Range(0,3)]; //call a random move that the monster knows.
+
+                        monster.TakeDamage(confusionDamage, monster);
+                        monster.StatusChangeMessages.Enqueue($"{monster.Base.MonsterName} hurt itself in its confusion.");
+                        return false;
+                    }
+
+                    return true; //monster can move
+                }
+            }
+        },
 
     };
 
@@ -116,5 +156,6 @@ public class ConditionsDB
 
 public enum ConditionID
 {
-    none, psn, brn, slp, par, frz
+    none, psn, brn, slp, par, frz, 
+    confusion
 }

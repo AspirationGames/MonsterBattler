@@ -51,6 +51,10 @@ public class Monster
     
     public Condition Status{get; private set;}
     public int StatusTime{get; set;}
+
+    public Condition VolatileStatus{get; private set;}
+    public int VolatileStatusTime{get; set;}
+
     public bool InBattle {get; set;} //flag for if monster is actively in battle
     public bool HpChanged {get; set;}
 
@@ -292,18 +296,53 @@ public class Monster
         OnStatusChaged?.Invoke();
     }
 
+    public void SetVolatileStatus(ConditionID conditionID)
+    {
+        if(VolatileStatus == null)
+        {
+            VolatileStatus = ConditionsDB.Conditions[conditionID];
+            VolatileStatus?.OnStart?.Invoke(this); //if the status has an on start method we will call it i.e. sleep
+            StatusChangeMessages.Enqueue($"{Base.MonsterName} {VolatileStatus.StartMessage}");
+
+        }
+        else
+        {
+            StatusChangeMessages.Enqueue($"But it failed.");
+            return;
+        }
+        
+    }
+
+    public void CureVolatileStatus()
+    {
+        VolatileStatus = null;
+    }
+
     public bool OnBeforeMove()
     {
-       if(Status?.OnBeforeMove != null)
+        bool canMove = true;
+
+       if(Status?.OnBeforeMove != null)//check for status
         {
-            return Status.OnBeforeMove(this); //if the pokemon has a status the OnBeforeMove method will run and deterime if mon can move
+            if(!Status.OnBeforeMove(this)) //if status exist roll for movement
+            {
+                canMove = false;
+            }
+        }
+        if(VolatileStatus?.OnBeforeMove != null)//Check for volatile status
+        {
+            if(!VolatileStatus.OnBeforeMove(this)) //if status exist roll for movement
+            {
+                canMove = false;
+            }
         }
 
-        return true;
+        return canMove; //returning true when monster doesn't have a status that effects before move to allow the monster to move uneffected
     }
     public void OnAfterTurn()
     {
         Status?.OnAfterTurn?.Invoke(this); //addomg a question mark after action will make sure that on after turn is not null
+        VolatileStatus?.OnAfterTurn?.Invoke(this);
     }
 
     
@@ -377,7 +416,9 @@ public class Monster
 
     public void OnBattleOver() //used to reset values after battle is over
     {
+        VolatileStatus = null;
         ResetStatStages();
+        
     }
 }
 
