@@ -415,10 +415,10 @@ public class BattleSystem : MonoBehaviour
             }
             if(!canAttack)
             {
-                yield return ShowStatusChanges(attackingMonster);
+                yield return StatusChangeDialog(attackingMonster);
                 continue;
             }
-            yield return ShowStatusChanges(attackingMonster); //expirments add a show status change here too for some reason.
+            yield return StatusChangeDialog(attackingMonster); //expirments add a show status change here too for some reason.
             
             Move attackingMove = attackingMonster.Moves[ selectedMoves[battleUnits.IndexOf(attackingUnit)] ]; 
             BattleUnit targetUnit = selectedTargets[battleUnits.IndexOf(attackingUnit)];
@@ -474,7 +474,7 @@ public class BattleSystem : MonoBehaviour
             if(unit.Monster.HP > 0)
             {
                 unit.Monster.OnAfterTurn();
-                yield return ShowStatusChanges(unit.Monster);
+                yield return StatusChangeDialog(unit.Monster);
                 yield return unit.Hud.UpdateHP();
 
                 if(unit.Monster.HP <= 0)//if the monster FAINTS
@@ -512,23 +512,23 @@ public class BattleSystem : MonoBehaviour
                     if(attackingMove.Base.Target == MoveTarget.Self)
                     {
                         attackingMonster.ApplyStageChange(effects.StageChanges);
-                        yield return ShowStatusChanges(attackingMonster);
+                        yield return StatusChangeDialog(attackingMonster);
                     }
                     else
                     {
                         targetMonster.ApplyStageChange(effects.StageChanges);
-                        yield return ShowStatusChanges(targetMonster);
+                        yield return StatusChangeDialog(targetMonster);
                     }
                 }
                 if(effects.StatusEffect != ConditionID.none)
                 {
                     targetMonster.SetStatus(effects.StatusEffect);
-                    yield return ShowStatusChanges(targetMonster);
+                    yield return StatusChangeDialog(targetMonster);
                 }
 
     }
 
-    IEnumerator ShowStatusChanges(Monster monster)
+    IEnumerator StatusChangeDialog(Monster monster)
     {
         while (monster.StatusChangeMessages.Count > 0)
         {

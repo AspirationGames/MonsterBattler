@@ -54,6 +54,8 @@ public class Monster
     public bool InBattle {get; set;} //flag for if monster is actively in battle
     public bool HpChanged {get; set;}
 
+    public event System.Action OnStatusChaged; 
+
 
     public void Init() //this method creates our pokemon
     {
@@ -269,14 +271,25 @@ public class Monster
 
     public void SetStatus(ConditionID conditionID)
     {
-        Status = ConditionsDB.Conditions[conditionID];
-        Status?.OnStart?.Invoke(this); //if the status has an on start method we will call it i.e. sleep
-        StatusChangeMessages.Enqueue($"{Base.MonsterName} {Status.StartMessage}");
+        if(Status == null)
+        {
+            Status = ConditionsDB.Conditions[conditionID];
+            Status?.OnStart?.Invoke(this); //if the status has an on start method we will call it i.e. sleep
+            StatusChangeMessages.Enqueue($"{Base.MonsterName} {Status.StartMessage}");
+            OnStatusChaged?.Invoke();
+        }
+        else
+        {
+            StatusChangeMessages.Enqueue($"But it failed.");
+            return;
+        }
+        
     }
 
     public void CureStatus()
     {
         Status = null;
+        OnStatusChaged?.Invoke();
     }
 
     public bool OnBeforeMove()

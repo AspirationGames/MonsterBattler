@@ -7,18 +7,14 @@ public class GameController : MonoBehaviour
 {
     GameState gameState;
 
-
-    private void Update()
+    private void Awake() 
     {
-        if (gameState == GameState.TeamSelect)
-        {
-            //give player controller control
-        }
-        else if(gameState == GameState.Battle)
-        {
-            //give battle system control
-        }
+        ConditionsDB.Init();
+    }
 
+    private void start()
+    {
+        
     }
     
 
