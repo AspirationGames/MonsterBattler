@@ -450,13 +450,29 @@ public class BattleSystem : MonoBehaviour
                 {
                     if(attackingMove.Base.Category == MoveCategory.Status) //If move is a status move
                     {
-                        yield return PerformEffects(attackingMove, attackingMonster, targetMonster);
+                        yield return PerformEffects(attackingMove.Base.Effects, attackingMonster, targetMonster, attackingMove.Base.Target);
                         continue;
                     }
+                    else
+                    {
+                        var damageDetails = targetMonster.TakeDamage(attackingMove, attackingMonster);
+                        yield return targetUnit.Hud.UpdateHP();
+                        yield return ShowDamageDetails(damageDetails);
+                    }
 
-                    var damageDetails = targetMonster.TakeDamage(attackingMove, attackingMonster);
-                    yield return targetUnit.Hud.UpdateHP();
-                    yield return ShowDamageDetails(damageDetails);
+                    //Secondary Effects, Likely need to go back and review HP check in order to apply recoil ect in the event target faints
+                    if(attackingMove.Base.SecondaryEffects != null && attackingMove.Base.SecondaryEffects.Count > 0 && targetMonster.HP > 0 )
+                    {
+                        foreach(var secondaryEffect in attackingMove.Base.SecondaryEffects)
+                        {
+                            int rng = UnityEngine.Random.Range(1, 101); //check chance of secondary effect occuring
+                            if(secondaryEffect.Chance >= rng)
+                            {
+                                yield return PerformEffects(secondaryEffect, attackingMonster, targetMonster, secondaryEffect.Target);
+                            }
+                        }
+
+                    }
 
                     if(targetUnit.Monster.HP <= 0)//if the monster FAINTS
                     {
@@ -552,13 +568,12 @@ public class BattleSystem : MonoBehaviour
 
     }
 
-    IEnumerator PerformEffects(Move attackingMove, Monster attackingMonster, Monster targetMonster)
+    IEnumerator PerformEffects(MoveEffects effects, Monster attackingMonster, Monster targetMonster, MoveTarget moveTarget)
     {
-        
-        var effects = attackingMove.Base.Effects;
+
                 if(effects.StageChanges != null) //stat change effects
                 {
-                    if(attackingMove.Base.Target == MoveTarget.Self) //self inflicted stagechange
+                    if(moveTarget == MoveTarget.Self) //self inflicted stagechange
                     {
                         attackingMonster.ApplyStageChange(effects.StageChanges);
                         yield return StatusChangeDialog(attackingMonster);
@@ -571,12 +586,12 @@ public class BattleSystem : MonoBehaviour
                 }
                 if(effects.StatusEffect != ConditionID.none) //status effects
                 {
-                    targetMonster.SetStatus(effects.StatusEffect);
+                    targetMonster.SetStatus((ConditionID)effects.StatusEffect);
                     yield return StatusChangeDialog(targetMonster);
                 }
                 if(effects.VolatileStatusEffect != ConditionID.none)
                 {
-                    targetMonster.SetVolatileStatus(effects.VolatileStatusEffect);
+                    targetMonster.SetVolatileStatus((ConditionID)effects.VolatileStatusEffect);
                     yield return StatusChangeDialog(targetMonster);
                 }
 

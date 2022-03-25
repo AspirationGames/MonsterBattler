@@ -19,6 +19,7 @@ public class MoveBase : ScriptableObject
     [SerializeField] int ap;
     [SerializeField] MoveCategory category;
     [SerializeField] MoveEffects effects;
+    [SerializeField] List<SecondaryEffects> secondaryEffects; //moves can have multiple secondary effects
     [SerializeField] MoveTarget target;
 
     
@@ -95,6 +96,14 @@ public class MoveBase : ScriptableObject
         }
     }
 
+    public List<SecondaryEffects> SecondaryEffects
+    {
+        get
+        {
+            return secondaryEffects;
+        }
+    }
+
     public MoveTarget Target 
     {
         get {return target;}
@@ -125,6 +134,23 @@ public class MoveBase : ScriptableObject
         }
 
     }
+[System.Serializable]
+    public class SecondaryEffects : MoveEffects //inherits attributes from MoveEffects class
+    {
+        [SerializeField] int chance;
+        [SerializeField] MoveTarget target;
+
+        public int Chance
+        {
+            get { return chance;}
+        }
+        public MoveTarget Target
+        {
+            get { return target;}
+        }
+
+    }
+
 
     [System.Serializable]
     public class StatStageChange

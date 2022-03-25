@@ -24,4 +24,5 @@ MonoBehaviour:
     stageChange: []
     statusEffect: 3
     volatileStatusEffect: 0
+  secondaryEffects: []
   target: 0
