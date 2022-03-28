@@ -398,10 +398,31 @@ public class BattleSystem : MonoBehaviour
         yield return PerformMoves();
     }
     
+    int CheckMovePriority(BattleUnit a, BattleUnit b)
+    {
+        Move moveA = a.Monster.Moves[ selectedMoves[battleUnits.IndexOf(a)]];
+        Move moveB = b.Monster.Moves[ selectedMoves[battleUnits.IndexOf(b)]];
+        int priorityA = moveA.Base.Priority;
+        int priorityB = moveB.Base.Priority;
+
+        if(priorityA > priorityB)
+        {
+            return -1; //we return negative 1 here because -1 means we are moving it up in the list or "to the left"
+        }
+        else if(priorityA < priorityB)
+        {
+            return 1;
+        }
+
+        return 0;
+
+    }
 
     IEnumerator PerformMoves()
     {
-        List<BattleUnit> faintedUnits = new List<BattleUnit>();
+
+        List<BattleUnit> faintedUnits = new List<BattleUnit>(); //list to keep track of fainted units
+        turnOrder.Sort(CheckMovePriority); //check for priority moves
 
         for(int i=0; i < turnOrder.Count; i++)
         {
@@ -442,7 +463,6 @@ public class BattleSystem : MonoBehaviour
 
             else //Perform Attack
             {
-
                 yield return battleDialogueBox.TypeDialog
                 ($"{attackingMonster.Base.MonsterName} use {attackingMove.Base.MoveName} on {targetMonster.Base.MonsterName}");
                 
@@ -485,15 +505,32 @@ public class BattleSystem : MonoBehaviour
                     yield return battleDialogueBox.TypeDialog($"but it missed!");
 
                 }
-   
-            }
-                
+            }        
         }
         //attack phase over
         selectedMoves.Clear(); 
         selectedTargets.Clear(); 
 
         //After Turn Effects
+        yield return RunAfterTurn(faintedUnits);
+        
+        //Check for Battle Over
+        if (faintedUnits.Count > 0)
+        {
+            yield return CheckForBattleOver(faintedUnits);
+            faintedUnits.Clear(); //clear list of fainted units after checking for battle over
+            
+        }
+        else
+        {   
+            NewTurn();
+        }
+        
+        
+    }
+
+    IEnumerator RunAfterTurn(List<BattleUnit> faintedUnits)
+    {
         foreach(BattleUnit unit in battleUnits)
         {
             if(unit.Monster.HP > 0)
@@ -511,19 +548,7 @@ public class BattleSystem : MonoBehaviour
             else continue;
         }
 
-        //Check for Battle Over
-        if (faintedUnits.Count > 0)
-        {
-            yield return CheckForBattleOver(faintedUnits);
-            faintedUnits.Clear(); //clear list of fainted units after checking for battle over
-            
-        }
-        else
-        {   
-            NewTurn();
-        }
-        
-        
+
     }
 
     bool AccuracyCheck(Move attackingMove, Monster attackingMonster, Monster targetMonster)

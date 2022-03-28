@@ -17,6 +17,8 @@ public class MoveBase : ScriptableObject
     [SerializeField] int accuracy;
     [SerializeField] bool alwaysHits;
     [SerializeField] int ap;
+
+    [SerializeField] int priority;
     [SerializeField] MoveCategory category;
     [SerializeField] MoveEffects effects;
     [SerializeField] List<SecondaryEffects> secondaryEffects; //moves can have multiple secondary effects
@@ -77,6 +79,15 @@ public class MoveBase : ScriptableObject
         get
         {
             return ap;
+        }
+    
+    }
+
+    public int Priority
+    {
+        get
+        {
+            return priority;
         }
     
     }
