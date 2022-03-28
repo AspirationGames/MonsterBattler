@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3fee88d74ad48c46bf8e228de80dbab, type: 3}
   m_Name: QuickAttack
   m_EditorClassIdentifier: 
-  moveName: 
+  moveName: Quick Attack
   description: 
-  type: 0
-  power: 0
-  accuracy: 0
+  type: 1
+  power: 40
+  accuracy: 100
   alwaysHits: 0
-  ap: 0
-  priority: 0
+  ap: 30
+  priority: 1
   category: 0
   effects:
     stageChange: []
