@@ -16,7 +16,7 @@ public class BattleSystem : MonoBehaviour
 
     [SerializeField] List<BattleUnit> turnOrder = new List<BattleUnit>();
     List<Move> selectedMoves =  new List<Move>();
-    List<int> selectedSwitch = new List<int>();
+    List<Monster> selectedSwitch = new List<Monster>();
     List<BattleUnit> selectedTargets = new List<BattleUnit>();
 
     [SerializeField] MonsterParty playerParty;
@@ -219,7 +219,7 @@ public class BattleSystem : MonoBehaviour
             {
                 battleState = BattleState.PlayerTarget1;
                 selectedMoves.Insert(0,selectedMove);
-                selectedSwitch.Insert(0,skipIndex);//skip value for switch
+                selectedSwitch.Insert(0,null);//skip value for switch
             }   
         }
         else if(battleState == BattleState.PlayerMove2)
@@ -234,7 +234,7 @@ public class BattleSystem : MonoBehaviour
             {
                 battleState = BattleState.PlayerTarget2;
                 selectedMoves.Insert(1,selectedMove);
-                selectedSwitch.Insert(1,skipIndex);//skip value for switch
+                selectedSwitch.Insert(1,null);//skip value for switch
             }
             
         }
@@ -292,7 +292,7 @@ public class BattleSystem : MonoBehaviour
         }
         else if(battleState == BattleState.PlayerSwitch1)
         {
-            selectedSwitch.Insert(0,switchMonsterIndex);
+            selectedSwitch.Insert(0,selectedMonster);
             // dummy numbers  to allow code to work
             selectedMoves.Insert(0,null);
             selectedTargets.Insert(0,null);
@@ -306,7 +306,7 @@ public class BattleSystem : MonoBehaviour
         }
         else if(battleState == BattleState.PlayerSwitch2)
         {
-            selectedSwitch.Insert(1,switchMonsterIndex);
+            selectedSwitch.Insert(1,selectedMonster);
             // dummy numbers  to allow code to work
             selectedMoves.Insert(1,null);
             selectedTargets.Insert(1,null);
@@ -321,7 +321,7 @@ public class BattleSystem : MonoBehaviour
         }
         else if(battleState == BattleState.PlayerFaintedSwitching)
         {
-            selectedSwitch.Add(switchMonsterIndex);
+            selectedSwitch.Add(selectedMonster);
             selectedMonster.InBattle = true;
             partyScreen.gameObject.SetActive(false);
             battleState = BattleState.Busy; //switch back to busy state to allow for coroutines to finish.
@@ -343,7 +343,7 @@ public class BattleSystem : MonoBehaviour
             int randomTargetIndex = UnityEngine.Random.Range(0,1);
             selectedMoves.Insert(i, battleUnits[i].Monster.Moves[randmomMoveIndex]);
             selectedTargets.Insert(i, battleUnits[randomTargetIndex]);
-            selectedSwitch.Insert(i,skipIndex);
+            selectedSwitch.Insert(i,null);
         }
 
         StartCoroutine(SwitchMonsters());
@@ -360,12 +360,12 @@ public class BattleSystem : MonoBehaviour
 
         for(int i=0; i < turnOrder.Count; i++)
         {
-            Monster currentMonster = turnOrder[i].Monster;
             BattleUnit currentUnit = turnOrder[i];
+            Monster currentMonster = currentUnit.Monster;
+
 
             
-
-            if(selectedSwitch[battleUnits.IndexOf(currentUnit)] == skipIndex)//if no switch was initiated for this turn just continue onto the next turn
+            if(selectedSwitch[battleUnits.IndexOf(currentUnit)] == null)//if no switch was initiated for this turn just continue onto the next turn
             {
                 continue;
             }
@@ -373,7 +373,7 @@ public class BattleSystem : MonoBehaviour
             {
                 if(currentUnit.IsPlayerMonster)
                 {
-                    Monster incomingMonster = playerParty.Monsters[ selectedSwitch[battleUnits.IndexOf(turnOrder[i])] ];
+                    Monster incomingMonster = selectedSwitch[battleUnits.IndexOf(turnOrder[i])];
 
                     currentUnit.Monster.InBattle = false;
                     yield return battleDialogueBox.TypeDialog
@@ -390,7 +390,7 @@ public class BattleSystem : MonoBehaviour
                 }
                 else if(!currentUnit.IsPlayerMonster)
                 {
-                    Monster incomingMonster = enemyParty.Monsters[ selectedSwitch[battleUnits.IndexOf(turnOrder[i])] ];
+                    Monster incomingMonster = selectedSwitch[battleUnits.IndexOf(turnOrder[i])];
 
                     currentUnit.Monster.InBattle = false;
                     yield return battleDialogueBox.TypeDialog
@@ -717,7 +717,7 @@ public class BattleSystem : MonoBehaviour
 
         
         Monster faintedMonster = faintedUnit.Monster;
-        Monster incomingMonster = playerParty.Monsters[ selectedSwitch[0] ];
+        Monster incomingMonster = selectedSwitch[0];
         
 
         faintedMonster.InBattle = false;
