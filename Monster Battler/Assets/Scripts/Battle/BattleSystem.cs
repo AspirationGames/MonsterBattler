@@ -209,17 +209,34 @@ public class BattleSystem : MonoBehaviour
         //save selected moves
         if(battleState == BattleState.PlayerMove1)
         {
-            battleState = BattleState.PlayerTarget1;
-            selectedMoves.Insert(0,moveIndex);
-            //skip value for switch
-            selectedSwitch.Insert(0,skipIndex);
+            Move selectedMove = battleUnits[0].Monster.Moves[moveIndex];
+            if(selectedMove.AP < 1)
+            {
+                StartCoroutine(battleDialogueBox.TypeDialog($"{selectedMove} is out of AP."));
+                return;
+            }
+            else
+            {
+                battleState = BattleState.PlayerTarget1;
+                selectedMoves.Insert(0,moveIndex);
+                selectedSwitch.Insert(0,skipIndex);//skip value for switch
+            }   
         }
         else if(battleState == BattleState.PlayerMove2)
         { 
-            battleState = BattleState.PlayerTarget2;
-            selectedMoves.Insert(1,moveIndex);
-            //skip value for switch
-            selectedSwitch.Insert(1,skipIndex);
+            Move selectedMove = battleUnits[1].Monster.Moves[moveIndex];
+            if(selectedMove.AP < 1)
+            {
+                StartCoroutine(battleDialogueBox.TypeDialog($"{selectedMove} is out of AP."));
+                return;
+            }
+            else
+            {
+                battleState = BattleState.PlayerTarget2;
+                selectedMoves.Insert(1,moveIndex);
+                selectedSwitch.Insert(1,skipIndex);//skip value for switch
+            }
+            
         }
 
         SelectTarget();
