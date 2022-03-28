@@ -15,7 +15,7 @@ public class BattleSystem : MonoBehaviour
     BattleState battleState;    
 
     [SerializeField] List<BattleUnit> turnOrder = new List<BattleUnit>();
-    List<int> selectedMoves =  new List<int>();
+    List<Move> selectedMoves =  new List<Move>();
     List<int> selectedSwitch = new List<int>();
     List<BattleUnit> selectedTargets = new List<BattleUnit>();
 
@@ -157,7 +157,7 @@ public class BattleSystem : MonoBehaviour
             case BattleState.PlayerAction2: 
                 switch (selectedMoves[0])
                 {
-                    case skipIndex: //you selected switch during phase 1
+                    case null: //you selected switch during phase 1
                         battleState = BattleState.PlayerSwitch1;
                         selectedSwitch.RemoveAt(0);
                         selectedMoves.RemoveAt(0);
@@ -218,7 +218,7 @@ public class BattleSystem : MonoBehaviour
             else
             {
                 battleState = BattleState.PlayerTarget1;
-                selectedMoves.Insert(0,moveIndex);
+                selectedMoves.Insert(0,selectedMove);
                 selectedSwitch.Insert(0,skipIndex);//skip value for switch
             }   
         }
@@ -233,7 +233,7 @@ public class BattleSystem : MonoBehaviour
             else
             {
                 battleState = BattleState.PlayerTarget2;
-                selectedMoves.Insert(1,moveIndex);
+                selectedMoves.Insert(1,selectedMove);
                 selectedSwitch.Insert(1,skipIndex);//skip value for switch
             }
             
@@ -294,7 +294,7 @@ public class BattleSystem : MonoBehaviour
         {
             selectedSwitch.Insert(0,switchMonsterIndex);
             // dummy numbers  to allow code to work
-            selectedMoves.Insert(0,skipIndex);
+            selectedMoves.Insert(0,null);
             selectedTargets.Insert(0,null);
 
             selectedMonster.InBattle = true; //We set the selected monster inbattle to prevent it from being selected again
@@ -308,7 +308,7 @@ public class BattleSystem : MonoBehaviour
         {
             selectedSwitch.Insert(1,switchMonsterIndex);
             // dummy numbers  to allow code to work
-            selectedMoves.Insert(1,skipIndex);
+            selectedMoves.Insert(1,null);
             selectedTargets.Insert(1,null);
 
             selectedMonster.InBattle = true;
@@ -341,7 +341,7 @@ public class BattleSystem : MonoBehaviour
         {
             int randmomMoveIndex = UnityEngine.Random.Range(0, battleUnits[i].Monster.Moves.Count);
             int randomTargetIndex = UnityEngine.Random.Range(0,1);
-            selectedMoves.Insert(i, randmomMoveIndex);
+            selectedMoves.Insert(i, battleUnits[i].Monster.Moves[randmomMoveIndex]);
             selectedTargets.Insert(i, battleUnits[randomTargetIndex]);
             selectedSwitch.Insert(i,skipIndex);
         }
@@ -417,11 +417,16 @@ public class BattleSystem : MonoBehaviour
     
     int CheckMovePriority(BattleUnit a, BattleUnit b)
     {
-        Move moveA = a.Monster.Moves[ selectedMoves[battleUnits.IndexOf(a)]];
-        Move moveB = b.Monster.Moves[ selectedMoves[battleUnits.IndexOf(b)]];
+        Move moveA = selectedMoves[battleUnits.IndexOf(a)];
+        Move moveB = selectedMoves[battleUnits.IndexOf(b)];
+        if(moveA == null || moveB == null)
+        {
+            return 0;
+        }
+
         int priorityA = moveA.Base.Priority;
         int priorityB = moveB.Base.Priority;
-
+        
         if(priorityA > priorityB)
         {
             return -1; //we return negative 1 here because -1 means we are moving it up in the list or "to the left"
@@ -447,7 +452,7 @@ public class BattleSystem : MonoBehaviour
             Monster attackingMonster = attackingUnit.Monster;
             bool canAttack = attackingMonster.OnBeforeMove();
         
-            if(selectedMoves[battleUnits.IndexOf(attackingUnit)] == skipIndex || attackingMonster.HP <= 0) //Skip attack check
+            if(selectedMoves[battleUnits.IndexOf(attackingUnit)] == null || attackingMonster.HP <= 0) //Skip attack check
             {
                 continue;
             }
@@ -458,7 +463,7 @@ public class BattleSystem : MonoBehaviour
             }
             yield return StatusChangeDialog(attackingMonster); //expirments add a show status change here too for some reason.
             
-            Move attackingMove = attackingMonster.Moves[ selectedMoves[battleUnits.IndexOf(attackingUnit)] ]; 
+            Move attackingMove = selectedMoves[battleUnits.IndexOf(attackingUnit)]; 
             BattleUnit targetUnit = selectedTargets[battleUnits.IndexOf(attackingUnit)];
             Monster targetMonster = targetUnit.Monster;
             attackingMove.AP--; 
