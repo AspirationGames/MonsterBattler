@@ -267,6 +267,9 @@ public class Monster
            var stat = stageChange.stat;
            var stage = stageChange.stage;
 
+           Debug.Log(stat);
+           Debug.Log(stage);
+
            StatStages[stat] = Mathf.Clamp(StatStages[stat] + stage, -6, 6); //applies stage change to current StatStages
 
            if(stage > 0) StatusChangeMessages.Enqueue($"{Base.MonsterName}'s {stat} increased!");

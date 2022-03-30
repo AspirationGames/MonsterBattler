@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ConditionsDB
 {
+    
     public static void Init()
     {
         foreach(var kvp in Conditions)
@@ -23,6 +24,17 @@ public class ConditionsDB
                 Name = "Poison",
                 Description = "Poisons the target.",
                 StartMessage = "was poisoned.",
+                OnStart = (Monster monster) =>
+                {
+                    var psnSpAttackDrop = new StatStageChange();
+                    psnSpAttackDrop.stat = Stat.SpAttack;
+                    psnSpAttackDrop.stage = -2;
+
+                    List<StatStageChange> psnStatStageChanges = new List<StatStageChange> ();
+                    psnStatStageChanges.Add(psnSpAttackDrop);
+                    
+                    monster.ApplyStageChange(psnStatStageChanges);
+                },
                 OnAfterTurn = (Monster monster) =>
                 {
                     monster.UpdateHP(monster.MaxHP / 8);
@@ -37,6 +49,17 @@ public class ConditionsDB
                 Name = "Burn",
                 Description = "Burns the target.",
                 StartMessage = "was burned.",
+                OnStart = (Monster monster) =>
+                {
+                    var brnAttackDrop = new StatStageChange();
+                    brnAttackDrop.stat = Stat.Attack;
+                    brnAttackDrop.stage = -2;
+
+                    List<StatStageChange> brnStatStageChanges = new List<StatStageChange> ();
+                    brnStatStageChanges.Add(brnAttackDrop);
+                    
+                    monster.ApplyStageChange(brnStatStageChanges);
+                },
                 OnAfterTurn = (Monster monster) =>
                 {
                     monster.UpdateHP(monster.MaxHP / 16);
@@ -77,6 +100,17 @@ public class ConditionsDB
                 Name = "Paralyze",
                 Description = "Paralyzes the target",
                 StartMessage = "was Paralyzed.",
+                OnStart = (Monster monster) =>
+                {
+                    var parSpeedDrop = new StatStageChange();
+                    parSpeedDrop.stat = Stat.Speed;
+                    parSpeedDrop.stage = -2;
+
+                    List<StatStageChange> parStatStageChanges = new List<StatStageChange> ();
+                    parStatStageChanges.Add(parSpeedDrop);
+                    
+                    monster.ApplyStageChange(parStatStageChanges);
+                },
                 OnBeforeMove = (Monster monster) =>
                 {
                     if (Random.Range(1, 5) == 1) //roll to move 25%
