@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -339,9 +340,11 @@ public class BattleSystem : MonoBehaviour
 
         for(int i=2; i < battleUnits.Count; i++)
         {
-            int randmomMoveIndex = UnityEngine.Random.Range(0, battleUnits[i].Monster.Moves.Count);
+            var movesWithPP = battleUnits[i].Monster.Moves.Where(x => x.AP > 0).ToList();
+            
+            int randmomMoveIndex = UnityEngine.Random.Range(0, movesWithPP.Count);
             int randomTargetIndex = UnityEngine.Random.Range(0,1);
-            selectedMoves.Insert(i, battleUnits[i].Monster.Moves[randmomMoveIndex]);
+            selectedMoves.Insert(i, movesWithPP[randmomMoveIndex]);
             selectedTargets.Insert(i, battleUnits[randomTargetIndex]);
             selectedSwitch.Insert(i,null);
         }
@@ -459,6 +462,7 @@ public class BattleSystem : MonoBehaviour
             if(!canAttack)
             {
                 yield return StatusChangeDialog(attackingMonster);
+                yield return attackingUnit.Hud.UpdateHP(); //this is in the event that the status causes damage (i.e. confusion);
                 continue;
             }
             yield return StatusChangeDialog(attackingMonster); //expirments add a show status change here too for some reason.
