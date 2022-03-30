@@ -139,8 +139,8 @@ public class ConditionsDB
                     if(Random.Range(1, 4) == 1) //roll to hurt yoruself in confusion 33% chance
                     {
                         Move confusionDamage = monster.Moves[Random.Range(0,3)]; //call a random move that the monster knows.
-
                         monster.TakeDamage(confusionDamage, monster);
+                        
                         monster.StatusChangeMessages.Enqueue($"{monster.Base.MonsterName} hurt itself in its confusion.");
                         return false;
                     }
