@@ -23,20 +23,28 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] MonsterParty playerParty;
     [SerializeField] MonsterParty enemyParty;
 
+    
     const int skipIndex = 99;
 
 
     void Start()
     {
 
+        //StartCoroutine(SetupBattle());
+    }
+
+    void StartRandomEncounter(MonsterParty playerParty, MonsterParty untamedMonsters)
+    {
+        this.playerParty = playerParty;
+        this.enemyParty = untamedMonsters;
         StartCoroutine(SetupBattle());
     }
 
-    void StartBattle(MonsterParty playerParty, MonsterParty enemyParty)
+    void StartDruidBattle(MonsterParty playerParty, MonsterParty druidParty)
     {
-        //this.playerParty = playerParty;
-        //this.enemyParty = enemyParty;
-        //StartCoroutine(SetupBattle());
+        this.playerParty = playerParty;
+        this.enemyParty = druidParty;
+        StartCoroutine(SetupBattle());
     }
     
     public IEnumerator SetupBattle()
