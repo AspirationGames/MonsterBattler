@@ -17,11 +17,20 @@ MonoBehaviour:
   type: 1
   power: 0
   accuracy: 100
+  alwaysHits: 0
   ap: 30
+  priority: 0
   category: 2
   effects:
     stageChange:
     - stat: 1
       stage: -1
     statusEffect: 0
+    volatileStatusEffect: 0
+  secondaryEffects:
+  - stageChange: []
+    statusEffect: 0
+    volatileStatusEffect: 0
+    chance: 0
+    target: 0
   target: 0
