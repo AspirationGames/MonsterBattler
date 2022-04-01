@@ -7,10 +7,15 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 5f;
     Vector2 moveInput;
-    bool isMoving;
+    bool isWalking;
+
+    Animator playerAnimator;
     
     
-    
+    void Awake() 
+    {
+        playerAnimator = GetComponent<Animator>();    
+    }
     void Update()
     {
         ProcessMovement();
@@ -26,22 +31,31 @@ public class PlayerController : MonoBehaviour
 
     void ProcessMovement()
     {
-         if(!isMoving && moveInput != Vector2.zero)
+        
+
+         if(!isWalking && moveInput != Vector2.zero)
         {
             if(moveInput.x !=0 ) moveInput.y = 0; //prefent horizontal movement
 
+            //Animations
+            playerAnimator.SetFloat("moveX", moveInput.x);
+            playerAnimator.SetFloat("moveY", moveInput.y);
+
+            //Target Positions for Movement
             var targetPosition = transform.position;
             targetPosition.x += moveInput.x;
             targetPosition.y += moveInput.y;
 
+            //Movement is handled by couroutine
             StartCoroutine(Movement(targetPosition));
         }
         
+        playerAnimator.SetBool("isWalking", isWalking);
     }
 
     IEnumerator Movement(Vector3 targetPosition)
     {
-        isMoving = true;
+        isWalking = true;
         while( (targetPosition - transform.position).sqrMagnitude > Mathf.Epsilon )
         {
 
@@ -51,7 +65,7 @@ public class PlayerController : MonoBehaviour
         }
 
         transform.position = targetPosition;
-        isMoving = false;
+        isWalking = false;
     }
 
 
