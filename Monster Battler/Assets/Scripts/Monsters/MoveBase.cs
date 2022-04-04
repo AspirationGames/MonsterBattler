@@ -128,6 +128,8 @@ public class MoveBase : ScriptableObject
         [SerializeField] List<StatStageChange> stageChange;
         [SerializeField] ConditionID statusEffect;
         [SerializeField] ConditionID volatileStatusEffect;
+        [SerializeField] ConditionID weather;
+
 
         public List<StatStageChange> StageChanges
         {
@@ -142,6 +144,11 @@ public class MoveBase : ScriptableObject
         public ConditionID VolatileStatusEffect
         {
             get{return volatileStatusEffect;}
+        }
+
+        public ConditionID Weather
+        {
+            get{return weather;}
         }
 
     }

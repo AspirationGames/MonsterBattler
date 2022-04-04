@@ -163,6 +163,7 @@ public enum MonsterType
     Solar,
     Bug,
     Flying,
+    Earth
 
 }
 
@@ -222,6 +223,7 @@ public class TypeChart
         /*SOL*/ new float[]{1f, 1f, 1f, 1f, 2f, 2f, 1f, 1f, 1f},
         /*BUG*/ new float[]{1f, 2f, 1f, 1f, 1f, 1f, 1f, 1f, 1f},
         /*FLY*/ new float[]{1f, 2f, 1f, 1f, 1f, 1f, 1f, 1f, 1f},
+        /*ERT*/ new float[]{1f,.5f, 2f, 1f, 1f, 1f, 1f, 1f, 0f},
         
 
     };

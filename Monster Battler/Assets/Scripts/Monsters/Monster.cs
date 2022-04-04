@@ -375,7 +375,7 @@ public class Monster
         get { return GetStat(Stat.Speed); }
     }
     
-    public DamageDetails TakeDamage(Move move, Monster attacker)
+    public DamageDetails TakeDamage(Move move, Monster attacker, Condition weather)
     {
         //critical hits
         float critical = 1f;
@@ -388,6 +388,9 @@ public class Monster
         float stab = 1f;
         if(this.Base.Type1 == move.Base.Type || this.Base.Type2 == move.Base.Type) stab = 1.5f;
 
+        //Weather modifier
+        float weathrModifier = weather?.OnDamageModify?.Invoke(this, attacker, move) ?? 1f; //note that if weather is null we return null
+
         var damageDetails = new DamageDetails()
         {
             Critical = critical,
@@ -398,7 +401,7 @@ public class Monster
         float attack = (move.Base.Category == MoveCategory.Special) ? attacker.SpAttack : attacker.Attack; //checks to see if move is special to determine attack type. This is a shorthand if statement
         float defense = (move.Base.Category == MoveCategory.Special)? SpDefense : Defense;
 
-        float modifiers = Random.Range(0.85f, 1f) * typeEffectiveness * critical * stab;
+        float modifiers = Random.Range(0.85f, 1f) * typeEffectiveness * critical * stab * weathrModifier;
         float a = (2*attacker.Level + 10)/ 250f;
         float d = a * move.Base.Power * ((float)attack / defense) + 2;
         int damage = Mathf.FloorToInt(d*modifiers);

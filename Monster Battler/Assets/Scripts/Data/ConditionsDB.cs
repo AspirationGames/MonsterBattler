@@ -172,14 +172,83 @@ public class ConditionsDB
 
                     if(Random.Range(1, 4) == 1) //roll to hurt yoruself in confusion 33% chance
                     {
-                        Move confusionDamage = monster.Moves[Random.Range(0,3)]; //call a random move that the monster knows.
-                        monster.TakeDamage(confusionDamage, monster);
+                        //Move confusionDamage = monster.Moves[Random.Range(0,3)]; //call a random move that the monster knows.
+                        //monster.TakeDamage(confusionDamage, monster);
                         
+                        monster.UpdateHP(monster.MaxHP / 8);
+
                         monster.StatusChangeMessages.Enqueue($"{monster.Base.MonsterName} hurt itself in its confusion.");
                         return false;
                     }
 
                     return true; //monster can move
+                }
+            }
+        },
+
+        //Weather
+
+        {   //Scortching Sun
+            ConditionID.sun, 
+            new Condition()
+            {
+                Name = "Scortching Sun",
+                StartMessage = "The heat of the sun intensified.",
+                EffectMessage = "The battlefield is scortching hot.",
+                OnDamageModify = (Monster attackingMonster, Monster targetMonster, Move move) =>
+                {
+                    if(move.Base.Type == MonsterType.Fire)
+                        return 1.5f;
+                    else if(move.Base.Type == MonsterType.Water)
+                        return 0.5f;
+                    else
+                        return 1f;
+                }
+            }
+        },
+        {   //Pouring Rain
+            ConditionID.rain, 
+            new Condition()
+            {
+                Name = "Pouring Rain",
+                StartMessage = "Rain began to pour down from above.",
+                EffectMessage = "The battlefield is flooded with water",
+                OnDamageModify = (Monster attackingMonster, Monster targetMonster, Move move) =>
+                {
+                    if(move.Base.Type == MonsterType.Water)
+                        return 1.5f;
+                    else if(move.Base.Type == MonsterType.Fire)
+                        return 0.5f;
+                    else
+                        return 1f;
+                }
+            }
+        },
+        {   //Pouring Rain
+            ConditionID.sandstorm, 
+            new Condition()
+            {
+                Name = "Sandstorm",
+                StartMessage = "A sand storm began.",
+                EffectMessage = "The battlefield is engulfed in a sandstorm",
+                OnWeather = (Monster monster) =>
+                {
+                    if(monster.Base.Type1 != MonsterType.Earth || monster.Base.Type2 != MonsterType.Earth)
+                    {
+                        monster.UpdateHP(Mathf.RoundToInt((float)monster.MaxHP / 16f)); //damage monsters
+                        monster.StatusChangeMessages.Enqueue($"{monster.Base.MonsterName} is ravaged by the sandstorm");
+                    }
+                    else
+                    {
+                        return;
+                    }
+                },
+                OnDamageModify = (Monster attackingMonster, Monster targetMonster, Move move) =>
+                {
+                    if(targetMonster.Base.Type1 == MonsterType.Earth || targetMonster.Base.Type2 == MonsterType.Earth)
+                        return 1.5f; //sandstorm will boost attack of monsters
+                    else
+                        return 1f;
                 }
             }
         },
@@ -190,6 +259,15 @@ public class ConditionsDB
 
 public enum ConditionID
 {
+    //Status Conditions
     none, psn, brn, slp, par, frz, 
-    confusion
+    
+    //Volatile Status Conditions
+    confusion,
+
+    //Weather Effects
+    sun, rain, sandstorm,
+
+    //Warp Effects
+    timewarp
 }

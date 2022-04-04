@@ -25,6 +25,8 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] MonsterParty playerParty;
     [SerializeField] MonsterParty enemyParty;
 
+    public BattleFieldEffects battleFieldEffects {get; set;}
+
     
     const int skipIndex = 99;
 
@@ -72,6 +74,7 @@ public class BattleSystem : MonoBehaviour
         }
 
         partyScreen.Init();
+        battleFieldEffects = new BattleFieldEffects();
 
        yield return battleDialogueBox.TypeDialog($"A wild {battleUnits[2].Monster.Base.MonsterName} and {battleUnits[3].Monster.Base.MonsterName} appeared!"); //you can use yield return to call anothe coroutine which is what we are doing here
        
@@ -231,6 +234,19 @@ public class BattleSystem : MonoBehaviour
                 battleState = BattleState.PlayerTarget1;
                 selectedMoves.Insert(0,selectedMove);
                 selectedSwitch.Insert(0,null);//skip value for switch
+
+                if(selectedMove.Base.Target == MoveTarget.Self) //if move target is self
+                {
+                    selectedTargets.Insert(0,battleUnits[0]); 
+                    battleDialogueBox.EnableMoveSelector(false);
+                    
+                    battleState = BattleState.PlayerAction2;
+                    SelectAction();
+                }
+                else
+                {
+                    SelectTarget();
+                }
             }   
         }
         else if(battleState == BattleState.PlayerMove2)
@@ -246,11 +262,25 @@ public class BattleSystem : MonoBehaviour
                 battleState = BattleState.PlayerTarget2;
                 selectedMoves.Insert(1,selectedMove);
                 selectedSwitch.Insert(1,null);//skip value for switch
+
+                if(selectedMove.Base.Target == MoveTarget.Self) //if move target is self
+                {
+                    selectedTargets.Insert(1,battleUnits[1]); 
+                    battleDialogueBox.EnableMoveSelector(false);
+
+                    battleState = BattleState.EnemyAction1;
+                    EnemyActionSelection();
+                    
+                }
+                else
+                {
+                    SelectTarget();
+                }
             }
             
         }
 
-        SelectTarget();
+        
 
     }
 
@@ -522,7 +552,7 @@ public class BattleSystem : MonoBehaviour
                     }
                     else
                     {
-                        var damageDetails = targetMonster.TakeDamage(attackingMove, attackingMonster);
+                        var damageDetails = targetMonster.TakeDamage(attackingMove, attackingMonster, battleFieldEffects.Weather);
                         yield return targetUnit.Hud.UpdateHP();
                         yield return ShowDamageDetails(damageDetails);
                     }
@@ -560,6 +590,40 @@ public class BattleSystem : MonoBehaviour
 
         //After Turn Effects
         yield return RunAfterTurn(faintedUnits);
+
+        //WeatherEffects
+        if(battleFieldEffects.Weather != null)
+        {
+            yield return battleDialogueBox.TypeDialog(battleFieldEffects.Weather.EffectMessage);
+
+            foreach(BattleUnit unit in turnOrder)
+            {
+                if(unit.Monster.HP > 0)
+                {
+                    battleFieldEffects.Weather.OnWeather?.Invoke(unit.Monster);
+                    yield return StatusChangeDialog(unit.Monster);
+                    yield return unit.Hud.UpdateHP();
+
+                    if(unit.Monster.HP <= 0)//if the monster FAINTS
+                    {
+                        yield return battleDialogueBox.TypeDialog($"{unit.Monster.Base.MonsterName} fainted");
+                        faintedUnits.Add(unit);
+                    }
+                } 
+            }
+
+            if(battleFieldEffects.WeatherDuration != null)
+            {
+                battleFieldEffects.WeatherDuration--;
+
+                if(battleFieldEffects.WeatherDuration == 0)
+                {
+                    battleFieldEffects.Weather = null;
+                    battleFieldEffects.WeatherDuration = null;
+                    yield return battleDialogueBox.TypeDialog($"The harsh weather has cleared up");
+                }
+            }
+        }
         
         //Check for Battle Over
         if (faintedUnits.Count > 0)
@@ -585,6 +649,8 @@ public class BattleSystem : MonoBehaviour
                 unit.Monster.OnAfterTurn();
                 yield return StatusChangeDialog(unit.Monster);
                 yield return unit.Hud.UpdateHP();
+
+                
 
                 if(unit.Monster.HP <= 0)//if the monster FAINTS
                 {
@@ -661,10 +727,17 @@ public class BattleSystem : MonoBehaviour
                     targetMonster.SetStatus((ConditionID)effects.StatusEffect);
                     yield return StatusChangeDialog(targetMonster);
                 }
-                if(effects.VolatileStatusEffect != ConditionID.none)
+                if(effects.VolatileStatusEffect != ConditionID.none) //volatie status effects
                 {
                     targetMonster.SetVolatileStatus((ConditionID)effects.VolatileStatusEffect);
                     yield return StatusChangeDialog(targetMonster);
+                }
+                if(effects.Weather != ConditionID.none) //weather effects
+                {
+                    battleFieldEffects.SetWeather(effects.Weather);
+                    battleFieldEffects.WeatherDuration = 5;
+                    yield return battleDialogueBox.TypeDialog($"{battleFieldEffects.Weather.StartMessage}");
+                    
                 }
 
     }

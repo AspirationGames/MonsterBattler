@@ -44,16 +44,16 @@ public class EnemyAI : MonoBehaviour
            foreach(Move move in playerMoves)
            {
                //potential damage
-               DamageDetails potentialDamage = enemyUnit.Monster.TakeDamage(move,attackingMonster);
+               //DamageDetails potentialDamage = enemyUnit.Monster.TakeDamage(move,attackingMonster,);
 
-               if(potentialDamage.Fainted)
+               //if(potentialDamage.Fainted)
                {
                    //player Unit can potentially KO enemy;
-                   return true;
+                   //return true;
                }
-               else
+               //else
                {
-                   return false;
+                   //return false;
                }
            }
 

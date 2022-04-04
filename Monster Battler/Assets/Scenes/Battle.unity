@@ -2172,7 +2172,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &680127113
 Transform:
   m_ObjectHideFlags: 0
@@ -2208,6 +2208,7 @@ MonoBehaviour:
   - {fileID: 1993355020}
   battleDialogueBox: {fileID: 833896325}
   partyScreen: {fileID: 1995945269}
+  enemyAI: {fileID: 1891973318}
   turnOrder: []
   playerParty: {fileID: 1844712393}
   enemyParty: {fileID: 1891973316}
@@ -8392,21 +8393,6 @@ MonoBehaviour:
     developedSkillSpAttack: 0
     developedSkillSpDefense: 0
     developedSkillSpeed: 252
-  - _base: {fileID: 11400000, guid: 57d0a29cc67460745b766488d455f982, type: 2}
-    level: 5
-    personality: 15
-    naturalSkillMaxHP: 31
-    naturalSkillAttack: 31
-    naturalSkillDefense: 31
-    naturalSkillSpAttack: 31
-    naturalSkillSpDefense: 31
-    naturalSkillSpeed: 31
-    developedSkillMaxHP: 4
-    developedSkillAttack: 0
-    developedSkillDefense: 0
-    developedSkillSpAttack: 252
-    developedSkillSpDefense: 0
-    developedSkillSpeed: 252
   - _base: {fileID: 11400000, guid: e517362a48ec6f24da07555dc4a1f493, type: 2}
     level: 50
     personality: 2
@@ -8420,6 +8406,21 @@ MonoBehaviour:
     developedSkillAttack: 0
     developedSkillDefense: 0
     developedSkillSpAttack: 0
+    developedSkillSpDefense: 0
+    developedSkillSpeed: 252
+  - _base: {fileID: 11400000, guid: 57d0a29cc67460745b766488d455f982, type: 2}
+    level: 5
+    personality: 15
+    naturalSkillMaxHP: 31
+    naturalSkillAttack: 31
+    naturalSkillDefense: 31
+    naturalSkillSpAttack: 31
+    naturalSkillSpDefense: 31
+    naturalSkillSpeed: 31
+    developedSkillMaxHP: 4
+    developedSkillAttack: 0
+    developedSkillDefense: 0
+    developedSkillSpAttack: 252
     developedSkillSpDefense: 0
     developedSkillSpeed: 252
   - _base: {fileID: 11400000, guid: 424fb588cf7627c4f9b0c80bc5b7d64f, type: 2}
@@ -8577,6 +8578,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1891973317}
   - component: {fileID: 1891973316}
+  - component: {fileID: 1891973318}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -8599,19 +8601,19 @@ MonoBehaviour:
   monsters:
   - _base: {fileID: 11400000, guid: 424fb588cf7627c4f9b0c80bc5b7d64f, type: 2}
     level: 5
-    personality: 3
+    personality: 10
     naturalSkillMaxHP: 31
     naturalSkillAttack: 31
     naturalSkillDefense: 31
     naturalSkillSpAttack: 31
     naturalSkillSpDefense: 31
-    naturalSkillSpeed: 0
+    naturalSkillSpeed: 31
     developedSkillMaxHP: 252
     developedSkillAttack: 252
     developedSkillDefense: 0
     developedSkillSpAttack: 0
     developedSkillSpDefense: 0
-    developedSkillSpeed: 0
+    developedSkillSpeed: 252
   - _base: {fileID: 11400000, guid: d63bf37dc82034448bb8d1234f4d8a31, type: 2}
     level: 5
     personality: 4
@@ -8672,6 +8674,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1891973318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1891973315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc4124b30de157f47a4d35697758b13a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1941425380
 GameObject:
   m_ObjectHideFlags: 0
