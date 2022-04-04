@@ -13,6 +13,8 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] BattleDialogBox battleDialogueBox;
     [SerializeField] PartyScreen partyScreen;
 
+    [SerializeField] EnemyAI enemyAI;
+
     BattleState battleState;    
 
     [SerializeField] List<BattleUnit> turnOrder = new List<BattleUnit>();
@@ -30,21 +32,21 @@ public class BattleSystem : MonoBehaviour
     void Start()
     {
 
-        //StartCoroutine(SetupBattle());
+        StartCoroutine(SetupBattle());
     }
 
     void StartRandomEncounter(MonsterParty playerParty, MonsterParty untamedMonsters)
     {
-        this.playerParty = playerParty;
-        this.enemyParty = untamedMonsters;
-        StartCoroutine(SetupBattle());
+        //this.playerParty = playerParty;
+        //this.enemyParty = untamedMonsters;
+        //StartCoroutine(SetupBattle());
     }
 
     void StartDruidBattle(MonsterParty playerParty, MonsterParty druidParty)
     {
-        this.playerParty = playerParty;
-        this.enemyParty = druidParty;
-        StartCoroutine(SetupBattle());
+        //this.playerParty = playerParty;
+        //this.enemyParty = druidParty;
+        //StartCoroutine(SetupBattle());
     }
     
     public IEnumerator SetupBattle()
@@ -325,7 +327,8 @@ public class BattleSystem : MonoBehaviour
             partyScreen.gameObject.SetActive(false);
             battleDialogueBox.EnableBackButton(false);
             battleState = BattleState.EnemyAction1;
-            EnemyActionSelection();
+            //EnemyActionSelection();
+            EnemyMoveSelection();
 
         }
         else if(battleState == BattleState.PlayerFaintedSwitching)
@@ -339,7 +342,14 @@ public class BattleSystem : MonoBehaviour
 
     void EnemyActionSelection()
     {
-        //potentially allow enemy to switch for now just attack
+        
+
+        for(int i=2; i < battleUnits.Count; i++)
+        {   
+
+            enemyAI.ActionSelection(battleUnits, turnOrder, battleUnits[i]);
+            
+        }
         EnemyMoveSelection();
     }
 
@@ -356,6 +366,9 @@ public class BattleSystem : MonoBehaviour
             selectedTargets.Insert(i, battleUnits[randomTargetIndex]);
             selectedSwitch.Insert(i,null);
         }
+
+        
+
 
         StartCoroutine(SwitchMonsters());
 

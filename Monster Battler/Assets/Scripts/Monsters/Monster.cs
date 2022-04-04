@@ -267,9 +267,6 @@ public class Monster
            var stat = stageChange.stat;
            var stage = stageChange.stage;
 
-           Debug.Log(stat);
-           Debug.Log(stage);
-
            StatStages[stat] = Mathf.Clamp(StatStages[stat] + stage, -6, 6); //applies stage change to current StatStages
 
            if(stage > 0) StatusChangeMessages.Enqueue($"{Base.MonsterName}'s {stat} increased!");
@@ -407,6 +404,8 @@ public class Monster
         int damage = Mathf.FloorToInt(d*modifiers);
 
         
+        bool killingMove = ( (HP - damage) < 1 );
+        killingMove = damageDetails.Fainted;
 
         UpdateHP(damage);
         
