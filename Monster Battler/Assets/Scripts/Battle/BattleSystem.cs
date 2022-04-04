@@ -394,7 +394,7 @@ public class BattleSystem : MonoBehaviour
         for(int i=2; i < battleUnits.Count; i++)
         {   
 
-            enemyAI.ActionSelection(battleUnits, turnOrder, battleUnits[i]);
+            enemyAI.ActionSelection(battleUnits, turnOrder, battleUnits[i], battleFieldEffects);
             
         }
         EnemyMoveSelection();

@@ -5,59 +5,104 @@ using UnityEngine;
 public class EnemyAI : MonoBehaviour
 {
     
-    public void ActionSelection(List<BattleUnit> battleUnits, List<BattleUnit> turnOrder, BattleUnit enemyUnit)
+    
+    public int ActionSelection(List<BattleUnit> battleUnits, List<BattleUnit> turnOrder, BattleUnit enemyUnit, BattleFieldEffects battleFieldEffects)
     {
+        bool isWeak;
 
-        if(!turnOrder[0].IsPlayerMonster || !turnOrder[0].IsPlayerMonster && !turnOrder[1].IsPlayerMonster)
+        if(enemyUnit == turnOrder[0]) //fastest unit
         {
-            //enemy units are fastest units
-            Debug.Log("enemy has two fastest units on field");
-        }
-        else if(!turnOrder[1].IsPlayerMonster)
-        {
-            //enemy is second fastest
-            Debug.Log("enemy has second fastest unit but not the fastest unit");
-            //check if enemy is weak to player units
-            bool weak = isWeak(battleUnits, enemyUnit);
-            Debug.Log(weak);
+            return 1; //attack
 
         }
-        else
+        else if(enemyUnit == turnOrder[1])
         {
-            Debug.Log("something went wrong");
+            if(turnOrder[0].IsPlayerMonster)
+            {
+                isWeak = IsWeak(turnOrder[0],enemyUnit,battleFieldEffects);
+                if (isWeak) return 2; //defend
+                else return 1; //attack
+            }
+            else
+            {
+                return 1;
+            }
+        }
+        else if(enemyUnit == turnOrder[2])
+        {
+            return 3;
+        }
+        else if(enemyUnit == turnOrder[3])
+        {
+            return 4;
         }
 
-        
+
+        return 4;
 
     }
 
-    bool isWeak(List<BattleUnit> battleUnits, BattleUnit enemyUnit)
+    Move SelectMove(List<BattleUnit> battleUnits, BattleUnit enemyUnit, BattleFieldEffects battleFieldEffects)
     {
-        //List<Move> playerMoves = new List<Move>();
-        List<Move> enemyUnitMoves = new List<Move>();
-        
-        for(int i=0; i < 2; i++)
-        {   
-            Monster attackingMonster = battleUnits[i].Monster;
-            List<Move> playerMoves = attackingMonster.Moves;
-           
-           foreach(Move move in playerMoves)
-           {
-               //potential damage
-               //DamageDetails potentialDamage = enemyUnit.Monster.TakeDamage(move,attackingMonster,);
+        Monster enemyMonster = enemyUnit.Monster;
+        List<Move> enemyMoves = enemyMonster.Moves;
 
-               //if(potentialDamage.Fainted)
+
+        for(int i=0; i < 2; i++)
+        {
+            Monster playerMonster = battleUnits[i].Monster;
+
+            foreach(Move move in enemyMoves)
+            {
+                //potential damage
+               DamageDetails potentialDamage = playerMonster.TakeDamage(move, enemyMonster, battleFieldEffects.Weather);
+
+                if(potentialDamage.Fainted)
                {
                    //player Unit can potentially KO enemy;
-                   //return true;
+                   Debug.Log("enemy can be KO'd");
+                   return move;
                }
-               //else
+               else if(potentialDamage.TypeEffectiveness > 1)
                {
-                   //return false;
+                   return move;
                }
-           }
+               else
+               {
+                   continue;
+               }
 
+            }
         }
+
+        return null;
+        
+    }
+
+    bool IsWeak(BattleUnit playerUnit, BattleUnit enemyUnit, BattleFieldEffects battleFieldEffects)
+    {
+           
+        Monster attackingMonster = playerUnit.Monster;
+        List<Move> playerMoves = attackingMonster.Moves;
+           
+        foreach(Move move in playerMoves)
+        {
+            //potential damage
+            DamageDetails potentialDamage = enemyUnit.Monster.TakeDamage(move,attackingMonster, battleFieldEffects.Weather);
+
+            if(potentialDamage.Fainted)
+            {
+                //player Unit can potentially KO enemy;
+                Debug.Log("enemy can be KO'd");
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        
 
         return false;
 
