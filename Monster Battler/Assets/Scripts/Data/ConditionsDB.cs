@@ -253,7 +253,20 @@ public class ConditionsDB
             }
         },
 
+        //Time Warp Effects
+
+        {   //Time Warp
+            ConditionID.timewarp, 
+            new Condition()
+            {
+                Name = "Time Warp",
+                StartMessage = "Time dimensions were warped",
+            }
+        },
+
     };
+
+    
 
 }
 

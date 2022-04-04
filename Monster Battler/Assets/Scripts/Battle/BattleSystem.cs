@@ -27,9 +27,6 @@ public class BattleSystem : MonoBehaviour
 
     public BattleFieldEffects battleFieldEffects {get; set;}
 
-    
-    const int skipIndex = 99;
-
 
     void Start()
     {
@@ -91,15 +88,35 @@ public class BattleSystem : MonoBehaviour
 
     int SpeedComparison(BattleUnit a, BattleUnit b)
     {
-        if(a.Monster.Speed > b.Monster.Speed)
+        if(battleFieldEffects.TimeWarp != null) //time warp speed priority
         {
-            return -1; //we return negative 1 here because -1 means we are moving it up in the list or "to the left"
+            
+            if(a.Monster.Speed < b.Monster.Speed)
+            {
+                return -1; //we return negative 1 here because -1 means we are moving it up in the list or "to the left"
+            }
+            else if(a.Monster.Speed > b.Monster.Speed)
+            {
+                return 1;
+            }
+            return 0;
+
         }
-        else if(a.Monster.Speed < b.Monster.Speed)
+        else //normal speed check
         {
-            return 1;
+
+            if(a.Monster.Speed > b.Monster.Speed)
+            {
+                return -1; //we return negative 1 here because -1 means we are moving it up in the list or "to the left"
+            }
+            else if(a.Monster.Speed < b.Monster.Speed)
+            {
+                return 1;
+            }
+            return 0;
         }
-        return 0;
+
+        
     }
 
    void SelectAction()
@@ -591,7 +608,7 @@ public class BattleSystem : MonoBehaviour
         //After Turn Effects
         yield return RunAfterTurn(faintedUnits);
 
-        //WeatherEffects
+        //BattleField Effects
         if(battleFieldEffects.Weather != null)
         {
             yield return battleDialogueBox.TypeDialog(battleFieldEffects.Weather.EffectMessage);
@@ -612,7 +629,7 @@ public class BattleSystem : MonoBehaviour
                 } 
             }
 
-            if(battleFieldEffects.WeatherDuration != null)
+            if(battleFieldEffects.WeatherDuration != null) //Weather Duration Update
             {
                 battleFieldEffects.WeatherDuration--;
 
@@ -621,6 +638,18 @@ public class BattleSystem : MonoBehaviour
                     battleFieldEffects.Weather = null;
                     battleFieldEffects.WeatherDuration = null;
                     yield return battleDialogueBox.TypeDialog($"The harsh weather has cleared up");
+                }
+            }
+
+            if(battleFieldEffects.WarpDuration!= null) //Time Warp Update
+            {
+                battleFieldEffects.WarpDuration--;
+
+                if(battleFieldEffects.WarpDuration == 0)
+                {
+                    battleFieldEffects.TimeWarp = null;
+                    battleFieldEffects.WarpDuration = null;
+                    yield return battleDialogueBox.TypeDialog($"The dimensions of time have reverted to their normal state");
                 }
             }
         }
@@ -738,6 +767,23 @@ public class BattleSystem : MonoBehaviour
                     battleFieldEffects.WeatherDuration = 5;
                     yield return battleDialogueBox.TypeDialog($"{battleFieldEffects.Weather.StartMessage}");
                     
+                }
+                if(effects.TimeWarp != ConditionID.none)
+                {
+                    if(battleFieldEffects.TimeWarp == null)
+                    {
+                        battleFieldEffects.SetWarp(effects.TimeWarp);
+                        battleFieldEffects.WarpDuration = 5;
+                        yield return battleDialogueBox.TypeDialog($"{battleFieldEffects.TimeWarp.StartMessage}");
+                    }
+                    else
+                    {
+                        battleFieldEffects.TimeWarp = null;
+                        battleFieldEffects.WarpDuration = null;
+                        yield return battleDialogueBox.TypeDialog($"The dimensions of time have reverted to their normal state");
+                    }
+                
+
                 }
 
     }

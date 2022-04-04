@@ -129,6 +129,7 @@ public class MoveBase : ScriptableObject
         [SerializeField] ConditionID statusEffect;
         [SerializeField] ConditionID volatileStatusEffect;
         [SerializeField] ConditionID weather;
+        [SerializeField] ConditionID timeWarp;
 
 
         public List<StatStageChange> StageChanges
@@ -149,6 +150,11 @@ public class MoveBase : ScriptableObject
         public ConditionID Weather
         {
             get{return weather;}
+        }
+
+        public ConditionID TimeWarp
+        {
+            get{return timeWarp;}
         }
 
     }
