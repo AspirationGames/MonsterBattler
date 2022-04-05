@@ -31,7 +31,7 @@ public class BattleSystem : MonoBehaviour
     void Start()
     {
         
-        
+        StartCoroutine(SetupBattle());
     }
 
     void StartRandomEncounter()
@@ -40,7 +40,7 @@ public class BattleSystem : MonoBehaviour
         //this.enemyParty = untamedMonsters;
         //StartCoroutine(SetupBattle());
 
-        StartCoroutine(SetupBattle());
+        //StartCoroutine(SetupBattle());
     }
 
     void StartDruidBattle(MonsterParty playerParty, MonsterParty druidParty)
@@ -557,6 +557,8 @@ public class BattleSystem : MonoBehaviour
             {
                 yield return battleDialogueBox.TypeDialog
                 ($"{attackingMonster.Base.MonsterName} use {attackingMove.Base.MoveName}");
+                attackingUnit.PlayAttackAnimation();
+                
                 yield return battleDialogueBox.TypeDialog
                 ("But it Failed");
             }
@@ -567,6 +569,9 @@ public class BattleSystem : MonoBehaviour
                 yield return battleDialogueBox.TypeDialog
                 ($"{attackingMonster.Base.MonsterName} use {attackingMove.Base.MoveName} on {targetMonster.Base.MonsterName}");
                 
+                attackingUnit.PlayAttackAnimation();
+                yield return new WaitForSeconds(1f);
+                
                 if(AccuracyCheck(attackingMove, attackingMonster, targetMonster)) //accuracy check
                 {
                     if(attackingMove.Base.Category == MoveCategory.Status) //If move is a status move
@@ -576,6 +581,7 @@ public class BattleSystem : MonoBehaviour
                     }
                     else
                     {
+                        targetUnit.PlayHitAnimation();
                         var damageDetails = targetMonster.TakeDamage(attackingMove, attackingMonster, battleFieldEffects.Weather);
                         yield return targetUnit.Hud.UpdateHP();
                         yield return ShowDamageDetails(damageDetails);
@@ -597,8 +603,9 @@ public class BattleSystem : MonoBehaviour
 
                     if(targetUnit.Monster.HP <= 0)//if the monster FAINTS
                     {
-                    yield return battleDialogueBox.TypeDialog($"{targetMonster.Base.MonsterName} fainted");
-                    faintedUnits.Add(targetUnit);
+                        targetUnit.PlayFaintAnimation();
+                        yield return battleDialogueBox.TypeDialog($"{targetMonster.Base.MonsterName} fainted");
+                        faintedUnits.Add(targetUnit);
                     }
                 }
                 else //attack missed

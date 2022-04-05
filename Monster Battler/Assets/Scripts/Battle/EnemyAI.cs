@@ -8,7 +8,7 @@ public class EnemyAI : MonoBehaviour
     public Move EnemyMoveSelection(List<BattleUnit> battleUnits, List<BattleUnit> turnOrder, BattleUnit enemyUnit, BattleFieldEffects battleFieldEffects)
     {
         int speedPriority = SpeedCheck(turnOrder, enemyUnit, battleFieldEffects);
-        bool isWeak;
+        //bool isWeak;
 
         Monster enemyMonster = enemyUnit.Monster;
         List<Move> enemyMoves = enemyMonster.Moves;
