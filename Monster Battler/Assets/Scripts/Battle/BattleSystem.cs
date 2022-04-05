@@ -31,14 +31,16 @@ public class BattleSystem : MonoBehaviour
     void Start()
     {
         
-        StartCoroutine(SetupBattle());
+        
     }
 
-    void StartRandomEncounter(MonsterParty playerParty, MonsterParty untamedMonsters)
+    void StartRandomEncounter()
     {
         //this.playerParty = playerParty;
         //this.enemyParty = untamedMonsters;
         //StartCoroutine(SetupBattle());
+
+        StartCoroutine(SetupBattle());
     }
 
     void StartDruidBattle(MonsterParty playerParty, MonsterParty druidParty)

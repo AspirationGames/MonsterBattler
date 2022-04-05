@@ -70,9 +70,11 @@ public class PlayerController : MonoBehaviour
 
         transform.position = targetPosition;
         isWalking = false;
+
+        CheckForEncounter();
     }
 
-    private bool IsWalkable(Vector3 targetPosition)
+    bool IsWalkable(Vector3 targetPosition)
     {
         if(Physics2D.OverlapCircle(targetPosition, 0.2f, LayerMask.GetMask("SolidObjects")) != null)
         {
@@ -80,6 +82,17 @@ public class PlayerController : MonoBehaviour
         }
         
             return true;
+    }
+
+    void CheckForEncounter()
+    {
+        if(Physics2D.OverlapCircle(transform.position, 0.2f, LayerMask.GetMask("MonsterEncounters")) != null )
+        {
+            if(Random.Range(1, 101) <= 10) //10% chance of random monster encounter
+            {
+                Debug.Log("wild encounter");
+            }
+        }
     }
 
 
