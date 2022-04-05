@@ -408,7 +408,7 @@ public class Monster
 
         
         bool killingMove = ( (HP - damage) < 1 );
-        killingMove = damageDetails.Fainted;
+        killingMove = damageDetails.KO;
 
         UpdateHP(damage);
         
@@ -433,7 +433,7 @@ public class Monster
 
 public class DamageDetails
 {
-    public bool Fainted{get; set;}
+    public bool KO{get; set;}
     public float Critical{get; set;}
     public float TypeEffectiveness{get; set;}
 }

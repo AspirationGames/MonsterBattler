@@ -30,7 +30,7 @@ public class BattleSystem : MonoBehaviour
 
     void Start()
     {
-
+        
         StartCoroutine(SetupBattle());
     }
 
@@ -375,7 +375,7 @@ public class BattleSystem : MonoBehaviour
             battleDialogueBox.EnableBackButton(false);
             battleState = BattleState.EnemyAction1;
             //EnemyActionSelection();
-            EnemyMoveSelection();
+            EnemyActionSelection();
 
         }
         else if(battleState == BattleState.PlayerFaintedSwitching)
@@ -389,18 +389,26 @@ public class BattleSystem : MonoBehaviour
 
     void EnemyActionSelection()
     {
-        
 
-        for(int i=2; i < battleUnits.Count; i++)
-        {   
-
-            enemyAI.ActionSelection(battleUnits, turnOrder, battleUnits[i], battleFieldEffects);
-            
-        }
-        EnemyMoveSelection();
+        //EnemyMoves();
+        RandomEnemyMove();
     }
 
-    void EnemyMoveSelection()
+    void EnemyMoves()
+    {
+        for(int i=2; i < battleUnits.Count; i++)
+        {   
+            Move enemyMove = enemyAI.EnemyMoveSelection(battleUnits, turnOrder, battleUnits[i], battleFieldEffects);
+            BattleUnit enemyTarget = enemyAI.EnemyTargetSelection(battleUnits, battleUnits[i], enemyMove, battleFieldEffects);
+            selectedMoves.Insert(i, enemyMove);
+            selectedTargets.Insert(i, enemyTarget);
+            selectedSwitch.Insert(i,null);
+        }
+
+        StartCoroutine(SwitchMonsters());
+    }
+
+    void RandomEnemyMove() //Selects Random move for enemy
     {
 
         for(int i=2; i < battleUnits.Count; i++)
@@ -413,9 +421,6 @@ public class BattleSystem : MonoBehaviour
             selectedTargets.Insert(i, battleUnits[randomTargetIndex]);
             selectedSwitch.Insert(i,null);
         }
-
-        
-
 
         StartCoroutine(SwitchMonsters());
 
@@ -513,6 +518,7 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator PerformMoves()
     {
+        
 
         List<BattleUnit> faintedUnits = new List<BattleUnit>(); //list to keep track of fainted units
         turnOrder.Sort(CheckMovePriority); //check for priority moves
@@ -539,7 +545,6 @@ public class BattleSystem : MonoBehaviour
             BattleUnit targetUnit = selectedTargets[battleUnits.IndexOf(attackingUnit)];
             Monster targetMonster = targetUnit.Monster;
             attackingMove.AP--; 
-
 
             if(targetMonster.HP <= 0) // check if target is alive
             {

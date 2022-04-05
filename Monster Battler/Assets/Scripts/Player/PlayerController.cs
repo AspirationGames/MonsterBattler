@@ -47,7 +47,11 @@ public class PlayerController : MonoBehaviour
             targetPosition.y += moveInput.y;
 
             //Movement is handled by couroutine
-            StartCoroutine(Movement(targetPosition));
+            if(IsWalkable(targetPosition))
+            {
+                StartCoroutine(Movement(targetPosition));
+            }
+            
         }
         
         playerAnimator.SetBool("isWalking", isWalking);
@@ -66,6 +70,16 @@ public class PlayerController : MonoBehaviour
 
         transform.position = targetPosition;
         isWalking = false;
+    }
+
+    private bool IsWalkable(Vector3 targetPosition)
+    {
+        if(Physics2D.OverlapCircle(targetPosition, 0.2f, LayerMask.GetMask("SolidObjects")) != null)
+        {
+            return false;
+        }
+        
+            return true;
     }
 
 

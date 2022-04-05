@@ -5,92 +5,169 @@ using UnityEngine;
 public class EnemyAI : MonoBehaviour
 {
     
-    
-    public int ActionSelection(List<BattleUnit> battleUnits, List<BattleUnit> turnOrder, BattleUnit enemyUnit, BattleFieldEffects battleFieldEffects)
+    public Move EnemyMoveSelection(List<BattleUnit> battleUnits, List<BattleUnit> turnOrder, BattleUnit enemyUnit, BattleFieldEffects battleFieldEffects)
     {
+        int speedPriority = SpeedCheck(turnOrder, enemyUnit, battleFieldEffects);
         bool isWeak;
 
-        if(enemyUnit == turnOrder[0]) //fastest unit
+        Monster enemyMonster = enemyUnit.Monster;
+        List<Move> enemyMoves = enemyMonster.Moves;
+
+        
+
+        if(this.tag == "Time Warp" && battleFieldEffects.TimeWarp != null && speedPriority != 1)
+        {
+            foreach(Move move in enemyMoves)
+            {
+                if(move.Base.Effects.TimeWarp == ConditionID.timewarp)
+                {
+                    return move;
+                }
+                else
+                    continue;
+            }
+        }
+
+
+    
+    //Default Action
+
+        return FindHighestDamageMove(battleUnits, enemyUnit, enemyMoves, battleFieldEffects);
+
+    }
+
+    public BattleUnit EnemyTargetSelection(List<BattleUnit> battleUnits, BattleUnit enemyUnit, Move enemyMove, BattleFieldEffects battleFieldEffects)
+    {
+        if(enemyMove.Base.Target == MoveTarget.Self)
+        {
+            return enemyUnit;
+        }
+        
+        //Default Action
+
+        return FindHighestDamageTarget(battleUnits, enemyUnit, enemyMove, battleFieldEffects);
+    }
+
+    
+
+    private int SpeedCheck(List<BattleUnit> turnOrder, BattleUnit enemyUnit, BattleFieldEffects battleFieldEffects)
+    {
+        
+
+        if (enemyUnit == turnOrder[0]) //fastest unit
         {
             return 1; //attack
 
         }
-        else if(enemyUnit == turnOrder[1])
+        else if (enemyUnit == turnOrder[1])
         {
-            if(turnOrder[0].IsPlayerMonster)
+            if (turnOrder[0].IsPlayerMonster)
             {
-                isWeak = IsWeak(turnOrder[0],enemyUnit,battleFieldEffects);
-                if (isWeak) return 2; //defend
-                else return 1; //attack
+                return 2;
             }
             else
             {
                 return 1;
             }
         }
-        else if(enemyUnit == turnOrder[2])
+        else if (enemyUnit == turnOrder[2])
         {
             return 3;
         }
-        else if(enemyUnit == turnOrder[3])
+        else if (enemyUnit == turnOrder[3])
         {
             return 4;
         }
 
 
         return 4;
-
     }
 
-    Move SelectMove(List<BattleUnit> battleUnits, BattleUnit enemyUnit, BattleFieldEffects battleFieldEffects)
+    Move FindHighestDamageMove(List<BattleUnit> battleUnits, BattleUnit enemyUnit, List<Move> enemyMoves, BattleFieldEffects battleFieldEffects)
     {
-        Monster enemyMonster = enemyUnit.Monster;
-        List<Move> enemyMoves = enemyMonster.Moves;
+        
 
-
-        for(int i=0; i < 2; i++)
+        foreach(BattleUnit unit in battleUnits)
         {
-            Monster playerMonster = battleUnits[i].Monster;
+            if(!unit.IsPlayerMonster)
+                continue;
+            else
+                foreach(Move move in enemyMoves)
+                {
+                    //potential damage
+                    DamageDetails potentialDamage = unit.Monster.TakeDamage(move, enemyUnit.Monster, battleFieldEffects.Weather);
 
-            foreach(Move move in enemyMoves)
-            {
-                //potential damage
-               DamageDetails potentialDamage = playerMonster.TakeDamage(move, enemyMonster, battleFieldEffects.Weather);
+                    if(potentialDamage.KO)
+                    {
+                        //player Unit can potentially KO enemy;
+                        Debug.Log("enemy can be KO'd");
+                        return move;
+                    }
+                    else if(potentialDamage.TypeEffectiveness > 1)
+                    {
+                        return move;
+                    }
+                    else
+                    {
+                        continue;
+                    }
 
-                if(potentialDamage.Fainted)
-               {
-                   //player Unit can potentially KO enemy;
-                   Debug.Log("enemy can be KO'd");
-                   return move;
-               }
-               else if(potentialDamage.TypeEffectiveness > 1)
-               {
-                   return move;
-               }
-               else
-               {
-                   continue;
-               }
-
-            }
+                }
         }
 
         return null;
-        
     }
+
+    BattleUnit FindHighestDamageTarget(List<BattleUnit> battleUnits, BattleUnit enemyUnit, Move move, BattleFieldEffects battleFieldEffects)
+    {
+       foreach(BattleUnit unit in battleUnits)
+        {
+            DamageDetails potentialDamage = unit.Monster.TakeDamage(move, enemyUnit.Monster, battleFieldEffects.Weather);
+
+            if(!unit.IsPlayerMonster)
+                continue;
+            else
+            {
+
+                if(potentialDamage.KO)
+                {
+                    //player Unit can potentially KO enemy;
+                    Debug.Log("enemy can be KO'd");
+                    return unit;
+                }
+                else if(potentialDamage.TypeEffectiveness > 1)
+                {
+                    return unit;
+                }
+                else if(potentialDamage.TypeEffectiveness < 1)
+                {
+                    continue;
+                }
+                else if(potentialDamage.TypeEffectiveness == 1)
+                {
+                    return unit;
+                }
+            }
+            
+        }
+
+        return null;
+    }
+
+
 
     bool IsWeak(BattleUnit playerUnit, BattleUnit enemyUnit, BattleFieldEffects battleFieldEffects)
     {
            
         Monster attackingMonster = playerUnit.Monster;
         List<Move> playerMoves = attackingMonster.Moves;
-           
+
         foreach(Move move in playerMoves)
         {
             //potential damage
             DamageDetails potentialDamage = enemyUnit.Monster.TakeDamage(move,attackingMonster, battleFieldEffects.Weather);
 
-            if(potentialDamage.Fainted)
+            if(potentialDamage.KO)
             {
                 //player Unit can potentially KO enemy;
                 Debug.Log("enemy can be KO'd");
