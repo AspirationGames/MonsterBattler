@@ -32,7 +32,6 @@ public class BattleSystem : MonoBehaviour
 
     public void StartBattle()
     {
-        
         StartCoroutine(SetupBattle());
     }
 
@@ -573,6 +572,12 @@ public class BattleSystem : MonoBehaviour
                 
                 attackingUnit.PlayAttackAnimation();
                 yield return new WaitForSeconds(1f);
+
+                if(targetMonster.IsProtected)
+                {
+                    yield return battleDialogueBox.TypeDialog($"{targetMonster.Base.MonsterName} was protected from the attack by a {targetMonster.ProtectedStatus.Name}");
+                    continue;
+                }
                 
                 if(AccuracyCheck(attackingMove, attackingMonster, targetMonster)) //accuracy check
                 {
@@ -581,6 +586,8 @@ public class BattleSystem : MonoBehaviour
                         yield return PerformEffects(attackingMove.Base.Effects, attackingMonster, targetMonster, attackingMove.Base.Target);
                         continue;
                     }
+                    // if target monster is protected
+
                     else
                     {
                         targetUnit.PlayHitAnimation();
@@ -692,6 +699,7 @@ public class BattleSystem : MonoBehaviour
             if(unit.Monster.HP > 0)
             {
                 unit.Monster.OnAfterTurn();
+                unit.Monster.ResetProtect();
                 yield return StatusChangeDialog(unit.Monster);
                 yield return unit.Hud.UpdateHP();
 
@@ -703,7 +711,12 @@ public class BattleSystem : MonoBehaviour
                     faintedUnits.Add(unit);
                 }
             }
-            else continue;
+            else
+            {
+                unit.Monster.ResetProtect();
+                continue;
+            } 
+            
         }
 
 
@@ -798,7 +811,20 @@ public class BattleSystem : MonoBehaviour
                         battleFieldEffects.WarpDuration = null;
                         yield return battleDialogueBox.TypeDialog($"The dimensions of time have reverted to their normal state");
                     }
-                
+
+                }
+                if(effects.Protect != ConditionID.none)
+                {
+                    if(moveTarget == MoveTarget.Self) //protecting self
+                    {
+                        attackingMonster.Protect(effects.Protect);
+                        yield return StatusChangeDialog(attackingMonster);
+                    }
+                    else //protecting ally
+                    {
+                        targetMonster.Protect(effects.Protect);
+                        yield return StatusChangeDialog(targetMonster);
+                    }
 
                 }
 

@@ -12,17 +12,20 @@ public class MoveBase : ScriptableObject
     [SerializeField] string description;
     [SerializeField] MonsterType type;
 
+    [SerializeField] MoveTarget target;
+
     [Header("Stats")]
     [SerializeField] int power;
     [SerializeField] int accuracy;
     [SerializeField] bool alwaysHits;
     [SerializeField] int ap;
-
     [SerializeField] int priority;
+
+    [Header("Effects")]
     [SerializeField] MoveCategory category;
     [SerializeField] MoveEffects effects;
     [SerializeField] List<SecondaryEffects> secondaryEffects; //moves can have multiple secondary effects
-    [SerializeField] MoveTarget target;
+    
 
     
 
@@ -130,6 +133,7 @@ public class MoveBase : ScriptableObject
         [SerializeField] ConditionID volatileStatusEffect;
         [SerializeField] ConditionID weather;
         [SerializeField] ConditionID timeWarp;
+        [SerializeField] ConditionID protect;
 
 
         public List<StatStageChange> StageChanges
@@ -155,6 +159,11 @@ public class MoveBase : ScriptableObject
         public ConditionID TimeWarp
         {
             get{return timeWarp;}
+        }
+
+        public ConditionID Protect
+        {
+            get{return protect;}
         }
 
     }

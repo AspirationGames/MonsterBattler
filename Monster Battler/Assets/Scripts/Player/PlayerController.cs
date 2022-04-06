@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] LayerMask solidObjects;
     [SerializeField] LayerMask monsterEncounters;
+
+    [SerializeField] float encoutnerRate = 10f;
     Vector2 moveInput;
     bool isWalking;
 
@@ -94,7 +96,7 @@ public class PlayerController : MonoBehaviour
     {
         if(Physics2D.OverlapCircle(transform.position, 0.2f, monsterEncounters)!= null )
         {
-            if(UnityEngine.Random.Range(1, 101) <= 10) //10% chance of random monster encounter
+            if(UnityEngine.Random.Range(1, 101) <= encoutnerRate) //10% chance of random monster encounter
             {
                 playerAnimator.SetBool("isWalking", false);
                 OnEncounter();

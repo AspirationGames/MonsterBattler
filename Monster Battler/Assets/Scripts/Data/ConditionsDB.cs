@@ -264,6 +264,32 @@ public class ConditionsDB
             }
         },
 
+        //Protection effects
+
+        {   //Protect
+            ConditionID.barrier, 
+            new Condition()
+            {
+                Name = "Barrier",
+                EffectMessage = "was shielded by a barrier",
+                OnStart = (Monster monster) =>
+                {
+                    
+                },
+                OnProtect = (Monster monster) =>
+                {
+                    if(monster.ProtectSucessChance > Random.Range(1, 101))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+        },
+
     };
 
     
@@ -282,5 +308,8 @@ public enum ConditionID
     sun, rain, sandstorm,
 
     //Warp Effects
-    timewarp
+    timewarp,
+
+    //Protected
+    barrier
 }

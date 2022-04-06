@@ -37,13 +37,14 @@ public class GameController : MonoBehaviour
     {
         gameState = GameState.Battle;
         battleSystem.gameObject.SetActive(true);
+        battleSystem.StartBattle();
     }
     
     private void EndBattle(bool won)
     {
         gameState = GameState.OverWorld;
         battleSystem.gameObject.SetActive(false);
-        battleSystem.StartBattle();
+        
 
     }
 

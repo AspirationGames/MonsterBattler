@@ -55,8 +55,15 @@ public class Monster
     public Condition VolatileStatus{get; private set;}
     public int VolatileStatusTime{get; set;}
 
+    public Condition ProtectedStatus {get; set;} //protected
+
+    public float ProtectSucessChance {get; set;}
+    public bool IsProtected{get; set;}
+
     public bool InBattle {get; set;} //flag for if monster is actively in battle
     public bool HpChanged {get; set;}
+
+    
 
     public event System.Action OnStatusChaged; 
 
@@ -83,6 +90,8 @@ public class Monster
         ResetStatStages();
         Status = null;
         VolatileStatus = null;
+        ProtectedStatus = null;
+        ProtectSucessChance = 100f;
         
     }
 
@@ -322,6 +331,51 @@ public class Monster
         VolatileStatus = null;
     }
 
+    public void Protect(ConditionID conditionID)
+    {
+        Debug.Log(ProtectSucessChance);
+        
+        if(ProtectedStatus == null)
+        {   
+            ProtectedStatus = ConditionsDB.Conditions[conditionID];
+
+            if(ProtectedStatus.OnProtect(this)) //tries to protect target
+            {
+                IsProtected = true;
+                StatusChangeMessages.Enqueue($"{Base.MonsterName} {ProtectedStatus.EffectMessage}");
+            }
+            else
+            {
+                StatusChangeMessages.Enqueue($"But it failed.");
+                return;
+            }
+        }
+
+        else // monster is already under protected status
+        {
+            StatusChangeMessages.Enqueue($"But it failed.");
+            return;
+        }
+    }
+    public void ResetProtect() //should reset protect values after each turn
+    {
+        if(ProtectedStatus != null && IsProtected) //monster protected this turn and did so sucesfully. We increment divide sucess chance by 3 each time.
+        {
+            ProtectSucessChance = ProtectSucessChance/3;
+            IsProtected = false;
+            ProtectedStatus = null;
+        }
+        else if(ProtectedStatus != null && !IsProtected)
+        {
+            ProtectSucessChance = 100f;
+            ProtectedStatus = null;
+        }
+        else // monster did not have any protected status
+        {
+            return;
+        }
+    }
+
     public bool OnBeforeMove()
     {
         bool canMove = true;
@@ -347,6 +401,8 @@ public class Monster
     {
         Status?.OnAfterTurn?.Invoke(this); //addomg a question mark after action will make sure that on after turn is not null
         VolatileStatus?.OnAfterTurn?.Invoke(this);
+        ProtectedStatus?.OnAfterTurn?.Invoke(this);
+        
     }
 
     
