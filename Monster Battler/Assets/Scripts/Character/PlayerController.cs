@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
     void OnInteract(InputValue inputValue)
     {
         interactInput = inputValue.isPressed;
-        Debug.Log(interactInput);
+        //Debug.Log(interactInput);
     }
 
     public void HandleUpdate()
@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
         
         if (interactableCollider != null)
         {
-            Debug.Log("interacting");
+            interactableCollider.GetComponent<Interactable>()?.Interact(); //finds Interactable interace. Any interactable items should have this interface attached to their class
         }
 
     }
