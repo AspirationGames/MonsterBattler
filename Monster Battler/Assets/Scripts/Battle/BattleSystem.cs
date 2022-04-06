@@ -15,7 +15,9 @@ public class BattleSystem : MonoBehaviour
 
     [SerializeField] EnemyAI enemyAI;
 
-    BattleState battleState;    
+    BattleState battleState;
+
+    public event Action<bool> OnBattleOver;    
 
     [SerializeField] List<BattleUnit> turnOrder = new List<BattleUnit>();
     List<Move> selectedMoves =  new List<Move>();
@@ -28,7 +30,7 @@ public class BattleSystem : MonoBehaviour
     public BattleFieldEffects battleFieldEffects {get; set;}
 
 
-    void Start()
+    public void StartBattle()
     {
         
         StartCoroutine(SetupBattle());
@@ -815,11 +817,15 @@ public class BattleSystem : MonoBehaviour
     {
         if(!playerParty.HasHealthyMonster()) //player has no healthy monsters
         {
-            Debug.Log("you lose");
+            yield return battleDialogueBox.TypeDialog("You Lose!");
+            yield return new WaitForSeconds(2f);
+            BattleOver(false);
         }
-        else if(!enemyParty.HasHealthyMonster()) //enemyu has no healthy monsters
+        else if(!enemyParty.HasHealthyMonster()) //enemy has no healthy monsters
         {
-            Debug.Log("you win");
+            yield return battleDialogueBox.TypeDialog("You Win!");
+            yield return new WaitForSeconds(2f);
+            BattleOver(true);
         }
         else
         {
@@ -959,7 +965,7 @@ public class BattleSystem : MonoBehaviour
     {
         battleState = BattleState.BattleOver;
         playerParty.Monsters.ForEach(m => m.OnBattleOver()); //rests for each monster in party
-        //OnBattleOver(won);
+        OnBattleOver(won);
 
     }
 

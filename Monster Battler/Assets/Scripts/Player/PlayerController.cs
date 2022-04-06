@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,10 +7,15 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 5f;
+
+    [SerializeField] LayerMask solidObjects;
+    [SerializeField] LayerMask monsterEncounters;
     Vector2 moveInput;
     bool isWalking;
 
     Animator playerAnimator;
+
+    public event Action OnEncounter;
     
     
     void Awake() 
@@ -18,7 +24,7 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
-        ProcessMovement();
+        
     }
 
     void OnMove(InputValue inputValue)
@@ -29,7 +35,7 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    void ProcessMovement()
+    public void HandleUpdate()
     {
         
 
@@ -76,7 +82,7 @@ public class PlayerController : MonoBehaviour
 
     bool IsWalkable(Vector3 targetPosition)
     {
-        if(Physics2D.OverlapCircle(targetPosition, 0.2f, LayerMask.GetMask("SolidObjects")) != null)
+        if(Physics2D.OverlapCircle(targetPosition, 0.2f, solidObjects) != null)
         {
             return false;
         }
@@ -86,11 +92,13 @@ public class PlayerController : MonoBehaviour
 
     void CheckForEncounter()
     {
-        if(Physics2D.OverlapCircle(transform.position, 0.2f, LayerMask.GetMask("MonsterEncounters")) != null )
+        if(Physics2D.OverlapCircle(transform.position, 0.2f, monsterEncounters)!= null )
         {
-            if(Random.Range(1, 101) <= 10) //10% chance of random monster encounter
+            if(UnityEngine.Random.Range(1, 101) <= 10) //10% chance of random monster encounter
             {
-                Debug.Log("wild encounter");
+                playerAnimator.SetBool("isWalking", false);
+                OnEncounter();
+
             }
         }
     }

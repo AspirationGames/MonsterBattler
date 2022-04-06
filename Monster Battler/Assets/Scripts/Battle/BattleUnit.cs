@@ -50,6 +50,7 @@ public class BattleUnit : MonoBehaviour
 
         hud.SetData(monster);
 
+        monsterImage.color = originalColor;
         PlayEnterAnimation();
 
     }
@@ -66,7 +67,7 @@ public class BattleUnit : MonoBehaviour
         }
 
         monsterImage.transform.DOLocalMoveX(startPosition.x, enterAnimationDuration);
-        monsterImage.DOColor(originalColor, 0.5f);
+        
     }
 
     public void PlayAttackAnimation()
