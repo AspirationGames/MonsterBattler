@@ -8,11 +8,14 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 5f;
 
-    [SerializeField] LayerMask solidObjects;
-    [SerializeField] LayerMask monsterEncounters;
+    [SerializeField] LayerMask solidObjectsLayer;
+    [SerializeField] LayerMask interactableLayer;
+    [SerializeField] LayerMask monsterEncountersLayer;
 
     [SerializeField] float encoutnerRate = 10f;
     Vector2 moveInput;
+
+    bool interactInput;
     bool isWalking;
 
     Animator playerAnimator;
@@ -24,10 +27,6 @@ public class PlayerController : MonoBehaviour
     {
         playerAnimator = GetComponent<Animator>();    
     }
-    void Update()
-    {
-        
-    }
 
     void OnMove(InputValue inputValue)
     {
@@ -35,6 +34,12 @@ public class PlayerController : MonoBehaviour
 
         
         
+    }
+
+    void OnInteract(InputValue inputValue)
+    {
+        interactInput = inputValue.isPressed;
+        Debug.Log(interactInput);
     }
 
     public void HandleUpdate()
@@ -61,8 +66,29 @@ public class PlayerController : MonoBehaviour
             }
             
         }
+
+        if(interactInput)
+        {
+            Interact();
+        }
         
         playerAnimator.SetBool("isWalking", isWalking);
+    }
+
+    void Interact()
+    {
+        var faceDirection = new Vector3(playerAnimator.GetFloat("moveX"), playerAnimator.GetFloat("moveY"));
+        var interactPosition = transform.position + faceDirection;
+
+        //Debug.DrawLine(transform.position, interactPosition, Color.green, 1f);
+
+        var interactableCollider = Physics2D.OverlapCircle(interactPosition, 0.3f, interactableLayer);
+        
+        if (interactableCollider != null)
+        {
+            Debug.Log("interacting");
+        }
+
     }
 
     IEnumerator Movement(Vector3 targetPosition)
@@ -84,7 +110,7 @@ public class PlayerController : MonoBehaviour
 
     bool IsWalkable(Vector3 targetPosition)
     {
-        if(Physics2D.OverlapCircle(targetPosition, 0.2f, solidObjects) != null)
+        if(Physics2D.OverlapCircle(targetPosition, 0.2f, solidObjectsLayer | interactableLayer) != null)
         {
             return false;
         }
@@ -94,7 +120,7 @@ public class PlayerController : MonoBehaviour
 
     void CheckForEncounter()
     {
-        if(Physics2D.OverlapCircle(transform.position, 0.2f, monsterEncounters)!= null )
+        if(Physics2D.OverlapCircle(transform.position, 0.2f, monsterEncountersLayer)!= null )
         {
             if(UnityEngine.Random.Range(1, 101) <= encoutnerRate) //10% chance of random monster encounter
             {
@@ -104,6 +130,8 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    
 
 
 }
