@@ -6611,6 +6611,11 @@ MonoBehaviour:
     lines:
     - Hi there! What level are you?
     - 'I''m only level 1. '
+  sprites:
+  - {fileID: -996098071, guid: 304d50df6b1a3474b98f48ba4c0dbc35, type: 3}
+  - {fileID: 1864908633, guid: 304d50df6b1a3474b98f48ba4c0dbc35, type: 3}
+  - {fileID: -996098071, guid: 304d50df6b1a3474b98f48ba4c0dbc35, type: 3}
+  - {fileID: -777784805, guid: 304d50df6b1a3474b98f48ba4c0dbc35, type: 3}
 --- !u!1 &1378905367
 GameObject:
   m_ObjectHideFlags: 0

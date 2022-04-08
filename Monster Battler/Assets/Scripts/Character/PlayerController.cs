@@ -14,9 +14,9 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
     [SerializeField] LayerMask monsterEncountersLayer;
 
     [SerializeField] float encoutnerRate = 10f;
-    bool isWalking;
+    bool isMoving;
 
-    Animator playerAnimator;
+    CharacterAnimator characterAnimator;
 
     Vector2 moveDirection;
     public event Action OnEncounter;
@@ -24,12 +24,9 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
     PlayerControls playerControls;
     void Awake() 
     {
-        playerAnimator = GetComponent<Animator>();  
-
+        characterAnimator = GetComponent<CharacterAnimator>();  
         playerControls = new PlayerControls();
-        playerControls.Player.SetCallbacks(this);  
-
-        Debug.Log(playerControls != null);
+        playerControls.Player.SetCallbacks(this); 
     }
 
     void OnEnable() 
@@ -92,7 +89,7 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
     public void HandleUpdate()
     {
 
-         if(!isWalking && moveDirection != Vector2.zero)
+         if(!isMoving && moveDirection != Vector2.zero)
         {
             if(Mathf.Abs(moveDirection.x) > Mathf.Abs(moveDirection.y)) //prevent horizontal movement
             {
@@ -106,8 +103,8 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
 
 
             //Animations
-            playerAnimator.SetFloat("moveX", moveDirection.x);
-            playerAnimator.SetFloat("moveY", moveDirection.y);
+            characterAnimator.MoveX = moveDirection.x;
+            characterAnimator.MoveY = moveDirection.y;
 
             //Target Positions for Movement
             var targetPosition = transform.position;
@@ -119,18 +116,19 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
             {
                 StartCoroutine(Movement(targetPosition));
             }
+
             
         }
 
+        characterAnimator.IsMoving = isMoving;
         
         
         
-        playerAnimator.SetBool("isWalking", isWalking);
     }
 
     void Interact()
     {
-        var faceDirection = new Vector3(playerAnimator.GetFloat("moveX"), playerAnimator.GetFloat("moveY"));
+        var faceDirection = new Vector3(characterAnimator.MoveX, characterAnimator.MoveY);
         var interactPosition = transform.position + faceDirection;
 
         //Debug.DrawLine(transform.position, interactPosition, Color.green, 1f);
@@ -146,7 +144,7 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
 
     IEnumerator Movement(Vector3 targetPosition)
     {
-        isWalking = true;
+        isMoving = true;
         while( (targetPosition - transform.position).sqrMagnitude > Mathf.Epsilon )
         {
 
@@ -156,7 +154,7 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
         }
 
         transform.position = targetPosition;
-        isWalking = false;
+        isMoving = false;
 
         CheckForEncounter();
     }
@@ -173,15 +171,17 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
 
     void CheckForEncounter()
     {
+        
         if(Physics2D.OverlapCircle(transform.position, 0.2f, monsterEncountersLayer)!= null )
         {
             if(UnityEngine.Random.Range(1, 101) <= encoutnerRate) //10% chance of random monster encounter
             {
-                playerAnimator.SetBool("isWalking", false);
+                characterAnimator.IsMoving = false;
                 OnEncounter();
 
             }
         }
+
     }
 
     
