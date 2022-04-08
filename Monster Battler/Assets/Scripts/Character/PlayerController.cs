@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions 
 {
+    
     [SerializeField] float moveSpeed = 5f;
 
     [SerializeField] LayerMask solidObjectsLayer;
@@ -13,51 +14,96 @@ public class PlayerController : MonoBehaviour
     [SerializeField] LayerMask monsterEncountersLayer;
 
     [SerializeField] float encoutnerRate = 10f;
-    Vector2 moveInput;
-
-    bool interactInput;
     bool isWalking;
 
     Animator playerAnimator;
 
+    Vector2 moveDirection;
     public event Action OnEncounter;
     
-    
+    PlayerControls playerControls;
     void Awake() 
     {
-        playerAnimator = GetComponent<Animator>();    
+        playerAnimator = GetComponent<Animator>();  
+
+        playerControls = new PlayerControls();
+        playerControls.Player.SetCallbacks(this);  
+
+        Debug.Log(playerControls != null);
     }
 
-    void OnMove(InputValue inputValue)
+    void OnEnable() 
     {
-        moveInput = inputValue.Get<Vector2>();
-
-        
-        
+        playerControls.Enable();
     }
 
-    void OnInteract(InputValue inputValue)
+    void OnDisable() 
     {
-        interactInput = inputValue.isPressed;
-        //Debug.Log(interactInput);
+        playerControls.Disable();
     }
+
+    public bool IsInFreeRoamState()
+    {
+        if(GameController.Instance.GameState == GameState.OverWorld)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+   
+    public void OnMove(InputAction.CallbackContext context)
+    {
+
+        if (!IsInFreeRoamState()) {
+            return;
+        }
+
+        if(context.started)
+            return;
+        
+        moveDirection = context.ReadValue<Vector2>();
+        
+    }
+
+    
+
+    public void OnInteract(InputAction.CallbackContext context)
+    {   
+        if(!IsInFreeRoamState())
+        {
+            return;
+        }
+        if(context.started)
+        {
+            return;
+        }
+        else if(context.performed)
+        {
+            Interact();
+        }
+            
+    }
+
+    
 
     public void HandleUpdate()
     {
-        
 
-         if(!isWalking && moveInput != Vector2.zero)
+         if(!isWalking && moveDirection != Vector2.zero)
         {
-            if(moveInput.x !=0 ) moveInput.y = 0; //prefent horizontal movement
+            if(moveDirection.x !=0 ) moveDirection.y = 0; //prefent horizontal movement
 
             //Animations
-            playerAnimator.SetFloat("moveX", moveInput.x);
-            playerAnimator.SetFloat("moveY", moveInput.y);
+            playerAnimator.SetFloat("moveX", moveDirection.x);
+            playerAnimator.SetFloat("moveY", moveDirection.y);
 
             //Target Positions for Movement
             var targetPosition = transform.position;
-            targetPosition.x += moveInput.x;
-            targetPosition.y += moveInput.y;
+            targetPosition.x += Mathf.Round(moveDirection.x);
+            targetPosition.y += Mathf.Round(moveDirection.y);
 
             //Movement is handled by couroutine
             if(IsWalkable(targetPosition))
@@ -67,10 +113,8 @@ public class PlayerController : MonoBehaviour
             
         }
 
-        if(interactInput)
-        {
-            Interact();
-        }
+        
+        
         
         playerAnimator.SetBool("isWalking", isWalking);
     }
@@ -132,6 +176,4 @@ public class PlayerController : MonoBehaviour
     }
 
     
-
-
 }

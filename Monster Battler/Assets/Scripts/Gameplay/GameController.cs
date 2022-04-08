@@ -2,22 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameState{ OverWorld, Battle}
+public enum GameState{ OverWorld, Battle, Dialog}
 public class GameController : MonoBehaviour
 {
     [SerializeField] PlayerController playerController;
     [SerializeField] BattleSystem battleSystem;
     GameState gameState;
 
+    public static GameController Instance {get; private set;}
+
     private void Awake() 
     {
+        Instance = this;
+
         ConditionsDB.Init();
+
     }
 
     private void Start()
     {
         playerController.OnEncounter += StartBattle;
         battleSystem.OnBattleOver += EndBattle;
+
+        DialogManager.Instance.OnDialogStart += () => gameState = GameState.Dialog;
+        DialogManager.Instance.OnDialogEnd += () => 
+        {   
+            if(gameState == GameState.Dialog) //we need this if statement for events we go from dialogue to battle
+                gameState = GameState.OverWorld;
+        };
     }
 
     private void Update()
@@ -30,6 +42,11 @@ public class GameController : MonoBehaviour
         else if(gameState == GameState.Battle)
         {
             //Battle is ongoing place any logic that needs to be handled in update system for battle system here. Currently we have none.
+            return;
+        }
+        else if(gameState == GameState.Dialog)
+        {
+            DialogManager.Instance.HandleUpdate();
         }
     }
 
@@ -47,6 +64,8 @@ public class GameController : MonoBehaviour
         
 
     }
+
+    public GameState GameState => gameState;
 
     
         
