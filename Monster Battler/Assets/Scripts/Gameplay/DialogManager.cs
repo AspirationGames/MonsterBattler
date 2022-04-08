@@ -13,6 +13,7 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
     [SerializeField] int lettersPerSecond;
 
     public static DialogManager Instance {get; private set;}
+    public bool IsShowing {get; private set;}
 
     public event Action OnDialogStart;
     public event Action OnDialogEnd;
@@ -38,6 +39,7 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
         
         OnDialogStart?.Invoke();
 
+        IsShowing = true;
         this.dialog = dialog;
         dialogBox.SetActive(true);
         dialogControls.Enable();
@@ -66,9 +68,10 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
             {
                 StartCoroutine(TypeDialog(dialog.Lines[currentLine]));
             }
-            else
+            else //close dialog
             {
                 currentLine = 0;
+                IsShowing = false;
                 dialogBox.SetActive(false);
                 OnDialogEnd?.Invoke();
                 dialogControls.Disable();
@@ -78,11 +81,7 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
 
     public void HandleUpdate()
     {
-        if(Keyboard.current.eKey.wasPressedThisFrame && !isTyping)
-        {
-            //testing
-        }
-
+        //don't think I need this anymore I was previously handling OnConfirm here. Keeping in place for now.
     }
     
 

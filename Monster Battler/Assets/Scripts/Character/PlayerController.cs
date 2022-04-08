@@ -68,7 +68,6 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
         }
         else if(context.performed)
         {
-            Debug.Log("interacting");
             Interact();
         }
             

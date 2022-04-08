@@ -22,7 +22,7 @@ public class Character : MonoBehaviour
         float horizontal = Mathf.Round(moveDirection.x);
         float vertical = Mathf.Round(moveDirection.y);
 
-        if(Mathf.Abs(horizontal) > Mathf.Abs(vertical)) //prevent horizontal movement
+        if(Mathf.Abs(horizontal) > Mathf.Abs(vertical)) //prevent diagonal movement
         {
                 vertical= 0;
                 
