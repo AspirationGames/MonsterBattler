@@ -94,7 +94,16 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
 
          if(!isWalking && moveDirection != Vector2.zero)
         {
-            if(moveDirection.x !=0 ) moveDirection.y = 0; //prefent horizontal movement
+            if(Mathf.Abs(moveDirection.x) > Mathf.Abs(moveDirection.y)) //prevent horizontal movement
+            {
+                moveDirection.y = 0;
+                
+            }
+            else
+            {
+                moveDirection.x = 0;
+            }
+
 
             //Animations
             playerAnimator.SetFloat("moveX", moveDirection.x);
