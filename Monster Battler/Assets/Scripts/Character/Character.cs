@@ -69,8 +69,11 @@ public class Character : MonoBehaviour
 
     bool IsPathClear(Vector3 targetPosition)
     {
+        
         var diff = targetPosition - transform.position;
         var direction = diff.normalized;
+
+        //Debug.DrawRay(transform.position + direction, direction, Color.green, 2f);
 
        if( Physics2D.BoxCast(transform.position + direction, new Vector2(0.2f,0.2f), 0f, direction, diff.magnitude - 1, 
             GameLayers.i.SolidObjectsLayer | GameLayers.i.InteractableLayer | GameLayers.i.PlayerLayer) )

@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
 
     void CheckForEncounter()
     {
-        
+
         if(Physics2D.OverlapCircle(transform.position, 0.2f, GameLayers.i.MonsterEncountersLayer)!= null )
         {
             if(UnityEngine.Random.Range(1, 101) <= encoutnerRate) //10% chance of random monster encounter
