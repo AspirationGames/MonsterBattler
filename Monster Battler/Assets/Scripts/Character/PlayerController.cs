@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
         
         if (interactableCollider != null)
         {
-            interactableCollider.GetComponent<Interactable>()?.Interact(); //finds Interactable interace. Any interactable items should have this interface attached to their class
+            interactableCollider.GetComponent<Interactable>()?.Interact(transform); //finds Interactable interace. Any interactable items should have this interface attached to their class
         }
 
     }

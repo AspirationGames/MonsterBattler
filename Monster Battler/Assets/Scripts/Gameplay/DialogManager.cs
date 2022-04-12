@@ -19,6 +19,7 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
     public event Action OnDialogEnd;
 
     Dialog dialog;
+    Action onDialogFinished;
     int currentLine = 0;
 
     bool isTyping;
@@ -33,7 +34,7 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
         dialogControls.Dialog.SetCallbacks(this);     
     }
 
-    public IEnumerator ShowDialog(Dialog dialog)
+    public IEnumerator ShowDialog(Dialog dialog, Action onFinished = null)
     {
         yield return new WaitForEndOfFrame();
         
@@ -41,6 +42,7 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
 
         IsShowing = true;
         this.dialog = dialog;
+        onDialogFinished = onFinished;
         dialogBox.SetActive(true);
         dialogControls.Enable();
         StartCoroutine(TypeDialog(dialog.Lines[0]));
@@ -73,7 +75,8 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
                 currentLine = 0;
                 IsShowing = false;
                 dialogBox.SetActive(false);
-                OnDialogEnd?.Invoke();
+                onDialogFinished?.Invoke(); //NPC action
+                OnDialogEnd?.Invoke(); //Player Action
                 dialogControls.Disable();
             }
         }

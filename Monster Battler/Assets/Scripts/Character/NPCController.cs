@@ -18,18 +18,23 @@ public class NPCController : MonoBehaviour, Interactable
     {
         character = GetComponent<Character>();    
     }
-    public void Interact()
+    public void Interact(Transform initiator)
     {   
         if(npcState == NPCState.Idle)
         {
-            StartCoroutine( DialogManager.Instance.ShowDialog(dialog) );
+            npcState = NPCState.Dialog;
+            character.LookTowards(initiator.position);
+            StartCoroutine( DialogManager.Instance.ShowDialog(dialog, () => 
+            {
+                idleTime = 0f;
+                npcState = NPCState.Idle;
+            }));
         }
         
     }
 
     public void Update()
     {
-        if(DialogManager.Instance.IsShowing) return;
 
         if(npcState == NPCState.Idle)
         {
@@ -40,7 +45,7 @@ public class NPCController : MonoBehaviour, Interactable
                 if (movementPattern.Count > 0)
                 {
                    StartCoroutine(Walk());
-                   currentPattern = (currentPattern+ 1) % movementPattern.Count;
+                   
                 }
                 
             }
@@ -53,11 +58,18 @@ public class NPCController : MonoBehaviour, Interactable
     {
         npcState = NPCState.Walking;
 
+        var oldPosition = transform.position;
+
         yield return character.Move(movementPattern[currentPattern]);
+       
+        if(transform.position != oldPosition) //we are checking to make sure NPC moved in the event it was blocked by something we will not increment the movement pattern
+        {
+            currentPattern = (currentPattern+ 1) % movementPattern.Count;
+        }
 
         npcState = NPCState.Idle;
     }
     
 }
 
-public enum NPCState {Idle, Walking}
+public enum NPCState {Idle, Walking, Dialog}

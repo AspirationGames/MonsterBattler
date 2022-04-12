@@ -41,7 +41,7 @@ public class Character : MonoBehaviour
         targetPosition.x += horizontal;
         targetPosition.y += vertical;
 
-        if(!IsWalkable(targetPosition))
+        if(!IsPathClear(targetPosition))
         {
             yield break;
         }
@@ -67,6 +67,21 @@ public class Character : MonoBehaviour
         characterAnimator.IsMoving = IsMoving;
     }
 
+    bool IsPathClear(Vector3 targetPosition)
+    {
+        var diff = targetPosition - transform.position;
+        var direction = diff.normalized;
+
+       if( Physics2D.BoxCast(transform.position + direction, new Vector2(0.2f,0.2f), 0f, direction, diff.magnitude - 1, 
+            GameLayers.i.SolidObjectsLayer | GameLayers.i.InteractableLayer | GameLayers.i.PlayerLayer) )
+       {
+           return false;
+       }
+
+        return true;  
+
+    }
+
     bool IsWalkable(Vector3 targetPosition)
     {
         if(Physics2D.OverlapCircle(targetPosition, 0.2f, GameLayers.i.SolidObjectsLayer | GameLayers.i.InteractableLayer) != null)
@@ -74,7 +89,24 @@ public class Character : MonoBehaviour
             return false;
         }
         
-            return true;
+        return true;
+    }
+
+    public void LookTowards(Vector3 targetPosition)
+    {
+        var xDiff = Mathf.Floor(targetPosition.x) - Mathf.Floor(transform.position.x);
+        var yDiff = Mathf.Floor(targetPosition.y) - Mathf.Floor(transform.position.y);
+
+        if(xDiff == 0 || yDiff == 0)
+        {
+            characterAnimator.MoveX = Mathf.Clamp(xDiff, -1f, 1f);
+            characterAnimator.MoveY = Mathf.Clamp(yDiff, -1f, 1f);
+        }
+        else
+        {
+            Debug.Log("Diagonal position.");
+        }
+
     }
 
     public CharacterAnimator CharacterAnimator
