@@ -11,6 +11,8 @@ public class GameLayers : MonoBehaviour
     [SerializeField] LayerMask monsterEncountersLayer;
     [SerializeField] LayerMask playerLayer;
 
+    [SerializeField] LayerMask fovLayer;
+
     void Awake()
     {
         i = this;
@@ -34,6 +36,11 @@ public class GameLayers : MonoBehaviour
     public LayerMask PlayerLayer
     {
         get => playerLayer;
+    }
+
+    public LayerMask Fovlayer
+    {
+        get => fovLayer;
     }
 
 

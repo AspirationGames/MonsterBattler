@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions 
 {
     public event Action OnEncounter;
+    public event Action<Collider2D> OnMageEncounter;
     [SerializeField] float encoutnerRate = 10f;
     Vector2 moveDirection;
     PlayerControls playerControls;
@@ -82,7 +83,7 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
         {
             
 
-            StartCoroutine( character.Move(moveDirection, CheckForEncounter) );
+            StartCoroutine( character.Move(moveDirection, RunAfterMove) );
             
         }
 
@@ -107,6 +108,12 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
 
     }
 
+    void RunAfterMove()
+    {
+        CheckForEncounter();
+        CheckForSummoners();
+    }
+
     void CheckForEncounter()
     {
 
@@ -118,6 +125,18 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
                 OnEncounter();
 
             }
+        }
+
+    }
+
+    void CheckForSummoners()
+    {
+        var summonerCollider = Physics2D.OverlapCircle(transform.position, 0.2f, GameLayers.i.Fovlayer);
+
+        if(summonerCollider != null )
+        {
+            character.CharacterAnimator.IsMoving = false;
+            OnMageEncounter?.Invoke(summonerCollider);
         }
 
     }

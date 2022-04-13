@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameState{ OverWorld, Battle, Dialog}
+public enum GameState{ OverWorld, Battle, Dialog, CutScene}
 public class GameController : MonoBehaviour
 {
     [SerializeField] PlayerController playerController;
@@ -23,6 +23,17 @@ public class GameController : MonoBehaviour
     {
         playerController.OnEncounter += StartBattle;
         battleSystem.OnBattleOver += EndBattle;
+
+        playerController.OnMageEncounter += (Collider2D summonerCollider) => 
+        {
+            var summonerController = summonerCollider.GetComponentInParent<SummonerController>();
+            
+            if(summonerCollider != null)
+            {
+                gameState = GameState.CutScene;
+                StartCoroutine(summonerController.TriggerMageBattle(playerController));
+            }
+        };
 
         DialogManager.Instance.OnDialogStart += () => gameState = GameState.Dialog;
         DialogManager.Instance.OnDialogEnd += () => 

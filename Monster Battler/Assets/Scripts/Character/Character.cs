@@ -15,7 +15,7 @@ public class Character : MonoBehaviour
         characterAnimator = GetComponent<CharacterAnimator>();
 
     }
-    public IEnumerator Move(Vector2 moveDirection, Action OnMoveOver = null)
+    public IEnumerator Move(Vector2 moveDirection, Action RunAfterMove = null)
     {
         
         //Round up to nearest interger
@@ -59,7 +59,7 @@ public class Character : MonoBehaviour
         transform.position = targetPosition;
         IsMoving = false;
 
-        OnMoveOver?.Invoke();
+        RunAfterMove?.Invoke();
     }
 
     public void HandleUpdate()
