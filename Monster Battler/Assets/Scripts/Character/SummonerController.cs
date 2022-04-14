@@ -34,8 +34,16 @@ public class SummonerController : MonoBehaviour
 
         yield return character.Move(moveVector);
 
-        //Dialog
-        StartCoroutine( DialogManager.Instance.ShowDialog(dialog, () =>  { Debug.Log("start battle"); } ) );
+        //Dialog and Start Battle
+        StartCoroutine( DialogManager.Instance.ShowDialog(dialog, () => 
+        { 
+            //Start Battle
+            GameController.Instance.StartSummonerBattle(this);
+             
+        } ) );
+
+        
+        
     }
 
     public void SetFovRotation(FacingDirection dir)

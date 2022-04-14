@@ -24,8 +24,12 @@ public class BattleSystem : MonoBehaviour
     List<Monster> selectedSwitch = new List<Monster>();
     List<BattleUnit> selectedTargets = new List<BattleUnit>();
 
-    [SerializeField] MonsterParty playerParty;
-    [SerializeField] MonsterParty enemyParty;
+    MonsterParty playerParty;
+    MonsterParty enemyParty;
+
+    bool isSummonerBattle = false;
+    PlayerController player;
+    SummonerController summoner;
 
     public BattleFieldEffects battleFieldEffects {get; set;}
 
@@ -44,11 +48,16 @@ public class BattleSystem : MonoBehaviour
         //StartCoroutine(SetupBattle());
     }
 
-    void StartDruidBattle(MonsterParty playerParty, MonsterParty druidParty)
+    public void StartSummonerBattle(MonsterParty playerParty, MonsterParty summonerParty)
     {
-        //this.playerParty = playerParty;
-        //this.enemyParty = druidParty;
-        //StartCoroutine(SetupBattle());
+        this.playerParty = playerParty;
+        enemyParty = summonerParty;
+
+        player = playerParty.GetComponent<PlayerController>();
+        summoner = summonerParty.GetComponent<SummonerController>();
+
+        isSummonerBattle = true;
+        StartCoroutine(SetupBattle());
     }
     
     public IEnumerator SetupBattle()
@@ -76,7 +85,7 @@ public class BattleSystem : MonoBehaviour
         partyScreen.Init();
         battleFieldEffects = new BattleFieldEffects();
 
-       yield return battleDialogueBox.TypeDialog($"A wild {battleUnits[2].Monster.Base.MonsterName} and {battleUnits[3].Monster.Base.MonsterName} appeared!"); //you can use yield return to call anothe coroutine which is what we are doing here
+       yield return battleDialogueBox.TypeDialog($"A {battleUnits[2].Monster.Base.MonsterName} and {battleUnits[3].Monster.Base.MonsterName} were summoned infront of you!"); //you can use yield return to call anothe coroutine which is what we are doing here
        
         
        NewTurn();
@@ -557,7 +566,7 @@ public class BattleSystem : MonoBehaviour
             if(targetMonster == null) //if no new valid target can be found
             {
                 yield return battleDialogueBox.TypeDialog
-                ($"{attackingMonster.Base.MonsterName} use {attackingMove.Base.MoveName}");
+                ($"{attackingMonster.Base.MonsterName} used {attackingMove.Base.MoveName}.");
                 attackingUnit.PlayAttackAnimation();
                 
                 yield return battleDialogueBox.TypeDialog
@@ -568,14 +577,14 @@ public class BattleSystem : MonoBehaviour
             else //Perform Attack
             {
                 yield return battleDialogueBox.TypeDialog
-                ($"{attackingMonster.Base.MonsterName} use {attackingMove.Base.MoveName} on {targetMonster.Base.MonsterName}");
+                ($"{attackingMonster.Base.MonsterName} used {attackingMove.Base.MoveName}.");
                 
                 attackingUnit.PlayAttackAnimation();
                 yield return new WaitForSeconds(1f);
 
                 if(targetMonster.IsProtected)
                 {
-                    yield return battleDialogueBox.TypeDialog($"{targetMonster.Base.MonsterName} was protected from the attack by a {targetMonster.ProtectedStatus.Name}");
+                    yield return battleDialogueBox.TypeDialog($"{targetMonster.Base.MonsterName} was protected from the attack by a {targetMonster.ProtectedStatus.Name}.");
                     continue;
                 }
                 
@@ -613,7 +622,7 @@ public class BattleSystem : MonoBehaviour
                     if(targetUnit.Monster.HP <= 0)//if the monster FAINTS
                     {
                         targetUnit.PlayFaintAnimation();
-                        yield return battleDialogueBox.TypeDialog($"{targetMonster.Base.MonsterName} fainted");
+                        yield return battleDialogueBox.TypeDialog($"{targetMonster.Base.MonsterName} fainted.");
                         faintedUnits.Add(targetUnit);
                     }
                 }
@@ -646,7 +655,7 @@ public class BattleSystem : MonoBehaviour
 
                     if(unit.Monster.HP <= 0)//if the monster FAINTS
                     {
-                        yield return battleDialogueBox.TypeDialog($"{unit.Monster.Base.MonsterName} fainted");
+                        yield return battleDialogueBox.TypeDialog($"{unit.Monster.Base.MonsterName} fainted.");
                         faintedUnits.Add(unit);
                     }
                 } 
@@ -660,7 +669,7 @@ public class BattleSystem : MonoBehaviour
                 {
                     battleFieldEffects.Weather = null;
                     battleFieldEffects.WeatherDuration = null;
-                    yield return battleDialogueBox.TypeDialog($"The harsh weather has cleared up");
+                    yield return battleDialogueBox.TypeDialog($"The harsh weather has cleared up.");
                 }
             }
 
@@ -672,7 +681,7 @@ public class BattleSystem : MonoBehaviour
                 {
                     battleFieldEffects.TimeWarp = null;
                     battleFieldEffects.WarpDuration = null;
-                    yield return battleDialogueBox.TypeDialog($"The dimensions of time have reverted to their normal state");
+                    yield return battleDialogueBox.TypeDialog($"The dimensions of time have reverted to their normal state.");
                 }
             }
         }
@@ -707,7 +716,7 @@ public class BattleSystem : MonoBehaviour
 
                 if(unit.Monster.HP <= 0)//if the monster FAINTS
                 {
-                    yield return battleDialogueBox.TypeDialog($"{unit.Monster.Base.MonsterName} fainted");
+                    yield return battleDialogueBox.TypeDialog($"{unit.Monster.Base.MonsterName} fainted.");
                     faintedUnits.Add(unit);
                 }
             }
@@ -809,7 +818,7 @@ public class BattleSystem : MonoBehaviour
                     {
                         battleFieldEffects.TimeWarp = null;
                         battleFieldEffects.WarpDuration = null;
-                        yield return battleDialogueBox.TypeDialog($"The dimensions of time have reverted to their normal state");
+                        yield return battleDialogueBox.TypeDialog($"The dimensions of time have reverted to their normal state.");
                     }
 
                 }

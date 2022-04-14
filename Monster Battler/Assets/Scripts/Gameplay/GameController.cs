@@ -67,6 +67,17 @@ public class GameController : MonoBehaviour
         battleSystem.gameObject.SetActive(true);
         battleSystem.StartBattle();
     }
+
+    public void StartSummonerBattle(SummonerController summonerController)
+    {
+        gameState = GameState.Battle;
+        battleSystem.gameObject.SetActive(true);
+
+        var playerParty = playerController.GetComponent<MonsterParty>();
+        var summonerParty = summonerController.GetComponent<MonsterParty>();
+
+        battleSystem.StartSummonerBattle(playerParty, summonerParty);
+    }
     
     private void EndBattle(bool won)
     {
