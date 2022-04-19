@@ -12,14 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3fee88d74ad48c46bf8e228de80dbab, type: 3}
   m_Name: WaterGun
   m_EditorClassIdentifier: 
-  moveName: Water Gun
+  moveName: Water Blast
   description: 
   type: 4
+  target: 0
   power: 45
   accuracy: 100
+  alwaysHits: 0
   ap: 25
+  priority: 0
   category: 1
   effects:
     stageChange: []
     statusEffect: 0
-  target: 0
+    volatileStatusEffect: 0
+    weather: 0
+    timeWarp: 0
+    protect: 0
+  secondaryEffects: []

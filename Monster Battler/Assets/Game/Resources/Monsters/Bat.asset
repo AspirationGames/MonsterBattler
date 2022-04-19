@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30520e625ab1aac49b844bb99066645f, type: 3}
   m_Name: Bat
   m_EditorClassIdentifier: 
-  monsterName: Bat
+  monsterName: NightFang
   description: 
   frontSprite: {fileID: 21300000, guid: 69dfeacba8fdfa04aa7f59dc45b2f70f, type: 3}
   backSprite: {fileID: 21300000, guid: 11853c6ea6bbb9e46ac5a65759fdf0a2, type: 3}

@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3fee88d74ad48c46bf8e228de80dbab, type: 3}
   m_Name: Growl
   m_EditorClassIdentifier: 
-  moveName: Growl
+  moveName: Roar
   description: 
   type: 1
+  target: 0
   power: 0
   accuracy: 100
   alwaysHits: 0
@@ -27,10 +28,15 @@ MonoBehaviour:
       stage: -1
     statusEffect: 0
     volatileStatusEffect: 0
+    weather: 0
+    timeWarp: 0
+    protect: 0
   secondaryEffects:
   - stageChange: []
     statusEffect: 0
     volatileStatusEffect: 0
+    weather: 0
+    timeWarp: 0
+    protect: 0
     chance: 0
     target: 0
-  target: 0

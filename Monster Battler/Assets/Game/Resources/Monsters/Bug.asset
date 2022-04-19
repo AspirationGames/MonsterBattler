@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30520e625ab1aac49b844bb99066645f, type: 3}
   m_Name: Bug
   m_EditorClassIdentifier: 
-  monsterName: Bug
+  monsterName: Torchie
   description: 
   frontSprite: {fileID: 21300000, guid: 7ebba29c5deed524f9e4504b24649468, type: 3}
   backSprite: {fileID: 0}

@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3fee88d74ad48c46bf8e228de80dbab, type: 3}
   m_Name: VineWhip
   m_EditorClassIdentifier: 
-  moveName: Vine Whip
+  moveName: Natures Wrath
   description: 
   type: 2
+  target: 0
   power: 45
   accuracy: 100
   alwaysHits: 0
@@ -25,5 +26,7 @@ MonoBehaviour:
     stageChange: []
     statusEffect: 0
     volatileStatusEffect: 0
+    weather: 0
+    timeWarp: 0
+    protect: 0
   secondaryEffects: []
-  target: 0

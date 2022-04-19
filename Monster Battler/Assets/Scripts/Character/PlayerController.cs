@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions 
 {
+    [SerializeField] string name;
+    [SerializeField] Sprite sprite;
     public event Action OnEncounter;
     public event Action<Collider2D> OnMageEncounter;
     [SerializeField] float encoutnerRate = 10f;
@@ -141,5 +143,13 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
 
     }
 
-    
+    public string Name
+    {
+        get => name;
+    }
+
+    public Sprite Sprite
+    {
+        get => sprite;
+    }
 }

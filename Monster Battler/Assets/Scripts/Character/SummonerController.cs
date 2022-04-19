@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SummonerController : MonoBehaviour
 {
+    [SerializeField] string name;
+    [SerializeField] Sprite sprite;
     [SerializeField] Dialog dialog;
     [SerializeField] GameObject exclamation;
 
@@ -66,5 +68,15 @@ public class SummonerController : MonoBehaviour
         }
 
         fov.transform.eulerAngles = new Vector3(0f, 0f, angle); //euler angles can rotate taking a vector 3
+    }
+
+    public string Name
+    {
+        get => name;
+    }
+
+    public Sprite Sprite
+    {
+        get => sprite;
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
 public enum BattleState 
@@ -14,6 +15,9 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] PartyScreen partyScreen;
 
     [SerializeField] EnemyAI enemyAI;
+
+    [SerializeField] Image playerImage;
+    [SerializeField] Image enemyImage;
 
     BattleState battleState;
 
@@ -59,14 +63,37 @@ public class BattleSystem : MonoBehaviour
         isSummonerBattle = true;
         StartCoroutine(SetupBattle());
     }
+
+    void PlaceHolder()
+    {
+        
+       
+    }
     
     public IEnumerator SetupBattle()
     {
+        foreach(BattleUnit unit in battleUnits) //disable units and huds until summons.
+        {
+                unit.gameObject.SetActive(false);
+                unit.Clear();
+        }
+        if(isSummonerBattle) //show trainer and enemey summoner sprites and set dialogue to who challenges you in battle.
+        {
+            playerImage.gameObject.SetActive(true);
+            enemyImage.gameObject.SetActive(true);
+            playerImage.sprite = player.Sprite;
+            enemyImage.sprite = summoner.Sprite;
+
+            yield return battleDialogueBox.TypeDialog($"{summoner.Name} challeneges you to a battle.");
+        } 
+
+
         foreach(BattleUnit unit in battleUnits) //set up player
         {
+            unit.gameObject.SetActive(true); //reactivates each unit
             if(unit.IsPlayerMonster)
             {
-                unit.Setup(playerParty.Monsters[battleUnits.IndexOf(unit)]); //returns monsters at index 0 and 1
+                unit.Setup(playerParty.Monsters[battleUnits.IndexOf(unit)]); //returns monsters at index 0 and 1 in party
                 unit.Monster.InBattle = true;
                 turnOrder.Add(unit);
 
@@ -79,13 +106,15 @@ public class BattleSystem : MonoBehaviour
                 
             }
             
-            
         }
+
+        
 
         partyScreen.Init();
         battleFieldEffects = new BattleFieldEffects();
 
-       yield return battleDialogueBox.TypeDialog($"A {battleUnits[2].Monster.Base.MonsterName} and {battleUnits[3].Monster.Base.MonsterName} were summoned infront of you!"); //you can use yield return to call anothe coroutine which is what we are doing here
+        yield return battleDialogueBox.TypeDialog($"{player.Name} summoned {battleUnits[0].Monster.Base.MonsterName} and {battleUnits[1].Monster.Base.MonsterName} ");
+        yield return battleDialogueBox.TypeDialog($"A {battleUnits[2].Monster.Base.MonsterName} and {battleUnits[3].Monster.Base.MonsterName} were summoned infront of you!"); //you can use yield return to call anothe coroutine which is what we are doing here
        
         
        NewTurn();

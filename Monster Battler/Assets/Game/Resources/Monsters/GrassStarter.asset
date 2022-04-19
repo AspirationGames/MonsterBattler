@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30520e625ab1aac49b844bb99066645f, type: 3}
   m_Name: GrassStarter
   m_EditorClassIdentifier: 
-  monsterName: Grass
+  monsterName: Panfern
   description: 
   frontSprite: {fileID: 21300000, guid: 3aca08e9661287346a649c8db76796cf, type: 3}
   backSprite: {fileID: 21300000, guid: 4ae9a15370e6e9e449bf6dcdc8610084, type: 3}
