@@ -274,7 +274,7 @@ public class ConditionsDB
                 EffectMessage = "was shielded by a barrier",
                 OnStart = (Monster monster) =>
                 {
-                    
+                    //placeholder for future effects
                 },
                 OnProtect = (Monster monster) =>
                 {

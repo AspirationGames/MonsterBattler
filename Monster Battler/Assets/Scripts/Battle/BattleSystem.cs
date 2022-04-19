@@ -40,7 +40,9 @@ public class BattleSystem : MonoBehaviour
 
     public void StartBattle()
     {
-        StartCoroutine(SetupBattle());
+        //StartCoroutine(SetupBattle());
+
+        Debug.Log("Wild Monster Encounter");
     }
 
     void StartRandomEncounter()

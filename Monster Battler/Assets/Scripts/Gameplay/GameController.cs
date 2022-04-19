@@ -68,11 +68,13 @@ public class GameController : MonoBehaviour
         battleSystem.StartBattle();
     }
 
+    SummonerController summoner;
     public void StartSummonerBattle(SummonerController summonerController)
     {
         gameState = GameState.Battle;
         battleSystem.gameObject.SetActive(true);
 
+        summoner = summonerController;
         var playerParty = playerController.GetComponent<MonsterParty>();
         var summonerParty = summonerController.GetComponent<MonsterParty>();
 
@@ -81,6 +83,13 @@ public class GameController : MonoBehaviour
     
     private void EndBattle(bool won)
     {
+
+        if(summoner != null && won == true) //if summoner battle
+        {
+            summoner.BattleLost();
+            summoner = null;
+        }
+
         gameState = GameState.OverWorld;
         battleSystem.gameObject.SetActive(false);
         
