@@ -7,12 +7,17 @@ public class GameController : MonoBehaviour
 {
     [SerializeField] PlayerController playerController;
     [SerializeField] BattleSystem battleSystem;
+
+    Animator cameraAnimator;
     GameState gameState;
+    bool inBattle; //used only for camera aniamtions
 
     public static GameController Instance {get; private set;}
 
     private void Awake() 
     {
+        cameraAnimator = GetComponent<Animator>();
+
         Instance = this;
 
         ConditionsDB.Init();
@@ -45,6 +50,8 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
+        cameraAnimator.SetBool("inBattle", inBattle); //for camera animations
+
         if(gameState == GameState.OverWorld)
         {
             playerController.HandleUpdate();
@@ -64,6 +71,7 @@ public class GameController : MonoBehaviour
     private void StartBattle()
     {
         gameState = GameState.Battle;
+        inBattle = true;
         battleSystem.gameObject.SetActive(true);
         battleSystem.StartBattle();
     }
@@ -72,6 +80,7 @@ public class GameController : MonoBehaviour
     public void StartSummonerBattle(SummonerController summonerController)
     {
         gameState = GameState.Battle;
+        inBattle = true;
         battleSystem.gameObject.SetActive(true);
 
         summoner = summonerController;

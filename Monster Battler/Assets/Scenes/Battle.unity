@@ -595,7 +595,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 106174397}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.5, y: -15.2, z: 0}
+  m_LocalPosition: {x: -1.5, y: -15.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -667,6 +667,21 @@ MonoBehaviour:
     developedSkillSpDefense: 0
     developedSkillSpeed: 252
   - _base: {fileID: 11400000, guid: 424fb588cf7627c4f9b0c80bc5b7d64f, type: 2}
+    level: 6
+    personality: 24
+    naturalSkillMaxHP: 0
+    naturalSkillAttack: 31
+    naturalSkillDefense: 0
+    naturalSkillSpAttack: 0
+    naturalSkillSpDefense: 0
+    naturalSkillSpeed: 31
+    developedSkillMaxHP: 0
+    developedSkillAttack: 252
+    developedSkillDefense: 0
+    developedSkillSpAttack: 0
+    developedSkillSpDefense: 0
+    developedSkillSpeed: 252
+  - _base: {fileID: 11400000, guid: d63bf37dc82034448bb8d1234f4d8a31, type: 2}
     level: 6
     personality: 24
     naturalSkillMaxHP: 0
@@ -22424,7 +22439,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsters:
   - _base: {fileID: 11400000, guid: 149c32699cedbe04c8af6b598da1c975, type: 2}
-    level: 50
+    level: 7
     personality: 2
     naturalSkillMaxHP: 31
     naturalSkillAttack: 31
@@ -22439,7 +22454,7 @@ MonoBehaviour:
     developedSkillSpDefense: 0
     developedSkillSpeed: 252
   - _base: {fileID: 11400000, guid: 57d0a29cc67460745b766488d455f982, type: 2}
-    level: 50
+    level: 7
     personality: 15
     naturalSkillMaxHP: 31
     naturalSkillAttack: 31
