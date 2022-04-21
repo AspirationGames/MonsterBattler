@@ -84,8 +84,7 @@ public class GameController : MonoBehaviour
             wildMonsters.Monsters.Add(wildMonsterCopy);
         }
         
-        battleSystem.StartWildMonsterBattle(playerParty, wildMonsters);
-        wildMonsters.Monsters.Clear(); //clear wild monster party after starting battle. 
+        battleSystem.StartWildMonsterBattle(playerParty, wildMonsters); 
     }
 
     SummonerController summoner;

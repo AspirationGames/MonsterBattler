@@ -68,6 +68,7 @@ public class BattleSystem : MonoBehaviour
     
     public IEnumerator SetupBattle()
     {   
+        Debug.Log(enemyParty.HasHealthyMonster());
         //Show player sprite
         playerImage.gameObject.SetActive(true);
         playerImage.sprite = player.Sprite;
@@ -499,7 +500,10 @@ public class BattleSystem : MonoBehaviour
     
     IEnumerator PerformSpells()
     {
+        Debug.Log(enemyParty.HasHealthyMonster());
+
         battleState = BattleState.Busy;
+
 
         for(int i=0; i < turnOrder.Count; i++)
         {
@@ -518,7 +522,26 @@ public class BattleSystem : MonoBehaviour
                 
             }
         }
-        yield return SwitchMonsters();
+
+        //Check for battle over
+
+        if(!playerParty.HasHealthyMonster()) //player has no healthy monsters
+        {
+            yield return battleDialogueBox.TypeDialog("You Lose!");
+            yield return new WaitForSeconds(1f);
+            BattleOver(false);
+        }
+        else if(!enemyParty.HasHealthyMonster()) //enemy has no healthy monsters
+        {
+            yield return battleDialogueBox.TypeDialog("You Win!");
+            yield return new WaitForSeconds(1f);
+            BattleOver(true);
+        }
+        else
+        {
+            yield return SwitchMonsters(); //continue battle
+        }
+        
         
     }
 
@@ -559,11 +582,7 @@ public class BattleSystem : MonoBehaviour
             enemyParty.RemoveMonster(targetUnit.Monster);
 
             yield return battleDialogueBox.TypeDialog($"{targetUnit.Monster.Base.MonsterName} has been added to your party");
-
             Destroy(summoningCircleSprite);
-
-
-            //NOTE: need to add logic to prevent captured monster from continuing to attack in battle
 
         }
         else
@@ -701,8 +720,6 @@ public class BattleSystem : MonoBehaviour
         List<BattleUnit> faintedUnits = new List<BattleUnit>(); //list to keep track of fainted units
         turnOrder.Sort(CheckMovePriority); //check for priority moves
 
-        Debug.Log(turnOrder.Count);
-        Debug.Log(selectedMoves.Count);
         for(int i=0; i < turnOrder.Count; i++)
         {
             BattleUnit attackingUnit = turnOrder[i];
@@ -1029,6 +1046,8 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator CheckForBattleOver(List<BattleUnit> faintedUnits)
     {
+        Debug.Log(enemyParty.HasHealthyMonster());
+
         if(!playerParty.HasHealthyMonster()) //player has no healthy monsters
         {
             yield return battleDialogueBox.TypeDialog("You Lose!");
@@ -1178,6 +1197,12 @@ public class BattleSystem : MonoBehaviour
     void BattleOver(bool won)
     {
         battleState = BattleState.BattleOver;
+
+        if(!isSummonerBattle) //if wild encounter we need to clear the enemy party to reset for next wild encounter.
+        {
+            enemyParty.Monsters.Clear();
+        }
+
         playerParty.Monsters.ForEach(m => m.OnBattleOver()); //rests for each monster in party
         OnBattleOver(won);
 

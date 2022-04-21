@@ -126,7 +126,6 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
         {
             if(UnityEngine.Random.Range(1, 101) <= encoutnerRate) //10% chance of random monster encounter
             {
-                Debug.Log("battle with wild mosnter");
                 character.CharacterAnimator.IsMoving = false;
                 OnEncounter();
 
