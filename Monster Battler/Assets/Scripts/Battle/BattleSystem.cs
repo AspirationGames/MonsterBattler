@@ -67,8 +67,7 @@ public class BattleSystem : MonoBehaviour
     }
     
     public IEnumerator SetupBattle()
-    {   
-        Debug.Log(enemyParty.HasHealthyMonster());
+    {  
         //Show player sprite
         playerImage.gameObject.SetActive(true);
         playerImage.sprite = player.Sprite;
@@ -500,7 +499,6 @@ public class BattleSystem : MonoBehaviour
     
     IEnumerator PerformSpells()
     {
-        Debug.Log(enemyParty.HasHealthyMonster());
 
         battleState = BattleState.Busy;
 
@@ -518,6 +516,12 @@ public class BattleSystem : MonoBehaviour
             else
             {
                 BattleUnit targetUnit = selectedTargets[battleUnits.IndexOf(currentUnit)];
+                
+                if(targetUnit.Monster.HP <= 0 || !targetUnit.Monster.InBattle)
+                {
+                    continue; //don't use spell if target is dead or gone. Maybe add dialog here later. 
+                }
+
                 yield return BindingSpell(targetUnit);
                 
             }
@@ -1046,7 +1050,6 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator CheckForBattleOver(List<BattleUnit> faintedUnits)
     {
-        Debug.Log(enemyParty.HasHealthyMonster());
 
         if(!playerParty.HasHealthyMonster()) //player has no healthy monsters
         {

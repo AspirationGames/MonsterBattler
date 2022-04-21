@@ -94,8 +94,9 @@ public class BattleDialogBox : MonoBehaviour
         {
             if (i < units.Count) //in the event we have less than 4 units
             {
-                if(!units[i].Monster.InBattle) //monster is no longer in battle
+                if(!units[i].Monster.InBattle || units[i].Monster.HP <= 0) //monster is no longer in battle
                 {
+                    
                     targetButtons[i].gameObject.SetActive(false);
                 }
                 else
