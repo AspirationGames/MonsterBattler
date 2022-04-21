@@ -96,4 +96,10 @@ public class MonsterParty : MonoBehaviour
         }
     }
 
+    public void RemoveMonster(Monster monster)
+    {
+        monsters.Remove(monster);
+
+    }
+
 }

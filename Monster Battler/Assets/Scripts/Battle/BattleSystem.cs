@@ -552,9 +552,14 @@ public class BattleSystem : MonoBehaviour
             //monster was binded
             yield return battleDialogueBox.TypeDialog($"{targetUnit.Monster.Base.MonsterName} was bound to you!");
 
-                    
+            targetUnit.Monster.InBattle = false;
+            turnOrder.Remove(targetUnit);
+            targetUnit.Hud.gameObject.SetActive(false);
             playerParty.AddMonster(targetUnit.Monster);
+            enemyParty.RemoveMonster(targetUnit.Monster);
+
             yield return battleDialogueBox.TypeDialog($"{targetUnit.Monster.Base.MonsterName} has been added to your party");
+
             Destroy(summoningCircleSprite);
 
 
@@ -721,7 +726,8 @@ public class BattleSystem : MonoBehaviour
             Monster targetMonster = targetUnit.Monster;
             attackingMove.AP--; 
 
-            if(targetMonster.HP <= 0) // check if target is alive
+          
+            if(targetMonster.HP <= 0 || !targetMonster.InBattle) // check if target is alive or has been removed from battle.
             {
                 FindNewTarget(attackingUnit, ref targetMonster, ref targetUnit);
             }
@@ -784,9 +790,8 @@ public class BattleSystem : MonoBehaviour
 
                     if(targetUnit.Monster.HP <= 0)//if the monster FAINTS
                     {
-                        targetUnit.PlayFaintAnimation();
-                        yield return battleDialogueBox.TypeDialog($"{targetMonster.Base.MonsterName} fainted.");
                         faintedUnits.Add(targetUnit);
+                        yield return HandleMonsterKill(targetUnit);
                     }
                 }
                 else //attack missed
@@ -864,14 +869,26 @@ public class BattleSystem : MonoBehaviour
         
     }
 
+    IEnumerator HandleMonsterKill(BattleUnit targetUnit)
+    {
+        //Fainted
+        targetUnit.PlayFaintAnimation();
+        targetUnit.Hud.gameObject.SetActive(false); 
+        yield return battleDialogueBox.TypeDialog($"{targetUnit.Monster.Base.MonsterName} fainted.");
+
+        
+        
+    }
+
     IEnumerator RunAfterTurn(List<BattleUnit> faintedUnits)
     {
         foreach(BattleUnit unit in battleUnits)
         {
-            if(unit.Monster.HP > 0)
+            unit.Monster.ResetProtect();
+
+            if(unit.Monster.HP > 0 && unit.Monster.InBattle)
             {
                 unit.Monster.OnAfterTurn();
-                unit.Monster.ResetProtect();
                 yield return StatusChangeDialog(unit.Monster);
                 yield return unit.Hud.UpdateHP();
 
@@ -885,7 +902,6 @@ public class BattleSystem : MonoBehaviour
             }
             else
             {
-                unit.Monster.ResetProtect();
                 continue;
             } 
             
@@ -1016,13 +1032,13 @@ public class BattleSystem : MonoBehaviour
         if(!playerParty.HasHealthyMonster()) //player has no healthy monsters
         {
             yield return battleDialogueBox.TypeDialog("You Lose!");
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
             BattleOver(false);
         }
         else if(!enemyParty.HasHealthyMonster()) //enemy has no healthy monsters
         {
             yield return battleDialogueBox.TypeDialog("You Win!");
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
             BattleOver(true);
         }
         else
@@ -1103,7 +1119,7 @@ public class BattleSystem : MonoBehaviour
 
             foreach (BattleUnit unit in battleUnits)
             {
-                if (!unit.IsPlayerMonster && unit.Monster.HP > 0)
+                if (!unit.IsPlayerMonster && unit.Monster.HP > 0 && unit.Monster.InBattle)
                 {
                     
                     targetUnit = unit;

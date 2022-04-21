@@ -75,11 +75,12 @@ public class BattleDialogBox : MonoBehaviour
         {
             if (i < moves.Count) //in the event we have less than 4 moves
             {
+                moveButtons[i].gameObject.SetActive(true);
                 moveButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = moves[i].Base.MoveName;
             }
             else
             {
-                moveButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = "-";
+                moveButtons[i].gameObject.SetActive(false);
                 //maybe change the color of the button too or test disabling the button? 
             }
 
@@ -93,11 +94,20 @@ public class BattleDialogBox : MonoBehaviour
         {
             if (i < units.Count) //in the event we have less than 4 units
             {
-                targetButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = units[i].Monster.Base.MonsterName;
+                if(!units[i].Monster.InBattle) //monster is no longer in battle
+                {
+                    targetButtons[i].gameObject.SetActive(false);
+                }
+                else
+                {
+                    targetButtons[i].gameObject.SetActive(true);
+                    targetButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = units[i].Monster.Base.MonsterName;
+                }
+                
             }
             else
             {
-                targetButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = "-";
+                targetButtons[i].gameObject.SetActive(false);
                 //maybe change the color of the button too or test disabling the button? 
             }
 
