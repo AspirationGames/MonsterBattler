@@ -51,8 +51,11 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
         }
 
         if(context.started)
+        {
             return;
+        }
         
+    
         moveDirection = context.ReadValue<Vector2>();
         
     }

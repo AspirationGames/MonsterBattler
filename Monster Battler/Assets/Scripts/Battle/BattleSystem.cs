@@ -525,7 +525,7 @@ public class BattleSystem : MonoBehaviour
     IEnumerator BindingSpell(BattleUnit targetUnit)
     {
 
-        yield return battleDialogueBox.TypeDialog($"{player.Name} used a summoning spell");
+        yield return battleDialogueBox.TypeDialog($"{player.Name} used a binding spell");
         var summoningCircleObj = Instantiate(summoningCircle, targetUnit.transform.position, Quaternion.identity);
         var summoningCircleSprite = summoningCircleObj.GetComponent<SpriteRenderer>();
 
