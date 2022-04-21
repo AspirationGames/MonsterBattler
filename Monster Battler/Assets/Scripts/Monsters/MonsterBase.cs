@@ -25,6 +25,8 @@ public class MonsterBase : ScriptableObject
     [SerializeField] int spDefense;
     [SerializeField] int speed;
 
+    [SerializeField][Range(0,255)] int catchRate = 255;
+
     [Header("MovePool")]
     [SerializeField] List<LearnableMoves> learnableMoves;
 
@@ -126,11 +128,15 @@ public class MonsterBase : ScriptableObject
     
     }
 
+    public int CatchRate
+    {
+        get{return catchRate;}
+    }
+
     public List<LearnableMoves> LearnableMoves
     {
         get{return learnableMoves;}
     }
-
 
 }    
 

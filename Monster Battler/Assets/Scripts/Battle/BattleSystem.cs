@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using DG.Tweening;
 
 public enum BattleState 
 {PlayerAction1, PlayerAction2, PlayerMove1, PlayerMove2, PlayerTarget1, PlayerTarget2, PlayerSwitch1, PlayerSwitch2, EnemyAction1, EnemyAction2, Busy, PlayerFaintedSwitching, BattleOver}
@@ -19,14 +20,18 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] Image playerImage;
     [SerializeField] Image enemyImage;
 
+    [SerializeField] GameObject summoningCircle;
+
     BattleState battleState;
 
     public event Action<bool> OnBattleOver;    
 
-    [SerializeField] List<BattleUnit> turnOrder = new List<BattleUnit>();
+    List<BattleUnit> turnOrder = new List<BattleUnit>();
     List<Move> selectedMoves =  new List<Move>();
     List<Monster> selectedSwitch = new List<Monster>();
     List<BattleUnit> selectedTargets = new List<BattleUnit>();
+
+    List<GameObject> selectedSpell = new List<GameObject>();
 
     MonsterParty playerParty;
     MonsterParty enemyParty;
@@ -38,20 +43,15 @@ public class BattleSystem : MonoBehaviour
     public BattleFieldEffects battleFieldEffects {get; set;}
 
 
-    public void StartBattle()
+    public void StartWildMonsterBattle(MonsterParty playerParty, MonsterParty wildMonsters)
     {
-        //StartCoroutine(SetupBattle());
-
-        Debug.Log("Wild Monster Encounter");
-    }
-
-    void StartRandomEncounter()
-    {
-        //this.playerParty = playerParty;
-        //this.enemyParty = untamedMonsters;
-        //StartCoroutine(SetupBattle());
-
-        //StartCoroutine(SetupBattle());
+        this.playerParty = playerParty;
+        this.enemyParty = wildMonsters;
+        
+        player = playerParty.GetComponent<PlayerController>();
+        
+        isSummonerBattle = false;
+        StartCoroutine(SetupBattle());
     }
 
     public void StartSummonerBattle(MonsterParty playerParty, MonsterParty summonerParty)
@@ -65,25 +65,24 @@ public class BattleSystem : MonoBehaviour
         isSummonerBattle = true;
         StartCoroutine(SetupBattle());
     }
-
-    void PlaceHolder()
-    {
-        
-       
-    }
     
     public IEnumerator SetupBattle()
-    {
+    {   
+        //Show player sprite
+        playerImage.gameObject.SetActive(true);
+        playerImage.sprite = player.Sprite;
+
         foreach(BattleUnit unit in battleUnits) //disable units and huds until summons.
         {
                 unit.gameObject.SetActive(false);
                 unit.Clear();
+
+                
         }
         if(isSummonerBattle) //show trainer and enemey summoner sprites and set dialogue to who challenges you in battle.
         {
-            playerImage.gameObject.SetActive(true);
+            
             enemyImage.gameObject.SetActive(true);
-            playerImage.sprite = player.Sprite;
             enemyImage.sprite = summoner.Sprite;
 
             yield return battleDialogueBox.TypeDialog($"{summoner.Name} challeneges you to a battle.");
@@ -206,6 +205,29 @@ public class BattleSystem : MonoBehaviour
         
     }
 
+    public void SelectSpell()
+    {
+        if(battleState == BattleState.PlayerAction1)
+        { 
+            battleState = BattleState.PlayerTarget1;
+            selectedMoves.Insert(0,null);
+            selectedSwitch.Insert(0, null);
+            selectedSpell.Insert(0, summoningCircle);
+            battleDialogueBox.EnableActionSelector(false);
+            SelectTarget();
+            
+        }
+        else if(battleState == BattleState.PlayerAction2)
+        {
+            battleState = BattleState.PlayerTarget2;
+            selectedMoves.Insert(1,null);
+            selectedSwitch.Insert(1, null);
+            selectedSpell.Insert(1, summoningCircle);
+            battleDialogueBox.EnableActionSelector(false);
+            SelectTarget();
+        }
+    }
+
     public void Back()
     {
 
@@ -294,6 +316,7 @@ public class BattleSystem : MonoBehaviour
                 battleState = BattleState.PlayerTarget1;
                 selectedMoves.Insert(0,selectedMove);
                 selectedSwitch.Insert(0,null);//skip value for switch
+                selectedSpell.Insert(0, null);
 
                 if(selectedMove.Base.Target == MoveTarget.Self) //if move target is self
                 {
@@ -322,6 +345,7 @@ public class BattleSystem : MonoBehaviour
                 battleState = BattleState.PlayerTarget2;
                 selectedMoves.Insert(1,selectedMove);
                 selectedSwitch.Insert(1,null);//skip value for switch
+                selectedSpell.Insert(1, null);
 
                 if(selectedMove.Base.Target == MoveTarget.Self) //if move target is self
                 {
@@ -358,7 +382,6 @@ public class BattleSystem : MonoBehaviour
         //save selected targets
         if(battleState == BattleState.PlayerTarget1)
         {
-
             selectedTargets.Insert(0,targetUnit);
             battleDialogueBox.EnableTargetSelector(false);
             battleState = BattleState.PlayerAction2;
@@ -397,6 +420,7 @@ public class BattleSystem : MonoBehaviour
             // dummy numbers  to allow code to work
             selectedMoves.Insert(0,null);
             selectedTargets.Insert(0,null);
+            selectedSpell.Insert(0, null);
 
             selectedMonster.InBattle = true; //We set the selected monster inbattle to prevent it from being selected again
 
@@ -411,6 +435,7 @@ public class BattleSystem : MonoBehaviour
             // dummy numbers  to allow code to work
             selectedMoves.Insert(1,null);
             selectedTargets.Insert(1,null);
+            selectedSpell.Insert(1, null);
 
             selectedMonster.InBattle = true;
 
@@ -448,7 +473,7 @@ public class BattleSystem : MonoBehaviour
             selectedSwitch.Insert(i,null);
         }
 
-        StartCoroutine(SwitchMonsters());
+        StartCoroutine(PerformSpells());
     }
 
     void RandomEnemyMove() //Selects Random move for enemy
@@ -463,18 +488,123 @@ public class BattleSystem : MonoBehaviour
             selectedMoves.Insert(i, movesWithPP[randmomMoveIndex]);
             selectedTargets.Insert(i, battleUnits[randomTargetIndex]);
             selectedSwitch.Insert(i,null);
+            selectedSpell.Insert(i,null);
         }
 
-        StartCoroutine(SwitchMonsters());
+        StartCoroutine(PerformSpells());
 
         
     }
     
     
+    IEnumerator PerformSpells()
+    {
+        battleState = BattleState.Busy;
+
+        for(int i=0; i < turnOrder.Count; i++)
+        {
+            BattleUnit currentUnit = turnOrder[i];
+            Monster currentMonster = currentUnit.Monster;
+
+            if(selectedSpell[battleUnits.IndexOf(currentUnit)] == null)//if no spell was initiated for this turn just continue onto the next turn
+            {
+              
+                continue;
+            }
+            else
+            {
+                BattleUnit targetUnit = selectedTargets[battleUnits.IndexOf(currentUnit)];
+                yield return BindingSpell(targetUnit);
+                
+            }
+        }
+        yield return SwitchMonsters();
+        
+    }
+
+    IEnumerator BindingSpell(BattleUnit targetUnit)
+    {
+
+        yield return battleDialogueBox.TypeDialog($"{player.Name} used a summoning spell");
+        var summoningCircleObj = Instantiate(summoningCircle, targetUnit.transform.position, Quaternion.identity);
+        var summoningCircleSprite = summoningCircleObj.GetComponent<SpriteRenderer>();
+
+        //Animations
+         yield return summoningCircleSprite.transform.DORotate(new Vector3 (0f,0f, -5000f), 2f, RotateMode.Fast).WaitForCompletion();
+        yield return targetUnit.PlayBindingAnimation();
+        yield return summoningCircleSprite.DOFade(0,0.5f).WaitForCompletion();
+
+        int flashCount = AttemptToBindMonster(targetUnit.Monster);
+                
+        for(int x=0; x< Mathf.Min(flashCount, 3); ++x) //Flashing Circle 
+        {
+            yield return new WaitForSeconds(0.5f);
+            var sequence = DOTween.Sequence();
+            var originalColor = summoningCircleSprite.color;
+            sequence.Join(summoningCircleSprite.DOColor(Color.white,0.5f));
+            sequence.Join(summoningCircleSprite.DOBlendableColor(Color.red,0.5f));
+            sequence.Join(summoningCircleSprite.DOColor(originalColor,0.5f));
+            yield return sequence.WaitForCompletion();
+        }
+
+        if(flashCount == 4)
+        {
+            //monster was binded
+            yield return battleDialogueBox.TypeDialog($"{targetUnit.Monster.Base.MonsterName} was bound to you!");
+
+                    
+            playerParty.AddMonster(targetUnit.Monster);
+            yield return battleDialogueBox.TypeDialog($"{targetUnit.Monster.Base.MonsterName} has been added to your party");
+            Destroy(summoningCircleSprite);
+
+
+            //NOTE: need to add logic to prevent captured monster from continuing to attack in battle
+
+        }
+        else
+        {
+            //binding spell failed
+            yield return new WaitForSeconds(1f);
+            yield return targetUnit.PlayBreakOutAnimation();
+
+            yield return battleDialogueBox.TypeDialog($"{targetUnit.Monster.Base.MonsterName} broke out of you binding spell.");
+            Destroy(summoningCircleSprite);
+
+        }
+    }
+
+    int AttemptToBindMonster(Monster monster)
+    {
+        float statusBonus = ConditionsDB.GetStatusBonus(monster.Status);
+        float catchChance = (3 * monster.MaxHP - 2 * monster.HP) * monster.Base.CatchRate * statusBonus / (3 * monster.MaxHP);
+
+        if(catchChance >= 255)
+        {
+            return 4;
+        }
+        else
+        {
+            float f = 1048560 / Mathf.Sqrt(Mathf.Sqrt(16711680 / catchChance)); 
+            int flashCount = 0;
+            while(flashCount < 4)
+            {
+
+               if( UnityEngine.Random.Range(0, 65535) >= f)
+               {
+                   break;
+               }
+
+               ++flashCount;
+            }
+
+            return flashCount;
+        }
+
+    }
 
     IEnumerator SwitchMonsters()
     {
-        battleState = BattleState.Busy;
+        
 
 
         for(int i=0; i < turnOrder.Count; i++)
@@ -566,6 +696,8 @@ public class BattleSystem : MonoBehaviour
         List<BattleUnit> faintedUnits = new List<BattleUnit>(); //list to keep track of fainted units
         turnOrder.Sort(CheckMovePriority); //check for priority moves
 
+        Debug.Log(turnOrder.Count);
+        Debug.Log(selectedMoves.Count);
         for(int i=0; i < turnOrder.Count; i++)
         {
             BattleUnit attackingUnit = turnOrder[i];

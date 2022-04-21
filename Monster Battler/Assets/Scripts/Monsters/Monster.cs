@@ -28,6 +28,14 @@ public class Monster
     [SerializeField][Range(0, 252)] int developedSkillSpAttack; //EVs
     [SerializeField][Range(0, 252)] int developedSkillSpDefense; //EVs
     [SerializeField][Range(0, 252)] int developedSkillSpeed; //EVs
+
+    public Monster(MonsterBase mBase, int mLevel)
+    {
+        _base = mBase;
+        level = mLevel;
+
+        Init();
+    }
     public MonsterBase Base 
     {
         get
@@ -47,7 +55,7 @@ public class Monster
     public List<Move> Moves{ get; set;} //we are using a property for the moves
     public Dictionary<Stat, int> Stats {get; private set;} //we can get stats publically but only set stats in the monster class
     public Dictionary<Stat, int> StatStages {get; private set;} //integer values in this dictionary are between minus 6 and plus 6
-    public Queue<string> StatusChangeMessages {get; private set;} = new Queue<string>();
+    public Queue<string> StatusChangeMessages {get; private set;}
     
     public Condition Status{get; private set;}
     public int StatusTime{get; set;}
@@ -87,6 +95,7 @@ public class Monster
         CalculateStats();
         HP = MaxHP;
 
+        StatusChangeMessages = new Queue<string>();
         ResetStatStages();
         Status = null;
         VolatileStatus = null;

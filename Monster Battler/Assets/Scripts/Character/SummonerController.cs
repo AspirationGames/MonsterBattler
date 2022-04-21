@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SummonerController : MonoBehaviour, Interactable
 {
-    [SerializeField] string name;
+    [SerializeField] string summonerName;
     [SerializeField] Sprite sprite;
     [SerializeField] Dialog dialog;
 
@@ -102,7 +102,7 @@ public class SummonerController : MonoBehaviour, Interactable
 
     public string Name
     {
-        get => name;
+        get => summonerName;
     }
 
     public Sprite Sprite

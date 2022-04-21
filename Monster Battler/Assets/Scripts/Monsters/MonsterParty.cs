@@ -84,4 +84,16 @@ public class MonsterParty : MonoBehaviour
 
     }
 
+    public void AddMonster(Monster monster)
+    {
+        if(monsters.Count < 4)
+        {
+            monsters.Add(monster);
+        }
+        else
+        {
+            //transfer monster to storage
+        }
+    }
+
 }

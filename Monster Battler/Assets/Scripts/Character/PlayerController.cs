@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions 
 {
-    [SerializeField] string name;
+    [SerializeField] string playerName;
     [SerializeField] Sprite sprite;
     public event Action OnEncounter;
     public event Action<Collider2D> OnMageEncounter;
@@ -123,6 +123,7 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
         {
             if(UnityEngine.Random.Range(1, 101) <= encoutnerRate) //10% chance of random monster encounter
             {
+                Debug.Log("battle with wild mosnter");
                 character.CharacterAnimator.IsMoving = false;
                 OnEncounter();
 
@@ -145,7 +146,7 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
 
     public string Name
     {
-        get => name;
+        get => playerName;
     }
 
     public Sprite Sprite

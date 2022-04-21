@@ -48,10 +48,15 @@ public class BattleUnit : MonoBehaviour
            monsterImage.sprite = Monster.Base.FrontSprite;
        }
 
+        //Set Hud
         hud.gameObject.SetActive(true);
         hud.SetData(monster);
 
+        //Reset Unit Animations
+        transform.localScale = new Vector3(1, 1, 1);
         monsterImage.color = originalColor;
+        
+        //Enter Animations
         PlayEnterAnimation();
 
     }
@@ -107,5 +112,24 @@ public class BattleUnit : MonoBehaviour
         sequence.Join(monsterImage.DOFade(0f, 0.5f));
     }
 
+    public IEnumerator PlayBindingAnimation()
+    {
+        var sequence = DOTween.Sequence();
+        sequence.Append(monsterImage.DOFade(0,0.5f));
+        sequence.Join(transform.DOLocalMoveY(startPosition.y - 50f, 0.5f));
+        sequence.Join(transform.DOScale(new Vector3(0.3f,0.3f,1f), 0.5f));
+        
+        yield return sequence.WaitForCompletion();
+    }
+
+    public IEnumerator PlayBreakOutAnimation()
+    {
+        var sequence = DOTween.Sequence();
+        sequence.Append(monsterImage.DOFade(1,0.5f));
+        sequence.Join(transform.DOLocalMoveY(startPosition.y, 0.5f));
+        sequence.Join(transform.DOScale(new Vector3(1f,1f,1f), 0.5f));
+        
+        yield return sequence.WaitForCompletion();
+    }
 
 }

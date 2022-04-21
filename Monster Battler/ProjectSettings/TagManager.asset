@@ -50,3 +50,6 @@ TagManager:
   - name: Player
     uniqueID: 2515744573
     locked: 0
+  - name: Battle
+    uniqueID: 349481505
+    locked: 0

@@ -10,7 +10,6 @@ public class GameController : MonoBehaviour
 
     Animator cameraAnimator;
     GameState gameState;
-    bool inBattle; //used only for camera aniamtions
 
     public static GameController Instance {get; private set;}
 
@@ -26,7 +25,7 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        playerController.OnEncounter += StartBattle;
+        playerController.OnEncounter += StartWildMonsterBattle;
         battleSystem.OnBattleOver += EndBattle;
 
         playerController.OnMageEncounter += (Collider2D summonerCollider) => 
@@ -50,7 +49,6 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
-        cameraAnimator.SetBool("inBattle", inBattle); //for camera animations
 
         if(gameState == GameState.OverWorld)
         {
@@ -68,20 +66,36 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void StartBattle()
+    private void StartWildMonsterBattle()
     {
         gameState = GameState.Battle;
-        inBattle = true;
         battleSystem.gameObject.SetActive(true);
-        battleSystem.StartBattle();
+
+        var playerParty = playerController.GetComponent<MonsterParty>();
+        var wildMonsters = FindObjectOfType<MapArea>().GetComponent<MonsterParty>();
+        
+        
+        for(int i = 0; i < 2; ++i)
+        {
+            var wildMonster = FindObjectOfType<MapArea>().GetComponent<MapArea>().GetRandomWildMonster();
+            
+            var wildMonsterCopy =  new Monster(wildMonster.Base, wildMonster.Level);
+
+            wildMonsters.Monsters.Add(wildMonsterCopy);
+        }
+        
+        battleSystem.StartWildMonsterBattle(playerParty, wildMonsters);
+        wildMonsters.Monsters.Clear(); //clear wild monster party after starting battle. 
     }
 
     SummonerController summoner;
     public void StartSummonerBattle(SummonerController summonerController)
     {
+        
         gameState = GameState.Battle;
-        inBattle = true;
         battleSystem.gameObject.SetActive(true);
+
+        
 
         summoner = summonerController;
         var playerParty = playerController.GetComponent<MonsterParty>();
