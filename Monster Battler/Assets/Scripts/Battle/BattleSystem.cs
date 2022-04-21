@@ -26,7 +26,7 @@ public class BattleSystem : MonoBehaviour
 
     public event Action<bool> OnBattleOver;    
 
-    List<BattleUnit> turnOrder = new List<BattleUnit>();
+    [SerializeField] List<BattleUnit> turnOrder = new List<BattleUnit>();
     List<Move> selectedMoves =  new List<Move>();
     List<Monster> selectedSwitch = new List<Monster>();
     List<BattleUnit> selectedTargets = new List<BattleUnit>();
@@ -123,6 +123,7 @@ public class BattleSystem : MonoBehaviour
 
     void NewTurn()
     {
+
         turnOrder.Sort(SpeedComparison);
         battleState = BattleState.PlayerAction1; //changing the battle state
         SelectAction();
@@ -1206,6 +1207,7 @@ public class BattleSystem : MonoBehaviour
             enemyParty.Monsters.Clear();
         }
 
+        turnOrder.Clear(); //reset all units in turn.
         playerParty.Monsters.ForEach(m => m.OnBattleOver()); //rests for each monster in party
         OnBattleOver(won);
 
