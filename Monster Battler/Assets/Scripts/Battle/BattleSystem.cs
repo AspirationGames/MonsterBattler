@@ -891,13 +891,56 @@ public class BattleSystem : MonoBehaviour
         
     }
 
-    IEnumerator HandleMonsterKill(BattleUnit targetUnit)
+    IEnumerator HandleMonsterKill(BattleUnit faintedUnit)
     {
         //Fainted
-        targetUnit.PlayFaintAnimation();
-        targetUnit.Hud.gameObject.SetActive(false); 
-        yield return battleDialogueBox.TypeDialog($"{targetUnit.Monster.Base.MonsterName} fainted.");
+        faintedUnit.PlayFaintAnimation();
+        faintedUnit.Hud.gameObject.SetActive(false); 
+        yield return battleDialogueBox.TypeDialog($"{faintedUnit.Monster.Base.MonsterName} fainted.");
 
+        
+        if(!faintedUnit.IsPlayerMonster) //should only gain exp if player. 
+        {
+            //EXP gain calculation
+            int b = faintedUnit.Monster.Base.ExpYield;
+            int lvl = faintedUnit.Monster.Level;
+            float summonerBonus = (isSummonerBattle) ? 1.5f : 1f; //summoner battles provide more exp
+
+            foreach(Monster monster in playerParty.Monsters)
+            {
+                if(monster.HP > 0)
+                {
+                    int expGain;
+                    if(monster.InBattle) //reduced exp for monsters that did not participate in battle. For now just implementing if monster is currently in battle.
+                    {
+                        expGain = Mathf.FloorToInt(( (b*lvl * summonerBonus) / 7)); 
+                        
+                    }
+                    else
+                    {
+                        expGain = Mathf.FloorToInt(( (b*lvl * summonerBonus) / 14)); 
+                    }
+                    //Add EXP to monsters
+                    monster.Exp += expGain;
+                    if(monster.InBattle) // update HUD for monsters in battle
+                    {
+                        Debug.Log("updaging HUD for EXP");
+                        yield return battleUnits[playerParty.Monsters.IndexOf(monster)].Hud.SetExpSmooth();
+                    }
+                    //Check for Level Up
+                    
+
+                }
+                else
+                {
+                    continue;
+                }
+                
+            }
+
+        }
+
+        
         
         
     }
@@ -918,7 +961,7 @@ public class BattleSystem : MonoBehaviour
 
                 if(unit.Monster.HP <= 0)//if the monster FAINTS
                 {
-                    yield return battleDialogueBox.TypeDialog($"{unit.Monster.Base.MonsterName} fainted.");
+                    yield return HandleMonsterKill(unit);
                     faintedUnits.Add(unit);
                 }
             }

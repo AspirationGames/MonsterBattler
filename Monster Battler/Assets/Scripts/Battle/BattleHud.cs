@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-
+using DG.Tweening;
 
 public class BattleHud : MonoBehaviour
 {
@@ -11,6 +11,7 @@ public class BattleHud : MonoBehaviour
     [SerializeField] TextMeshProUGUI levelText;
 
     [SerializeField] HPBar hpBar;
+    [SerializeField] GameObject expBar;
     [SerializeField] TextMeshProUGUI hpText;
     [SerializeField] Image statusImage;
     [SerializeField] List<Sprite> statusSprites;
@@ -24,9 +25,41 @@ public class BattleHud : MonoBehaviour
         levelText.text = "Lvl " + monster.Level.ToString();
         hpBar.SetHP((float) monster.HP / monster.MaxHP);
         hpText.text = monster.HP.ToString() + "/" + monster.MaxHP.ToString();
+        SetEXP();
 
         SetStatusImage();
         monster.OnStatusChaged += SetStatusImage;
+
+    }
+
+    public void SetEXP()
+    {
+        if (expBar == null) return;
+
+        float normalizedExp = GetNormalizedExp();
+
+        expBar.transform.localScale = new Vector3(normalizedExp, 1, 1);
+
+    }
+
+    public IEnumerator SetExpSmooth()
+    {
+        
+        if(expBar == null) yield break;
+
+        float normalizedExp = GetNormalizedExp();
+        Debug.Log(normalizedExp);
+        yield return expBar.transform.DOScaleX(normalizedExp, 1.5f).WaitForCompletion();
+    }
+
+    float GetNormalizedExp()
+    {
+        int currentLevelExp = monster.Base.GetExpForLevel(monster.Level);
+        int nextLevelExp = monster.Base.GetExpForLevel(monster.Level + 1);
+
+        float normalizedExp = (float)(monster.Exp - currentLevelExp) / (nextLevelExp - currentLevelExp);
+
+        return Mathf.Clamp01(normalizedExp);
 
     }
 

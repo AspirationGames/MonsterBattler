@@ -52,6 +52,8 @@ public class Monster
     } //set to property so we can refrence the base from the Pokemon Class directily in other classes (i.e. battlehud script);
 
     public int HP {get; set;} //our monsters current HP, we are using a property
+
+    public int Exp { get; set;}
     public List<Move> Moves{ get; set;} //we are using a property for the moves
     public Dictionary<Stat, int> Stats {get; private set;} //we can get stats publically but only set stats in the monster class
     public Dictionary<Stat, int> StatStages {get; private set;} //integer values in this dictionary are between minus 6 and plus 6
@@ -91,6 +93,8 @@ public class Monster
                 break;
             }
         }
+
+        Exp = Base.GetExpForLevel(level);
 
         CalculateStats();
         HP = MaxHP;

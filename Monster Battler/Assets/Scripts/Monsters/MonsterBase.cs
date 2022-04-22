@@ -17,7 +17,7 @@ public class MonsterBase : ScriptableObject
     [SerializeField] MonsterType type1;
     [SerializeField] MonsterType type2;
 
-    [Header("Stats")]
+    [Header("Base Stats")]
     [SerializeField] int maxHP;
     [SerializeField] int attack;
     [SerializeField] int defense;
@@ -25,10 +25,37 @@ public class MonsterBase : ScriptableObject
     [SerializeField] int spDefense;
     [SerializeField] int speed;
 
+    [Header("Other Stats")]
+
     [SerializeField][Range(0,255)] int catchRate = 255;
+    [SerializeField] int expYield;
+    [SerializeField] GrowthRate growthRate;
+    [SerializeField] int dsYield; //developmental skill point yield
+
+    
 
     [Header("MovePool")]
     [SerializeField] List<LearnableMoves> learnableMoves;
+
+    public int GetExpForLevel(int level)
+    {
+        switch (growthRate)
+        {
+            case GrowthRate.Erratic:
+                Debug.Log("erratic exp growth");
+                return 100;
+            case GrowthRate.Fast:
+                return Mathf.FloorToInt( 4*Mathf.Pow(level,3)/5 );
+            
+            case GrowthRate.MediumFast:
+                return Mathf.FloorToInt( Mathf.Pow(level,3) );
+            
+            default:
+                Debug.Log("no growth rate assigned");
+                return -1;
+                
+        }
+    }
 
     //Propterties
     public string MonsterName
@@ -133,6 +160,16 @@ public class MonsterBase : ScriptableObject
         get{return catchRate;}
     }
 
+    public int ExpYield
+    {
+        get{return expYield;}
+    }
+
+    public GrowthRate GrowthRate
+    {
+        get{return growthRate;}
+    }
+
     public List<LearnableMoves> LearnableMoves
     {
         get{return learnableMoves;}
@@ -170,6 +207,17 @@ public enum MonsterType
     Bug,
     Flying,
     Earth
+
+}
+
+public enum GrowthRate
+{
+    Erratic,
+    Fast,
+    MediumFast,
+    MediumSlow,
+    Slow,
+    Fluctuating
 
 }
 
