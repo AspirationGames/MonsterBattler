@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
 {
     [SerializeField] string playerName;
     [SerializeField] Sprite sprite;
+
+    const float offsetY = 0.3f; //this offset will account for detecting collision inappropriatly due to player sprite not being at center of tile.
     public event Action OnEncounter;
     public event Action<Collider2D> OnMageEncounter;
     [SerializeField] float encoutnerRate = 10f;
@@ -122,7 +124,7 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
     void CheckForEncounter()
     {
 
-        if(Physics2D.OverlapCircle(transform.position, 0.2f, GameLayers.i.MonsterEncountersLayer)!= null )
+        if(Physics2D.OverlapCircle(transform.position - new Vector3(0,offsetY), 0.2f, GameLayers.i.MonsterEncountersLayer)!= null )
         {
             if(UnityEngine.Random.Range(1, 101) <= encoutnerRate) //10% chance of random monster encounter
             {
@@ -136,7 +138,7 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
 
     void CheckForSummoners()
     {
-        var summonerCollider = Physics2D.OverlapCircle(transform.position, 0.2f, GameLayers.i.Fovlayer);
+        var summonerCollider = Physics2D.OverlapCircle(transform.position  - new Vector3(0,offsetY), 0.2f, GameLayers.i.Fovlayer);
 
         if(summonerCollider != null )
         {
