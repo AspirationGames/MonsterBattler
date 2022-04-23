@@ -33,6 +33,7 @@ public class BattleSystem : MonoBehaviour
 
     List<GameObject> selectedSpell = new List<GameObject>();
 
+    List<Monster> battleParticipants = new List<Monster>();
     MonsterParty playerParty;
     MonsterParty enemyParty;
 
@@ -97,6 +98,7 @@ public class BattleSystem : MonoBehaviour
             {
                 unit.Setup(playerParty.Monsters[battleUnits.IndexOf(unit)]); //returns monsters at index 0 and 1 in party
                 unit.Monster.InBattle = true;
+                battleParticipants.Add(unit.Monster);
                 turnOrder.Add(unit);
 
             }
@@ -634,8 +636,6 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator SwitchMonsters()
     {
-        
-
 
         for(int i=0; i < turnOrder.Count; i++)
         {
@@ -665,6 +665,13 @@ public class BattleSystem : MonoBehaviour
 
                     //re-order position in party screen
                     playerParty.SwapPartyPositions(currentMonster, incomingMonster);
+
+
+                    //Add monter to list of battle participants if monster has not already been added.
+                    if(!battleParticipants.Contains(incomingMonster))
+                    {
+                        battleParticipants.Add(incomingMonster);
+                    }
                     
                 }
                 else if(!currentUnit.IsPlayerMonster)
@@ -907,30 +914,22 @@ public class BattleSystem : MonoBehaviour
             int lvl = faintedUnit.Monster.Level;
             float summonerBonus = (isSummonerBattle) ? 1.5f : 1f; //summoner battles provide more exp
 
-            foreach(Monster monster in playerParty.Monsters)
+            foreach(Monster monster in battleParticipants)
             {
                 if(monster.HP > 0)
                 {
-                    int expGain;
-                    if(monster.InBattle) //reduced exp for monsters that did not participate in battle. For now just implementing if monster is currently in battle.
-                    {
-                        expGain = Mathf.FloorToInt(( (b*lvl * summonerBonus) / 7)); 
-                        
-                    }
-                    else
-                    {
-                        expGain = Mathf.FloorToInt(( (b*lvl * summonerBonus) / 14)); 
-                    }
+                    int expGain = Mathf.FloorToInt(( (b*lvl * summonerBonus) / 7)); 
+
                     //Add EXP to monsters
                     monster.Exp += expGain;
-                    if(monster.InBattle) // update HUD for monsters in battle
+                    if(monster.InBattle) // update HUD for monsters in battle the we update HUD
                     {
                         yield return battleUnits[playerParty.Monsters.IndexOf(monster)].Hud.SetExpSmooth();
                     }
                     //Check for Level Up
                    while ( monster.CheckForLevelUp() ) //A while loop will make sure if a monster gains multiple levels then it will continue to adjust
                    {
-                       if(monster.InBattle)
+                       if(monster.InBattle) //if in battle we update HUD
                        {
                            battleUnits[playerParty.Monsters.IndexOf(monster)].Hud.SetLevel();
                            yield return battleUnits[playerParty.Monsters.IndexOf(monster)].Hud.SetExpSmooth(true); //in the event the monster gained more exp than required to level up
@@ -1168,7 +1167,6 @@ public class BattleSystem : MonoBehaviour
         
         Monster faintedMonster = faintedUnit.Monster;
         Monster incomingMonster = selectedSwitch[0];
-        
 
         faintedMonster.InBattle = false;
         faintedUnit.Setup(incomingMonster);
@@ -1178,6 +1176,12 @@ public class BattleSystem : MonoBehaviour
         
         //re-order position in party screen
         playerParty.SwapPartyPositions(faintedMonster, incomingMonster);
+
+        //Add monter to list of battle participants if monster has not already been added.
+        if(!battleParticipants.Contains(incomingMonster))
+        {
+            battleParticipants.Add(incomingMonster);
+        }
 
     }
 
@@ -1257,6 +1261,7 @@ public class BattleSystem : MonoBehaviour
         }
 
         turnOrder.Clear(); //reset all units in turn.
+        battleParticipants.Clear(); //clear list of battle participants
         playerParty.Monsters.ForEach(m => m.OnBattleOver()); //rests for each monster in party
         OnBattleOver(won);
 
