@@ -51,6 +51,7 @@ public class BattleSystem : MonoBehaviour
         player = playerParty.GetComponent<PlayerController>();
         
         isSummonerBattle = false;
+        enemyImage.gameObject.SetActive(false); //removes summoner sprite image from battle
         StartCoroutine(SetupBattle());
     }
 
