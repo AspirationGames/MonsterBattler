@@ -924,10 +924,18 @@ public class BattleSystem : MonoBehaviour
                     monster.Exp += expGain;
                     if(monster.InBattle) // update HUD for monsters in battle
                     {
-                        Debug.Log("updaging HUD for EXP");
                         yield return battleUnits[playerParty.Monsters.IndexOf(monster)].Hud.SetExpSmooth();
                     }
                     //Check for Level Up
+                   while ( monster.CheckForLevelUp() ) //A while loop will make sure if a monster gains multiple levels then it will continue to adjust
+                   {
+                       if(monster.InBattle)
+                       {
+                           battleUnits[playerParty.Monsters.IndexOf(monster)].Hud.SetLevel();
+                           yield return battleUnits[playerParty.Monsters.IndexOf(monster)].Hud.SetExpSmooth(true); //in the event the monster gained more exp than required to level up
+                       }
+                       yield return battleDialogueBox.TypeDialog($"{monster.Base.MonsterName} leveled up!");
+                   }
                     
 
                 }
@@ -938,10 +946,7 @@ public class BattleSystem : MonoBehaviour
                 
             }
 
-        }
-
-        
-        
+        }  
         
     }
 

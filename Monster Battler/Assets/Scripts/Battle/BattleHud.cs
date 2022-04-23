@@ -22,13 +22,19 @@ public class BattleHud : MonoBehaviour
         monster = mon;
 
         nameText.text = monster.Base.MonsterName;
-        levelText.text = "Lvl " + monster.Level.ToString();
+        SetLevel();
         hpBar.SetHP((float) monster.HP / monster.MaxHP);
         hpText.text = monster.HP.ToString() + "/" + monster.MaxHP.ToString();
         SetEXP();
 
         SetStatusImage();
         monster.OnStatusChaged += SetStatusImage;
+
+    }
+
+    public void SetLevel()
+    {
+        levelText.text = "Lvl " + monster.Level.ToString();
 
     }
 
@@ -42,13 +48,19 @@ public class BattleHud : MonoBehaviour
 
     }
 
-    public IEnumerator SetExpSmooth()
+    public IEnumerator SetExpSmooth(bool expFull=false)
     {
         
         if(expBar == null) yield break;
 
+        if(expFull)
+        {
+            //reset exp bar
+            expBar.transform.localScale = new Vector3(0,1,1);
+
+        }
+
         float normalizedExp = GetNormalizedExp();
-        Debug.Log(normalizedExp);
         yield return expBar.transform.DOScaleX(normalizedExp, 1.5f).WaitForCompletion();
     }
 
