@@ -22623,7 +22623,7 @@ MonoBehaviour:
     developedSkillSpDefense: 0
     developedSkillSpeed: 252
   - _base: {fileID: 11400000, guid: 57d0a29cc67460745b766488d455f982, type: 2}
-    level: 50
+    level: 10
     personality: 15
     naturalSkillMaxHP: 31
     naturalSkillAttack: 31
@@ -22638,7 +22638,7 @@ MonoBehaviour:
     developedSkillSpDefense: 0
     developedSkillSpeed: 252
   - _base: {fileID: 11400000, guid: 149c32699cedbe04c8af6b598da1c975, type: 2}
-    level: 50
+    level: 5
     personality: 2
     naturalSkillMaxHP: 31
     naturalSkillAttack: 31
