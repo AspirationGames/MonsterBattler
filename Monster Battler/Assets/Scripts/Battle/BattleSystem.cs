@@ -935,6 +935,24 @@ public class BattleSystem : MonoBehaviour
                            yield return battleUnits[playerParty.Monsters.IndexOf(monster)].Hud.SetExpSmooth(true); //in the event the monster gained more exp than required to level up
                        }
                        yield return battleDialogueBox.TypeDialog($"{monster.Base.MonsterName} leveled up!");
+
+                       //check for new moves
+                       var newMove = monster.GetLearnableMoveAtCurrLevel();
+                        if(newMove != null)
+                        {
+                            if(monster.Moves.Count < MonsterBase.MaxNumberOfMoves)
+                            {
+                                monster.LearnMove(newMove);
+
+                                yield return battleDialogueBox.TypeDialog($"{monster.Base.MonsterName} learned {newMove.Base.MoveName}!");
+
+                            }
+                            else
+                            {
+                                //player will need to forget a move
+                            }
+                        }
+
                    }
                     
 

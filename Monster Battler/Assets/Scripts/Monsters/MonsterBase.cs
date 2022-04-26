@@ -35,7 +35,9 @@ public class MonsterBase : ScriptableObject
     
 
     [Header("MovePool")]
-    [SerializeField] List<LearnableMoves> learnableMoves;
+    [SerializeField] List<LearnableMove> learnableMoves;
+
+    public static int MaxNumberOfMoves {get; set;} = 4;
 
     public int GetExpForLevel(int level)
     {
@@ -170,7 +172,7 @@ public class MonsterBase : ScriptableObject
         get{return growthRate;}
     }
 
-    public List<LearnableMoves> LearnableMoves
+    public List<LearnableMove> LearnableMoves
     {
         get{return learnableMoves;}
     }
@@ -178,7 +180,7 @@ public class MonsterBase : ScriptableObject
 }    
 
 [System.Serializable]
-public class LearnableMoves
+public class LearnableMove
 {
     [SerializeField] MoveBase moveBase;
     [SerializeField] int moveLevel;

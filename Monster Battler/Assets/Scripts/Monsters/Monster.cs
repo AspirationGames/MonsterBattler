@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -88,7 +89,7 @@ public class Monster
             {
                 Moves.Add(new Move(move.Base));
             }
-            if(Moves.Count >= 4) // break our loop if the pokemon already has 4 moves
+            if(Moves.Count >= MonsterBase.MaxNumberOfMoves) // break our loop if the pokemon already has 4 moves
             {
                 break;
             }
@@ -430,7 +431,20 @@ public class Monster
 
     }
 
-    
+    public LearnableMove GetLearnableMoveAtCurrLevel()
+    {
+        return Base.LearnableMoves.Where(x => x.MoveLevel == level).FirstOrDefault();
+    }
+
+    public void LearnMove(LearnableMove newMove)
+    {
+        if(Moves.Count > MonsterBase.MaxNumberOfMoves)
+        {
+            return;
+        }
+
+        Moves.Add(new Move(newMove.Base));
+    }
 
     //Stat Properties
     
