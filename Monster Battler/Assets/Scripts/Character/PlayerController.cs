@@ -8,8 +8,6 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
 {
     [SerializeField] string playerName;
     [SerializeField] Sprite sprite;
-
-    const float offsetY = 0.3f; //this offset will account for detecting collision inappropriatly due to player sprite not being at center of tile.
     Vector2 moveDirection;
     PlayerControls playerControls;
     Character character;
@@ -114,7 +112,7 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
 
     void RunAfterMove()
     {
-      var triggerableColliders = Physics2D.OverlapCircleAll(transform.position - new Vector3(0,offsetY), 0.2f, GameLayers.i.TriggerableLayers);
+      var triggerableColliders = Physics2D.OverlapCircleAll(transform.position - new Vector3(0,character.OffSetY), 0.2f, GameLayers.i.TriggerableLayers); //offset y is used in this case to prefent detecting collision above palyer incorrectly
 
       foreach (var collider in triggerableColliders)
       {
