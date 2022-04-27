@@ -134,4 +134,9 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
     {
         get => sprite;
     }
+
+    public Character Character
+    {
+        get => character;
+    }
 }
