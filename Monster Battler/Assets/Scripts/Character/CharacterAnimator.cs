@@ -75,6 +75,7 @@ public class CharacterAnimator : MonoBehaviour
         if(IsMoving)
         {
             currentAnim.HandleUpdate();
+            
         }
         else //play first frame aka idle
         {

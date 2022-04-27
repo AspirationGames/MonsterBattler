@@ -10,9 +10,6 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
     [SerializeField] Sprite sprite;
 
     const float offsetY = 0.3f; //this offset will account for detecting collision inappropriatly due to player sprite not being at center of tile.
-    public event Action OnEncounter;
-    public event Action<Collider2D> OnMageEncounter;
-    [SerializeField] float encoutnerRate = 10f;
     Vector2 moveDirection;
     PlayerControls playerControls;
     Character character;
@@ -117,37 +114,19 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
 
     void RunAfterMove()
     {
-        CheckForEncounter();
-        CheckForSummoners();
-    }
+      var triggerableColliders = Physics2D.OverlapCircleAll(transform.position - new Vector3(0,offsetY), 0.2f, GameLayers.i.TriggerableLayers);
 
-    void CheckForEncounter()
-    {
-
-        if(Physics2D.OverlapCircle(transform.position - new Vector3(0,offsetY), 0.2f, GameLayers.i.MonsterEncountersLayer)!= null )
-        {
-            if(UnityEngine.Random.Range(1, 101) <= encoutnerRate) //10% chance of random monster encounter
-            {
-                character.CharacterAnimator.IsMoving = false;
-                OnEncounter();
-
-            }
-        }
-
-    }
-
-    void CheckForSummoners()
-    {
-        var summonerCollider = Physics2D.OverlapCircle(transform.position  - new Vector3(0,offsetY), 0.2f, GameLayers.i.Fovlayer);
-
-        if(summonerCollider != null )
+      foreach (var collider in triggerableColliders)
+      {
+        var triggerable = collider.GetComponent<IPlayerTriggerable>();
+        if(triggerable != null)
         {
             character.CharacterAnimator.IsMoving = false;
-            OnMageEncounter?.Invoke(summonerCollider);
+            triggerable.OnPlayerTriggered(this);
+            break;
         }
-
+      }
     }
-
     public string Name
     {
         get => playerName;

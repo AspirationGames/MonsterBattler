@@ -25,19 +25,7 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        playerController.OnEncounter += StartWildMonsterBattle;
         battleSystem.OnBattleOver += EndBattle;
-
-        playerController.OnMageEncounter += (Collider2D summonerCollider) => 
-        {
-            var summonerController = summonerCollider.GetComponentInParent<SummonerController>();
-            
-            if(summonerCollider != null)
-            {
-                gameState = GameState.CutScene;
-                StartCoroutine(summonerController.TriggerMageBattle(playerController));
-            }
-        };
 
         DialogManager.Instance.OnDialogStart += () => gameState = GameState.Dialog;
         DialogManager.Instance.OnDialogEnd += () => 
@@ -66,7 +54,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void StartWildMonsterBattle()
+    public void StartMonsterBattle()
     {
         gameState = GameState.Battle;
         battleSystem.gameObject.SetActive(true);
@@ -101,6 +89,12 @@ public class GameController : MonoBehaviour
         var summonerParty = summonerController.GetComponent<MonsterParty>();
 
         battleSystem.StartSummonerBattle(playerParty, summonerParty);
+    }
+
+    public void OnEnterSummonerFOV(SummonerController summoner)
+    {
+        gameState = GameState.CutScene;
+        StartCoroutine(summoner.TriggerMageBattle(playerController));
     }
     
     private void EndBattle(bool won)
