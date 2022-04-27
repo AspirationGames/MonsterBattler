@@ -28,6 +28,11 @@ public class SummonerController : MonoBehaviour, Interactable
         SetFovRotation(character.CharacterAnimator.DefaultDirection);
     }
 
+    private void Update()
+    {
+        character.HandleUpdate();
+    }
+
     public void Interact(Transform initiator)
     {
         character.LookTowards(initiator.position);
