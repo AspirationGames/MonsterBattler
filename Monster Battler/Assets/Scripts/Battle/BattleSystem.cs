@@ -47,6 +47,8 @@ public class BattleSystem : MonoBehaviour
     MoveBase moveToLearn; //new Move monster is trying to learn
     Monster monsterLearning; //The monster trying to learn a new move
 
+    int escapeAttempts;
+
 
     public void StartWildMonsterBattle(MonsterParty playerParty, MonsterParty wildMonsters)
     {
@@ -117,7 +119,7 @@ public class BattleSystem : MonoBehaviour
         }
 
         
-
+        escapeAttempts = 0;
         partyScreen.Init();
         battleFieldEffects = new BattleFieldEffects();
 
@@ -172,10 +174,37 @@ public class BattleSystem : MonoBehaviour
    void SelectAction()
     {
 
-        StartCoroutine(battleDialogueBox.TypeDialog("What will you do?"));
+        
         battleDialogueBox.EnableActionSelector(true);
+        battleDialogueBox.EnableRunButton(true);
 
-        if(battleState == BattleState.PlayerAction2) battleDialogueBox.EnableBackButton(true);
+        if(battleState == BattleState.PlayerAction2)
+        {
+            battleDialogueBox.EnableBackButton(true);
+            battleDialogueBox.EnableRunButton(false);
+        } 
+    }
+
+    public void OnRun()
+    {
+        if(isSummonerBattle)
+        {
+            StartCoroutine(battleDialogueBox.TypeDialog("You can't flee from a summoner battle."));
+            return;
+
+        }
+
+        for(int i = 0; i < 2; ++i) //passes turn for player 
+        {
+            selectedMoves.Insert(i,null);
+            selectedSwitch.Insert(i,null);
+            selectedTargets.Insert(i, null);
+            selectedSpell.Insert(i,null);
+        }
+        battleDialogueBox.EnableActionSelector(false);
+        StartCoroutine(AttemptToFlee());
+
+
     }
 
     public void SelectMove()
@@ -450,7 +479,6 @@ public class BattleSystem : MonoBehaviour
             partyScreen.gameObject.SetActive(false);
             battleDialogueBox.EnableBackButton(false);
             battleState = BattleState.EnemyAction1;
-            //EnemyActionSelection();
             EnemyActionSelection();
 
         }
@@ -1322,6 +1350,40 @@ public class BattleSystem : MonoBehaviour
         else if(damageDetails.TypeEffectiveness < 1f)
             yield return battleDialogueBox.TypeDialog("It's not very effective");
     }
+
+    IEnumerator AttemptToFlee()
+    {
+        battleState = BattleState.Busy;
+        ++ escapeAttempts;
+
+        int playerSpeed = battleUnits[0].Monster.Speed + battleUnits[1].Monster.Speed;
+        int enemeySpeed = battleUnits[2].Monster.Speed + battleUnits[3].Monster.Speed;
+
+        if(enemeySpeed < playerSpeed)
+        {
+            yield return battleDialogueBox.TypeDialog("You flee from the wild monsters!");
+            BattleOver(true);
+        }
+        else
+        {
+            float f = (playerSpeed * 128) / enemeySpeed + 30 * escapeAttempts;
+            f = f % 256;
+
+            if(UnityEngine.Random.Range(0, 256) < f)
+            {
+                yield return battleDialogueBox.TypeDialog("You flee from the wild monsters!");
+                BattleOver(true);
+            }
+            else
+            {
+
+                yield return battleDialogueBox.TypeDialog("You couldn't escape.");
+                battleState = BattleState.EnemyAction1;
+                EnemyActionSelection();
+            }
+        }
+
+    }
     
 
     void BattleOver(bool won)
@@ -1332,6 +1394,7 @@ public class BattleSystem : MonoBehaviour
         {
             enemyParty.Monsters.Clear();
         }
+
 
         turnOrder.Clear(); //reset all units in turn.
         battleParticipants.Clear(); //clear list of battle participants

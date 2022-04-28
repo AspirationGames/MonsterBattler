@@ -16,6 +16,7 @@ public class BattleDialogBox : MonoBehaviour
     [SerializeField] GameObject targetSelector;
 
     [SerializeField] GameObject backButton;
+    [SerializeField] GameObject runButton;
 
     Button[] moveButtons; 
     Button[] targetButtons;
@@ -66,6 +67,11 @@ public class BattleDialogBox : MonoBehaviour
     public void EnableBackButton(bool enabled)
     {
         backButton.SetActive(enabled);
+    }
+
+    public void EnableRunButton(bool enabled)
+    {
+        runButton.SetActive(enabled);
     }
 
     public void SetMoveNames(List<Move> moves)
