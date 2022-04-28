@@ -43,7 +43,9 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
     public void OnMove(InputAction.CallbackContext context)
     {
 
-        if (!IsInFreeRoamState()) {
+        if (!IsInFreeRoamState()) 
+        {
+            moveDirection = Vector2.zero; //fixed bug where character would move after battle
             return;
         }
 
