@@ -50,6 +50,9 @@ TagManager:
   - name: SolidObjects
     uniqueID: 2011092571
     locked: 0
+  - name: Tall Grass
+    uniqueID: 2588156301
+    locked: 0
   - name: Trees
     uniqueID: 3340643033
     locked: 0
