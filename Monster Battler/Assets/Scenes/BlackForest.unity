@@ -36435,7 +36435,7 @@ Transform:
   - {fileID: 2135200291}
   - {fileID: 1536803454}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1503060995
 GameObject:
@@ -92486,7 +92486,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8832480026388864702, guid: 48bce519db2b7404f9ea1b74b93dc3a9, type: 3}
       propertyPath: m_Name
-      value: Portal
+      value: Portal to HomeTown
       objectReference: {fileID: 0}
     - target: {fileID: 8832480027818950267, guid: 48bce519db2b7404f9ea1b74b93dc3a9, type: 3}
       propertyPath: m_LocalPosition.y
@@ -92501,6 +92501,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8832480026388864699, guid: 48bce519db2b7404f9ea1b74b93dc3a9, type: 3}
+      propertyPath: destinationPortal
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8832480026388864700, guid: 48bce519db2b7404f9ea1b74b93dc3a9, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -92547,7 +92551,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8832480026388864702, guid: 48bce519db2b7404f9ea1b74b93dc3a9, type: 3}
       propertyPath: m_Name
-      value: Portal (1)
+      value: Portal To City
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 48bce519db2b7404f9ea1b74b93dc3a9, type: 3}

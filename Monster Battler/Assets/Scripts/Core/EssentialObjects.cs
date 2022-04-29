@@ -7,7 +7,8 @@ public class EssentialObjects : MonoBehaviour
     private void Awake() 
     {
 
-        DontDestroyOnLoad(gameObject); //doesn't destroy on load this game object    
+        DontDestroyOnLoad(gameObject);
+        
     }
 
 

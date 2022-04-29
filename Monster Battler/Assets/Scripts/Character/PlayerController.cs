@@ -27,23 +27,11 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
     {
         playerControls.Disable();
     }
-
-    public bool IsInFreeRoamState()
-    {
-        if(GameController.Instance.GameState == GameState.OverWorld)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
    
     public void OnMove(InputAction.CallbackContext context)
     {
 
-        if (!IsInFreeRoamState()) 
+        if (GameController.Instance.GameState != GameState.OverWorld) 
         {
             moveDirection = Vector2.zero; //fixed bug where character would move after battle
             return;
@@ -63,7 +51,7 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
 
     public void OnInteract(InputAction.CallbackContext context)
     {   
-        if(!IsInFreeRoamState())
+        if(GameController.Instance.GameState != GameState.OverWorld)
         {
             return;
         }

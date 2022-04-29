@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameState{ OverWorld, Battle, Dialog, CutScene}
+public enum GameState{ OverWorld, Battle, Dialog, CutScene, Paused}
 public class GameController : MonoBehaviour
 {
     [SerializeField] PlayerController playerController;
@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour
 
     Animator cameraAnimator;
     GameState gameState;
+    GameState stateBeforePause;
 
     public static GameController Instance {get; private set;}
 
@@ -52,6 +53,21 @@ public class GameController : MonoBehaviour
         {
             DialogManager.Instance.HandleUpdate();
         }
+    }
+
+    public void PauseGame(bool pause)
+    {
+
+        if(pause)
+        {
+            stateBeforePause = gameState;
+            gameState = GameState.Paused;
+        }
+        else
+        {
+            gameState = stateBeforePause;
+        }
+
     }
 
     public void StartMonsterBattle()
