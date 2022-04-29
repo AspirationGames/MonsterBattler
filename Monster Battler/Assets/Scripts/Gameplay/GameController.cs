@@ -12,6 +12,10 @@ public class GameController : MonoBehaviour
     GameState gameState;
     GameState stateBeforePause;
 
+    public SceneDetails CurrentScene {get; private set;}
+
+    public SceneDetails PreviousScene {get; private set;}
+
     public static GameController Instance {get; private set;}
 
     private void Awake() 
@@ -126,6 +130,12 @@ public class GameController : MonoBehaviour
         battleSystem.gameObject.SetActive(false);
         
 
+    }
+
+    public void SetCurrentScene(SceneDetails currScene)
+    {
+        PreviousScene = CurrentScene;
+        CurrentScene = currScene;
     }
 
     public GameState GameState => gameState;
