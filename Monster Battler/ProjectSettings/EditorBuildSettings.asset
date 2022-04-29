@@ -14,5 +14,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SapphireCity.unity
     guid: 531edef33de7b6748b386f77344e1b79
+  - enabled: 1
+    path: Assets/Scenes/House0.unity
+    guid: b8cffa0c71ba98542835d53853363a89
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 042cf24304c04014eb3e466a7d54ca65, type: 2}
