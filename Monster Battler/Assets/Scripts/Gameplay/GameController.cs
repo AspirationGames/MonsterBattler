@@ -80,12 +80,12 @@ public class GameController : MonoBehaviour
         battleSystem.gameObject.SetActive(true);
 
         var playerParty = playerController.GetComponent<MonsterParty>();
-        var wildMonsters = FindObjectOfType<MapArea>().GetComponent<MonsterParty>();
+        var wildMonsters = CurrentScene.GetComponent<MonsterParty>();
         
         
         for(int i = 0; i < 2; ++i)
         {
-            var wildMonster = FindObjectOfType<MapArea>().GetComponent<MapArea>().GetRandomWildMonster();
+            var wildMonster = CurrentScene.GetComponent<MapArea>().GetRandomWildMonster();
             
             var wildMonsterCopy =  new Monster(wildMonster.Base, wildMonster.Level);
 

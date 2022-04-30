@@ -174,7 +174,8 @@ public class BattleSystem : MonoBehaviour
    void SelectAction()
     {
 
-        
+        StartCoroutine(battleDialogueBox.TypeDialog($"What will you do?"));
+
         battleDialogueBox.EnableActionSelector(true);
         battleDialogueBox.EnableRunButton(true);
 
