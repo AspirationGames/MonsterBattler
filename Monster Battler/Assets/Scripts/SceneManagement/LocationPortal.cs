@@ -21,6 +21,7 @@ public class LocationPortal : MonoBehaviour, IPlayerTriggerable
     public void OnPlayerTriggered(PlayerController player)
     {
         this.player = player;
+        player.Character.CharacterAnimator.IsMoving = false;
         StartCoroutine(Teleport());
 
     }
