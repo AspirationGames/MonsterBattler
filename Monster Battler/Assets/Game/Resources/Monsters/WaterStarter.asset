@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30520e625ab1aac49b844bb99066645f, type: 3}
   m_Name: WaterStarter
   m_EditorClassIdentifier: 
-  monsterName: Speckle
+  monsterName: Spuckling
   description: 
   frontSprite: {fileID: 21300000, guid: 87a02fb3cd8d52045b55ca886c04c73b, type: 3}
   backSprite: {fileID: 21300000, guid: f883ce339cb28df4099fe93906d4defd, type: 3}

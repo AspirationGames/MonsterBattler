@@ -502,15 +502,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wildMonsters:
-  - _base: {fileID: 11400000, guid: d63bf37dc82034448bb8d1234f4d8a31, type: 2}
-    level: 5
-    personality: 0
-    naturalSkillMaxHP: 0
-    naturalSkillAttack: 0
-    naturalSkillDefense: 0
-    naturalSkillSpAttack: 0
-    naturalSkillSpDefense: 0
-    naturalSkillSpeed: 0
+  - _base: {fileID: 11400000, guid: 424fb588cf7627c4f9b0c80bc5b7d64f, type: 2}
+    level: 6
+    personality: 21
+    naturalSkillMaxHP: 14
+    naturalSkillAttack: 18
+    naturalSkillDefense: 6
+    naturalSkillSpAttack: 11
+    naturalSkillSpDefense: 16
+    naturalSkillSpeed: 24
+    developedSkillMaxHP: 0
+    developedSkillAttack: 0
+    developedSkillDefense: 0
+    developedSkillSpAttack: 0
+    developedSkillSpDefense: 0
+    developedSkillSpeed: 0
+  - _base: {fileID: 11400000, guid: 424fb588cf7627c4f9b0c80bc5b7d64f, type: 2}
+    level: 6
+    personality: 21
+    naturalSkillMaxHP: 14
+    naturalSkillAttack: 18
+    naturalSkillDefense: 6
+    naturalSkillSpAttack: 11
+    naturalSkillSpDefense: 16
+    naturalSkillSpeed: 24
     developedSkillMaxHP: 0
     developedSkillAttack: 0
     developedSkillDefense: 0
