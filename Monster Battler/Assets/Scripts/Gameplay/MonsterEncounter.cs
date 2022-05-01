@@ -9,7 +9,7 @@ public class MonsterEncounter : MonoBehaviour, IPlayerTriggerable
     {
         if(UnityEngine.Random.Range(1, 101) <= encoutnerRate) //10% chance of random monster encounter
         {
-
+            player.Character.CharacterAnimator.IsMoving = false;
             GameController.Instance.StartMonsterBattle();
 
         }

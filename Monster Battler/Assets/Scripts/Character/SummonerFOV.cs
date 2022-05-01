@@ -6,6 +6,7 @@ public class SummonerFOV : MonoBehaviour, IPlayerTriggerable
 {
     public void OnPlayerTriggered(PlayerController player)
     {
+        player.Character.CharacterAnimator.IsMoving = false;
         GameController.Instance.OnEnterSummonerFOV(GetComponentInParent<SummonerController>());
     }
 }
