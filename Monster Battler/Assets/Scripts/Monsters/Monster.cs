@@ -599,6 +599,7 @@ public class Monster
     public void OnBattleOver() //used to reset values after battle is over
     {
         VolatileStatus = null;
+        InBattle = false;
         ResetStatStages();
         
     }

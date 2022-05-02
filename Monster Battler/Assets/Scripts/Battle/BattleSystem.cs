@@ -100,17 +100,35 @@ public class BattleSystem : MonoBehaviour
         foreach(BattleUnit unit in battleUnits) //set up player
         {
             unit.gameObject.SetActive(true); //reactivates each unit
+
             if(unit.IsPlayerMonster)
             {
-                unit.Setup(playerParty.Monsters[battleUnits.IndexOf(unit)]); //returns monsters at index 0 and 1 in party
+                Monster incomingMonster = playerParty.FindNextHealthyMonster();
+
+                if(incomingMonster == null) //in the event there is only one healthy monster
+                {
+                    continue;
+                }
+
+                unit.Setup(incomingMonster); 
                 unit.Monster.InBattle = true;
                 battleParticipants.Add(unit.Monster);
                 turnOrder.Add(unit);
 
+                //sort party selection screen. This is to account for monster fainting during battle but not being switched (APD code)
+                playerParty.SortParty(incomingMonster, battleUnits.IndexOf(unit));
+
             }
             else
             {
-                unit.Setup(enemyParty.Monsters[battleUnits.IndexOf(unit)-2]); //returns monsters at index 0 and 1 for enemy party which is why we subtract by 2
+                Monster incomingMonster = enemyParty.FindNextHealthyMonster();
+                
+                if(incomingMonster == null) //in the event there is only one healthy monster
+                {
+                    continue;
+                }
+
+                unit.Setup(incomingMonster); 
                 unit.Monster.InBattle = true;
                 turnOrder.Add(unit);
                 
@@ -938,7 +956,6 @@ public class BattleSystem : MonoBehaviour
         faintedUnit.PlayFaintAnimation();
         faintedUnit.Hud.gameObject.SetActive(false); 
         yield return battleDialogueBox.TypeDialog($"{faintedUnit.Monster.Base.MonsterName} fainted.");
-
         
         if(!faintedUnit.IsPlayerMonster) //should only gain exp if player. 
         {

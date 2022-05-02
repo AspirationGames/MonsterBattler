@@ -60,6 +60,20 @@ public class MonsterParty : MonoBehaviour
 
     }
 
+    public void SortParty(Monster monster, int BattlePosition)
+    {
+        if(monsters.IndexOf(monster) != BattlePosition)
+        {
+            SwapPartyPositions(monster, monsters[BattlePosition]);
+
+        }
+        else
+        {
+            return;
+        }
+
+    }
+
     public void SwapPartyPositions(Monster currentMonster, Monster incomingMonster)
     {
         int currentMonsterIndex = monsters.IndexOf(currentMonster);
@@ -84,7 +98,7 @@ public class MonsterParty : MonoBehaviour
         }
 
         Debug.Log("No Healthy Monster found. Please review code!");
-        return monsters[0];
+        return null;
 
     }
 
