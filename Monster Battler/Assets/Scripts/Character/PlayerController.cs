@@ -9,14 +9,15 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions, IS
 {
     [SerializeField] string playerName;
     [SerializeField] Sprite sprite;
-
-    [SerializeField] GameObject pauseMenu; 
     Vector2 moveDirection;
     PlayerControls playerControls;
     Character character;
+    
+    [SerializeField] PauseMenu pauseMenu;
     void Awake() 
     {  
         character = GetComponent<Character>();
+
         playerControls = new PlayerControls();
         playerControls.Player.SetCallbacks(this); 
     }
@@ -29,23 +30,6 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions, IS
     void OnDisable() 
     {
         playerControls.Disable();
-    }
-
-    public void OnMenu(InputAction.CallbackContext context)
-    {
-        if (GameController.Instance.GameState != GameState.OverWorld) 
-        {
-            moveDirection = Vector2.zero; //fixed bug where character would move after battle
-            return;
-        }
-
-        if(context.started)
-        {
-            return;
-        }
-        
-        pauseMenu.gameObject.SetActive(true);
-        
     }
    
     public void OnMove(InputAction.CallbackContext context)
@@ -84,6 +68,24 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions, IS
             Interact();
         }
             
+    }
+
+    public void OnPause(InputAction.CallbackContext context)
+    {
+        if (GameController.Instance.GameState != GameState.OverWorld) 
+        {
+            return;
+        }
+        if(context.started)
+        {
+            return;
+        }
+        else if(context.performed)
+        {
+            pauseMenu.gameObject.SetActive(true);
+            GameController.Instance.PauseGame(true);
+        }
+        
     }
 
     

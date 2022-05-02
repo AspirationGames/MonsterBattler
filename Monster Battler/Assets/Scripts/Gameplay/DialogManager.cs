@@ -48,22 +48,10 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
         StartCoroutine(TypeDialog(dialog.Lines[0]));
     }
 
-    public bool IsInDialogState()
-    {
-        if(GameController.Instance.GameState == GameState.Dialog)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
     public void OnConfirm(InputAction.CallbackContext context)
     {
         
-        if(!isTyping && context.performed && IsInDialogState())
+        if(!isTyping && context.performed && GameController.Instance.GameState == GameState.Dialog)
         {
             ++currentLine;
             if(currentLine < dialog.Lines.Count)
