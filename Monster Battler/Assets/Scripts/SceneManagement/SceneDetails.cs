@@ -25,16 +25,24 @@ public class SceneDetails : MonoBehaviour
                 scene.LoadScene();
             }
             //Unload no longer connected scenes.
-            if(GameController.Instance.PreviousScene != null)
+            var prevScene = GameController.Instance.PreviousScene;
+            if(prevScene != null)
             {
                 var previosulyLoadedScenes = GameController.Instance.PreviousScene.connectedScenes;
-                foreach (var scene in previosulyLoadedScenes)
+
+                foreach (var scene in previosulyLoadedScenes)//unload no longer connected scenes
                 {
                     if(!connectedScenes.Contains(scene) && scene != this)
                     {
                         scene.UnloadScene();
                     }
+                    
+                }
 
+                if(!connectedScenes.Contains(prevScene)) //if the current scene doese not contain the previous scene we should unload the previous scene aswell.
+                {   
+                        Debug.Log("unloading previous scene");
+                      prevScene.UnloadScene();  
                 }
             }
 
