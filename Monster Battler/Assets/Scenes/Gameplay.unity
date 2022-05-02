@@ -413,20 +413,76 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[0]._base
+      value: 
+      objectReference: {fileID: 11400000, guid: 149c32699cedbe04c8af6b598da1c975, type: 2}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[0].level
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[1]._base
+      value: 
+      objectReference: {fileID: 11400000, guid: 57d0a29cc67460745b766488d455f982, type: 2}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: monsters.Array.data[1].level
-      value: 6
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[2]._base
+      value: 
+      objectReference: {fileID: 11400000, guid: e517362a48ec6f24da07555dc4a1f493, type: 2}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[0].personality
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[1].personality
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[0].naturalSkillSpeed
+      value: 31
       objectReference: {fileID: 0}
     - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: monsters.Array.data[1].naturalSkillSpeed
       value: 31
       objectReference: {fileID: 0}
     - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[0].developedSkillMaxHP
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: monsters.Array.data[0].developedSkillSpeed
-      value: 0
+      value: 252
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[1].developedSkillMaxHP
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[1].developedSkillSpeed
+      value: 252
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[0].developedSkillAttack
+      value: 252
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[1].developedSkillAttack
+      value: 252
       objectReference: {fileID: 0}
     - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: monsters.Array.data[0].developedSkillSpAttack
-      value: 252
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[1].developedSkillSpAttack
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6221295680788380489, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: m_RootOrder

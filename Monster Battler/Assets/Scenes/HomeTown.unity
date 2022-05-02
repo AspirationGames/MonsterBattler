@@ -91027,11 +91027,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6197021835260261601, guid: 03c501168094cf94fbf9d47e677618ee, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 18.08
+      value: 4.5
       objectReference: {fileID: 0}
     - target: {fileID: 6197021835260261601, guid: 03c501168094cf94fbf9d47e677618ee, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.02
+      value: -16
       objectReference: {fileID: 0}
     - target: {fileID: 6197021835260261601, guid: 03c501168094cf94fbf9d47e677618ee, type: 3}
       propertyPath: m_LocalPosition.z
@@ -91064,6 +91064,34 @@ PrefabInstance:
     - target: {fileID: 6197021835260261601, guid: 03c501168094cf94fbf9d47e677618ee, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197021835260261602, guid: 03c501168094cf94fbf9d47e677618ee, type: 3}
+      propertyPath: monsters.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197021835260261602, guid: 03c501168094cf94fbf9d47e677618ee, type: 3}
+      propertyPath: monsters.Array.data[1]._base
+      value: 
+      objectReference: {fileID: 11400000, guid: 424fb588cf7627c4f9b0c80bc5b7d64f, type: 2}
+    - target: {fileID: 6197021835260261602, guid: 03c501168094cf94fbf9d47e677618ee, type: 3}
+      propertyPath: monsters.Array.data[1].personality
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197021835260261602, guid: 03c501168094cf94fbf9d47e677618ee, type: 3}
+      propertyPath: monsters.Array.data[1].naturalSkillAttack
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197021835260261602, guid: 03c501168094cf94fbf9d47e677618ee, type: 3}
+      propertyPath: monsters.Array.data[1].developedSkillAttack
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197021835260261602, guid: 03c501168094cf94fbf9d47e677618ee, type: 3}
+      propertyPath: monsters.Array.data[1].naturalSkillSpAttack
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197021835260261602, guid: 03c501168094cf94fbf9d47e677618ee, type: 3}
+      propertyPath: monsters.Array.data[1].developedSkillSpAttack
+      value: 252
       objectReference: {fileID: 0}
     - target: {fileID: 6857574987294132436, guid: 03c501168094cf94fbf9d47e677618ee, type: 3}
       propertyPath: uniqueId
