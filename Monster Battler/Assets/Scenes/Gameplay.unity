@@ -412,6 +412,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[1].level
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[1].naturalSkillSpeed
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[0].developedSkillSpeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[0].developedSkillSpAttack
+      value: 252
+      objectReference: {fileID: 0}
     - target: {fileID: 6221295680788380489, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: m_RootOrder
       value: 4

@@ -109,7 +109,7 @@ public class Monster
         
     }
 
-    public Monster(MonsterSaveData saveData)
+    public Monster(MonsterSaveData saveData) //Loads the save data
     {
         _base = MonsterDB.GetMonsterByName(saveData.sMonsterName);
         HP = saveData.sHp;
@@ -141,20 +141,8 @@ public class Monster
         }
 
 
-        //Generate Moves (this is placeholder for our save and load system for now)
-        Moves = new List<Move>();
-        
-        foreach (var move in _base.LearnableMoves)
-        {
-            if (move.MoveLevel <= Level) //add moves if the pokemons level is above the move level
-            {
-                Moves.Add(new Move(move.Base));
-            }
-            if(Moves.Count >= MonsterBase.MaxNumberOfMoves) // break our loop if the pokemon already has 4 moves
-            {
-                break;
-            }
-        }
+        //Moves
+        Moves = saveData.sMoves.Select(s => new Move(s)).ToList();
 
 
         //Reinitialize monster
@@ -178,6 +166,7 @@ public class Monster
             sExp = Exp,
             sStatusId = Status?.Id,
             sPersonality = personality,
+            sMoves = Moves.Select(m => m.GetMoveSaveData()).ToList(),
             sNaturalSkillMaxHP = naturalSkillMaxHP, //IVs
             sNaturalSkillAttack = naturalSkillAttack, //IVs
             sNaturalSkillDefense = naturalSkillDefense,//IVs
@@ -631,6 +620,7 @@ public class MonsterSaveData //only includes the savable data
     public int sExp;
     public ConditionID? sStatusId;
     public Personality sPersonality;
+    public List<MoveSaveData> sMoves;
     public int sNaturalSkillMaxHP; //IVs
     public int sNaturalSkillAttack; //IVs
     public int sNaturalSkillDefense; //IVs

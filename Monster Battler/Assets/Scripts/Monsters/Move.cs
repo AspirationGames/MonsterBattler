@@ -10,8 +10,33 @@ public class Move
     public Move(MoveBase mBase)
     {
         Base = mBase;
-        AP = mBase.Ap;
+        AP = mBase.AP;
 
     }
+
+    public Move(MoveSaveData saveData)
+    {
+        Base = MoveDB.GetMoveByName(saveData.sMoveName);
+        AP = saveData.sAP;
+
+    }
+    public MoveSaveData GetMoveSaveData()
+    {
+        var saveData = new MoveSaveData()
+        {
+            sMoveName = Base.MoveName,
+            sAP = AP
+        };
+
+        return saveData;
+
+    }
+}
+
+[System.Serializable]
+public class MoveSaveData
+{
+    public string sMoveName;
+    public int sAP;
 }
 

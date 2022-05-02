@@ -77,7 +77,7 @@ public class MoveBase : ScriptableObject
         }
     
     }
-    public int Ap
+    public int AP
     {
         get
         {
