@@ -373,7 +373,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Lvl 50
+  m_text: Lvl 100
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e62908a6a4424f44bad71366e4cf5012, type: 2}
   m_sharedMaterial: {fileID: -5241340365931600822, guid: e62908a6a4424f44bad71366e4cf5012, type: 2}
@@ -436,7 +436,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 45.531357, y: 6.1826687, z: 16.137985, w: 9.406075}
+  m_margin: {x: 2.6092377, y: 6.1826687, z: 16.137985, w: 9.406075}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

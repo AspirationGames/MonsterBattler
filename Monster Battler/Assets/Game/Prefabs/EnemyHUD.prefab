@@ -232,6 +232,7 @@ MonoBehaviour:
   nameText: {fileID: 1340295240195109741}
   levelText: {fileID: 7215912511881125912}
   hpBar: {fileID: 8649419180294539378}
+  expBar: {fileID: 0}
   hpText: {fileID: 8801575578149032724}
   statusImage: {fileID: 2886354152912547497}
   statusSprites:
@@ -728,7 +729,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Lvl 50
+  m_text: Lvl 100
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e62908a6a4424f44bad71366e4cf5012, type: 2}
   m_sharedMaterial: {fileID: -5241340365931600822, guid: e62908a6a4424f44bad71366e4cf5012, type: 2}
@@ -791,7 +792,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 45.531357, y: 6.1826687, z: 16.137985, w: 9.406075}
+  m_margin: {x: -0.3837738, y: 6.1826687, z: 16.137985, w: 9.406075}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
