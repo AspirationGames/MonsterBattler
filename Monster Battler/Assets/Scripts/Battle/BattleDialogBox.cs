@@ -95,11 +95,12 @@ public class BattleDialogBox : MonoBehaviour
 
     public void SetTargetNames(List<BattleUnit> units)
     {
-
+        
         for (int i=0; i < targetButtons.Length; ++i)
         {
-            if (i < units.Count) //in the event we have less than 4 units
+            if (units[i].isActiveAndEnabled) //in the event we have less than 4 units the unit should be disabled in the battlesystem script during set-up
             {
+
                 if(!units[i].Monster.InBattle || units[i].Monster.HP <= 0) //monster is no longer in battle
                 {
                     
@@ -114,8 +115,8 @@ public class BattleDialogBox : MonoBehaviour
             }
             else
             {
-                targetButtons[i].gameObject.SetActive(false);
-                //maybe change the color of the button too or test disabling the button? 
+                targetButtons[i].gameObject.SetActive(false); //disable inactive units
+                
             }
 
         }

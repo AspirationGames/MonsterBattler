@@ -97,7 +97,7 @@ public class MonsterParty : MonoBehaviour
             
         }
 
-        Debug.Log("No Healthy Monster found. Please review code!");
+        //No healthy monster found that is not already in battle
         return null;
 
     }

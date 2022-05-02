@@ -61,7 +61,7 @@ public class BattleUnit : MonoBehaviour
 
     }
 
-    public void Clear()
+    public void DeactivateUnitHUD()
     {
         hud.gameObject.SetActive(false);
     }

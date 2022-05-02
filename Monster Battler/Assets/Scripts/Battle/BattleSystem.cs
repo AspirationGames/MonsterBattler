@@ -83,7 +83,7 @@ public class BattleSystem : MonoBehaviour
         foreach(BattleUnit unit in battleUnits) //disable units and huds until summons.
         {
                 unit.gameObject.SetActive(false);
-                unit.Clear();
+                unit.DeactivateUnitHUD();
 
                 
         }
@@ -99,7 +99,7 @@ public class BattleSystem : MonoBehaviour
 
         foreach(BattleUnit unit in battleUnits) //set up player
         {
-            unit.gameObject.SetActive(true); //reactivates each unit
+            
 
             if(unit.IsPlayerMonster)
             {
@@ -110,6 +110,9 @@ public class BattleSystem : MonoBehaviour
                     continue;
                 }
 
+                yield return battleDialogueBox.TypeDialog($"{player.Name} summoned {incomingMonster.Base.MonsterName}. ");
+
+                unit.gameObject.SetActive(true); //reactivates unit
                 unit.Setup(incomingMonster); 
                 unit.Monster.InBattle = true;
                 battleParticipants.Add(unit.Monster);
@@ -128,6 +131,9 @@ public class BattleSystem : MonoBehaviour
                     continue;
                 }
 
+                yield return battleDialogueBox.TypeDialog($"{summoner.Name} summoned {incomingMonster.Base.MonsterName}. ");
+
+                unit.gameObject.SetActive(true); //reactivates unit
                 unit.Setup(incomingMonster); 
                 unit.Monster.InBattle = true;
                 turnOrder.Add(unit);
@@ -141,8 +147,8 @@ public class BattleSystem : MonoBehaviour
         partyScreen.Init();
         battleFieldEffects = new BattleFieldEffects();
 
-        yield return battleDialogueBox.TypeDialog($"{player.Name} summoned {battleUnits[0].Monster.Base.MonsterName} and {battleUnits[1].Monster.Base.MonsterName} ");
-        yield return battleDialogueBox.TypeDialog($"A {battleUnits[2].Monster.Base.MonsterName} and {battleUnits[3].Monster.Base.MonsterName} were summoned infront of you!"); //you can use yield return to call anothe coroutine which is what we are doing here
+        //yield return battleDialogueBox.TypeDialog($"{player.Name} summoned {battleUnits[0].Monster.Base.MonsterName} and {battleUnits[1].Monster.Base.MonsterName} ");
+        //yield return battleDialogueBox.TypeDialog($"A {battleUnits[2].Monster.Base.MonsterName} and {battleUnits[3].Monster.Base.MonsterName} were summoned infront of you!"); //you can use yield return to call anothe coroutine which is what we are doing here
        
         
        NewTurn();
@@ -440,10 +446,19 @@ public class BattleSystem : MonoBehaviour
         {
             selectedTargets.Insert(0,targetUnit);
             battleDialogueBox.EnableTargetSelector(false);
-            battleState = BattleState.PlayerAction2;
-            SelectAction();
-            
-            
+
+            if(battleUnits[1].isActiveAndEnabled)//check if player has active second unit
+            {
+                battleState = BattleState.PlayerAction2;
+                SelectAction();
+            }
+            else //player has no active second unit
+            {
+                SkipUnit(1);
+                battleDialogueBox.EnableTargetSelector(false);
+                battleState = BattleState.EnemyAction1;
+                EnemyActionSelection();
+            }
             
         }
         else if(battleState == BattleState.PlayerTarget2)
@@ -480,9 +495,21 @@ public class BattleSystem : MonoBehaviour
 
             selectedMonster.InBattle = true; //We set the selected monster inbattle to prevent it from being selected again
 
-            partyScreen.gameObject.SetActive(false);
-            battleState = BattleState.PlayerAction2;
-            SelectAction();
+            if(battleUnits[1].isActiveAndEnabled) //player has an active second unit
+            {
+                partyScreen.gameObject.SetActive(false);
+                battleState = BattleState.PlayerAction2;
+                SelectAction();
+            }
+            else //player has no active second unit
+            {
+                SkipUnit(1);
+                partyScreen.gameObject.SetActive(false);
+                battleDialogueBox.EnableBackButton(false);
+                battleState = BattleState.EnemyAction1;
+                EnemyActionSelection();
+            }
+            
             
         }
         else if(battleState == BattleState.PlayerSwitch2)
@@ -517,7 +544,7 @@ public class BattleSystem : MonoBehaviour
         RandomEnemyMove();
     }
 
-    void EnemyMoves()
+    void EnemyMoves() //Placeholder for future AI implementation
     {
         for(int i=2; i < battleUnits.Count; i++)
         {   
@@ -536,19 +563,35 @@ public class BattleSystem : MonoBehaviour
 
         for(int i=2; i < battleUnits.Count; i++)
         {
-            var movesWithPP = battleUnits[i].Monster.Moves.Where(x => x.AP > 0).ToList();
+            if(battleUnits[i].isActiveAndEnabled)
+            {
+                var movesWithPP = battleUnits[i].Monster.Moves.Where(x => x.AP > 0).ToList();
+                int randmomMoveIndex = UnityEngine.Random.Range(0, movesWithPP.Count);
+                int randomTargetIndex = UnityEngine.Random.Range(0,1);
+                selectedMoves.Insert(i, movesWithPP[randmomMoveIndex]);
+                selectedTargets.Insert(i, battleUnits[randomTargetIndex]);
+                selectedSwitch.Insert(i,null);
+                selectedSpell.Insert(i,null);
+            }
+            else
+            {
+                SkipUnit(i);
+            }
             
-            int randmomMoveIndex = UnityEngine.Random.Range(0, movesWithPP.Count);
-            int randomTargetIndex = UnityEngine.Random.Range(0,1);
-            selectedMoves.Insert(i, movesWithPP[randmomMoveIndex]);
-            selectedTargets.Insert(i, battleUnits[randomTargetIndex]);
-            selectedSwitch.Insert(i,null);
-            selectedSpell.Insert(i,null);
         }
 
         StartCoroutine(PerformSpells());
 
         
+    }
+
+    void SkipUnit(int i) //sets all action values to null for a given unit inded
+    {
+        
+        selectedMoves.Insert(i, null);
+        selectedTargets.Insert(i, null);
+        selectedSwitch.Insert(i,null);
+        selectedSpell.Insert(i,null);
     }
     
     
@@ -1073,6 +1116,8 @@ public class BattleSystem : MonoBehaviour
     {
         foreach(BattleUnit unit in battleUnits)
         {
+            if(!unit.isActiveAndEnabled) continue;
+
             unit.Monster.ResetProtect();
 
             if(unit.Monster.HP > 0 && unit.Monster.InBattle)
@@ -1314,7 +1359,9 @@ public class BattleSystem : MonoBehaviour
 
             foreach (BattleUnit unit in battleUnits)
             {
-                if (!unit.IsPlayerMonster && unit.Monster.HP > 0 && unit.Monster.InBattle)
+                if(!unit.isActiveAndEnabled) continue;
+
+                else if (!unit.IsPlayerMonster && unit.Monster.HP > 0 && unit.Monster.InBattle)
                 {
                     
                     targetUnit = unit;
