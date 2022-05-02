@@ -109,6 +109,96 @@ public class Monster
         
     }
 
+    public Monster(MonsterSaveData saveData)
+    {
+        _base = MonsterDB.GetMonsterByName(saveData.sMonsterName);
+        HP = saveData.sHp;
+        level = saveData.sLevel;
+        Exp = saveData.sExp;
+        personality = saveData.sPersonality;
+
+        naturalSkillMaxHP = saveData.sNaturalSkillMaxHP;
+        naturalSkillAttack = saveData.sNaturalSkillAttack;
+        naturalSkillDefense = saveData.sNaturalSkillDefense;
+        naturalSkillSpAttack = saveData.sNaturalSkillSpAttack;
+        naturalSkillSpDefense = saveData.sNaturalSkillSpDefense;
+        naturalSkillSpeed = saveData.sNaturalSkillSpeed;
+        developedSkillMaxHP = saveData.sDevelopedSkillMaxHP;
+        developedSkillAttack = saveData.sDevelopedSkillAttack;
+        developedSkillDefense = saveData.sDevelopedSkillDefense;
+        developedSkillSpAttack = saveData.sDevelopedSkillSpAttack;
+        developedSkillSpDefense = saveData.sDevelopedSkillSpDefense;
+        developedSkillSpeed = saveData.sDevelopedSkillSpeed;
+
+
+        if(saveData.sStatusId != null)
+        {
+            Status = ConditionsDB.Conditions[saveData.sStatusId.Value]; //.Value is used here because sStatudId is nullable
+        }
+        else
+        {
+            Status = null;
+        }
+
+
+        //Generate Moves (this is placeholder for our save and load system for now)
+        Moves = new List<Move>();
+        
+        foreach (var move in _base.LearnableMoves)
+        {
+            if (move.MoveLevel <= Level) //add moves if the pokemons level is above the move level
+            {
+                Moves.Add(new Move(move.Base));
+            }
+            if(Moves.Count >= MonsterBase.MaxNumberOfMoves) // break our loop if the pokemon already has 4 moves
+            {
+                break;
+            }
+        }
+
+
+        //Reinitialize monster
+
+        CalculateStats();
+        StatusChangeMessages = new Queue<string>();
+        ResetStatStages();
+        VolatileStatus = null;
+        ProtectedStatus = null;
+        ProtectSucessChance = 100f;
+
+
+    }
+    public MonsterSaveData GetSaveData() //converst monster data into savable data
+    {
+        var saveData = new MonsterSaveData()
+        {
+            sMonsterName = Base.MonsterName,
+            sHp = HP,
+            sLevel = Level,
+            sExp = Exp,
+            sStatusId = Status?.Id,
+            sPersonality = personality,
+            sNaturalSkillMaxHP = naturalSkillMaxHP, //IVs
+            sNaturalSkillAttack = naturalSkillAttack, //IVs
+            sNaturalSkillDefense = naturalSkillDefense,//IVs
+            sNaturalSkillSpAttack = naturalSkillSpAttack, //IVs
+            sNaturalSkillSpDefense = naturalSkillSpDefense, //IVs
+            sNaturalSkillSpeed = naturalSkillSpeed, //IVs
+            sDevelopedSkillMaxHP = developedSkillMaxHP, //EVs
+            sDevelopedSkillAttack = developedSkillAttack, //EVs
+            sDevelopedSkillDefense = developedSkillDefense, //EVs
+            sDevelopedSkillSpAttack = developedSkillSpAttack, //EVs
+            sDevelopedSkillSpDefense = developedSkillSpDefense,//EVs
+            sDevelopedSkillSpeed = developedSkillSpeed //EVs
+
+        };
+
+        return saveData;
+
+    }
+
+
+
     float PersonalityValue(Stat stat)
     {   //TO DO ADD FULL LIST OF PERSONALITY VALUES
         switch(stat)
@@ -347,7 +437,6 @@ public class Monster
 
     public void Protect(ConditionID conditionID)
     {
-        Debug.Log(ProtectSucessChance);
         
         if(ProtectedStatus == null)
         {   
@@ -531,4 +620,29 @@ public class DamageDetails
     public bool KO{get; set;}
     public float Critical{get; set;}
     public float TypeEffectiveness{get; set;}
+}
+
+[System.Serializable]
+public class MonsterSaveData //only includes the savable data
+{
+    public string sMonsterName; //the pokemon name will also be used to get all necessary base data
+    public int sHp;
+    public int sLevel;
+    public int sExp;
+    public ConditionID? sStatusId;
+    public Personality sPersonality;
+    public int sNaturalSkillMaxHP; //IVs
+    public int sNaturalSkillAttack; //IVs
+    public int sNaturalSkillDefense; //IVs
+    public int sNaturalSkillSpAttack; //IVs
+    public int sNaturalSkillSpDefense; //IVs
+    public int sNaturalSkillSpeed; //IVs
+    public int sDevelopedSkillMaxHP; //EVs
+    public int sDevelopedSkillAttack; //EVs
+    public int sDevelopedSkillDefense; //EVs
+    public int sDevelopedSkillSpAttack; //EVs
+    public int sDevelopedSkillSpDefense; //EVs
+    public int sDevelopedSkillSpeed; //EVs
+
+
 }

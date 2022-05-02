@@ -1,13 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions 
+public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions, ISavable
 {
     [SerializeField] string playerName;
     [SerializeField] Sprite sprite;
+
+    [SerializeField] GameObject pauseMenu; 
     Vector2 moveDirection;
     PlayerControls playerControls;
     Character character;
@@ -26,6 +29,23 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
     void OnDisable() 
     {
         playerControls.Disable();
+    }
+
+    public void OnMenu(InputAction.CallbackContext context)
+    {
+        if (GameController.Instance.GameState != GameState.OverWorld) 
+        {
+            moveDirection = Vector2.zero; //fixed bug where character would move after battle
+            return;
+        }
+
+        if(context.started)
+        {
+            return;
+        }
+        
+        pauseMenu.gameObject.SetActive(true);
+        
     }
    
     public void OnMove(InputAction.CallbackContext context)
@@ -114,6 +134,35 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
         }
       }
     }
+
+    public object CaptureState()
+    {
+        //save data
+        var saveData = new PlayerSaveData()
+        {
+            savedPosition = new float[] {transform.position.x, transform.position.y},
+            savedMonsters = GetComponent<MonsterParty>().Monsters.Select(m => m.GetSaveData()).ToList()
+        };
+
+        return saveData;
+
+    }
+
+    public void RestoreState(object state)
+    {
+        //load data
+        var saveData = (PlayerSaveData)state;
+
+        //Restore Player Position
+        var position = saveData.savedPosition;
+        transform.position = new Vector3 (position[0],position[1]);
+
+        //Restore Monster Party
+        GetComponent<MonsterParty>().Monsters = saveData.savedMonsters.Select(s => new Monster(s)).ToList(); //transformes each monster save data back into monsters.
+    }
+
+    
+
     public string Name
     {
         get => playerName;
@@ -128,4 +177,11 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions
     {
         get => character;
     }
+}
+
+[Serializable]
+public class PlayerSaveData
+{
+    public float[] savedPosition;
+    public List<MonsterSaveData> savedMonsters;
 }

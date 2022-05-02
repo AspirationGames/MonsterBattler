@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SummonerController : MonoBehaviour, Interactable
+public class SummonerController : MonoBehaviour, Interactable, ISavable
 {
     [SerializeField] string summonerName;
     [SerializeField] Sprite sprite;
@@ -103,6 +103,22 @@ public class SummonerController : MonoBehaviour, Interactable
     {
         fov.SetActive(false);
         battleLost = true;
+    }
+
+    public object CaptureState()
+    {
+        return battleLost;
+
+    }
+
+    public void RestoreState(object state)
+    {
+        battleLost = (bool)state;
+
+        if(battleLost == true)
+        {
+            fov.SetActive(false);
+        }
     }
 
     public string Name

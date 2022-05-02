@@ -101,6 +101,7 @@ GameObject:
   - component: {fileID: 6197021835260261600}
   - component: {fileID: 6197021835260261602}
   - component: {fileID: 6197021835260261603}
+  - component: {fileID: 6857574987294132436}
   m_Layer: 8
   m_Name: SummonerNPC
   m_TagString: Untagged
@@ -367,6 +368,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc4124b30de157f47a4d35697758b13a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6857574987294132436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6197021835260261528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4881f89f8b930e34489bbb86116ccd4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniqueId: 
 --- !u!1 &6197021836664056380
 GameObject:
   m_ObjectHideFlags: 0

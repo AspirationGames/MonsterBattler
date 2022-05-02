@@ -24,6 +24,7 @@ public class GameController : MonoBehaviour
 
         Instance = this;
 
+        MonsterDB.Init();
         ConditionsDB.Init();
 
     }
