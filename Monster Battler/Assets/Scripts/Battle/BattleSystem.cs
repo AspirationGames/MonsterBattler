@@ -131,7 +131,11 @@ public class BattleSystem : MonoBehaviour
                     continue;
                 }
 
-                yield return battleDialogueBox.TypeDialog($"{summoner.Name} summoned {incomingMonster.Base.MonsterName}. ");
+                if(isSummonerBattle)
+                {
+                    yield return battleDialogueBox.TypeDialog($"{summoner.Name} summoned {incomingMonster.Base.MonsterName}.");
+                }
+                
 
                 unit.gameObject.SetActive(true); //reactivates unit
                 unit.Setup(incomingMonster); 
@@ -142,13 +146,18 @@ public class BattleSystem : MonoBehaviour
             
         }
 
+        if(!isSummonerBattle)
+        {
+            yield return battleDialogueBox.TypeDialog($"A {battleUnits[2].Monster.Base.MonsterName} and {battleUnits[3].Monster.Base.MonsterName} were summoned infront of you!");
+        }
         
+
         escapeAttempts = 0;
         partyScreen.Init();
         battleFieldEffects = new BattleFieldEffects();
 
-        //yield return battleDialogueBox.TypeDialog($"{player.Name} summoned {battleUnits[0].Monster.Base.MonsterName} and {battleUnits[1].Monster.Base.MonsterName} ");
-        //yield return battleDialogueBox.TypeDialog($"A {battleUnits[2].Monster.Base.MonsterName} and {battleUnits[3].Monster.Base.MonsterName} were summoned infront of you!"); //you can use yield return to call anothe coroutine which is what we are doing here
+        
+        
        
         
        NewTurn();
