@@ -266,8 +266,11 @@ public class BattleSystem : MonoBehaviour
 
         if(battleState == BattleState.PlayerAction1) battleState = BattleState.PlayerSwitch1;
 
-        else if(battleState == BattleState.PlayerAction2) battleState = BattleState.PlayerSwitch2;
-        
+        else if(battleState == BattleState.PlayerAction2)
+        { 
+            battleState = BattleState.PlayerSwitch2;
+            battleDialogueBox.EnableBackButton(false);
+        }
         partyScreen.SetPartyData(playerParty.Monsters);
         partyScreen.gameObject.SetActive(true);
         battleDialogueBox.EnableActionSelector(false);
