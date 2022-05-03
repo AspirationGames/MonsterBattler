@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b97858cb267296643aef8c10d3e616b7, type: 3}
   m_Name: Elixer of Death
   m_EditorClassIdentifier: 
-  itemName: 
-  description: 
-  icon: {fileID: 0}
+  itemName: Elixer of Death
+  description: Restores a monster from death but at what cost.
+  icon: {fileID: -153442787, guid: 0f6d3601731942544a030ddf17e2e3df, type: 3}
   healAmount: 0
   restoresMaxHP: 0
   apAmount: 0
   restoresMaxAP: 0
   status: 0
   recoverAllStatus: 0
-  revive: 0
+  revive: 1
   maxRevive: 0
