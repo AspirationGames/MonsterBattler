@@ -10,7 +10,7 @@ public class ItemBase : ScriptableObject
     [SerializeField] Sprite icon;
 
 
-    public string Name => itemName;
+    public string ItemName => itemName;
 
     public string Description => description;
 
