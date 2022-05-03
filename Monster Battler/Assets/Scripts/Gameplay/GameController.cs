@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameState{ OverWorld, Battle, Dialog, CutScene, Paused, PartyScreen}
+public enum GameState{ OverWorld, Battle, Dialog, CutScene, Paused, PartyScreen, InventoryScreen}
 public class GameController : MonoBehaviour
 {
     [SerializeField] PlayerController playerController;
     [SerializeField] BattleSystem battleSystem;
 
     [SerializeField] PartyScreen partyScreen;
+    [SerializeField] InventoryScreen inventoryScreen;
 
     Animator cameraAnimator;
     GameState gameState;
-    GameState stateBeforePartyScreen;
+    GameState previousState;
     GameState stateBeforePause;
 
     
@@ -84,15 +85,29 @@ public class GameController : MonoBehaviour
 
     public void ShowPartyScreen()
     {
-        stateBeforePartyScreen = gameState;
+        previousState = gameState;
         gameState = GameState.PartyScreen;
         partyScreen.gameObject.SetActive(true);
         partyScreen.SetPartyData(playerController.GetComponent<MonsterParty>().Monsters);
     }
     public void ClosePartyScreen()
     {
-        gameState = stateBeforePartyScreen;
+        gameState = previousState;
         partyScreen.gameObject.SetActive(false);
+        
+    }
+
+    public void ShowInventoryScreen()
+    {
+        previousState = gameState;
+        gameState = GameState.InventoryScreen;
+        inventoryScreen.gameObject.SetActive(true);
+        
+    }
+    public void CloseInventoryScreen()
+    {
+        gameState = previousState;
+        inventoryScreen.gameObject.SetActive(false);
         
     }
 

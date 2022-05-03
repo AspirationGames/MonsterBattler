@@ -279,7 +279,7 @@ public class BattleSystem : MonoBehaviour
         
     }
 
-    public void SelectSpell()
+    public void SelectItem()
     {
         if(battleState == BattleState.PlayerAction1)
         { 
@@ -567,7 +567,7 @@ public class BattleSystem : MonoBehaviour
             selectedSwitch.Insert(i,null);
         }
 
-        StartCoroutine(PerformSpells());
+        StartCoroutine(UseItems());
     }
 
     void RandomEnemyMove() //Selects Random move for enemy
@@ -592,7 +592,7 @@ public class BattleSystem : MonoBehaviour
             
         }
 
-        StartCoroutine(PerformSpells());
+        StartCoroutine(UseItems());
 
         
     }
@@ -607,7 +607,7 @@ public class BattleSystem : MonoBehaviour
     }
     
     
-    IEnumerator PerformSpells()
+    IEnumerator UseItems()
     {
 
         battleState = BattleState.Busy;
@@ -662,7 +662,7 @@ public class BattleSystem : MonoBehaviour
     IEnumerator BindingSpell(BattleUnit targetUnit)
     {
 
-        yield return battleDialogueBox.TypeDialog($"{player.Name} used a binding spell");
+        yield return battleDialogueBox.TypeDialog($"{player.Name} used a binding crystal.");
         var summoningCircleObj = Instantiate(summoningCircle, targetUnit.transform.position, Quaternion.identity);
         var summoningCircleSprite = summoningCircleObj.GetComponent<SpriteRenderer>();
 
@@ -705,7 +705,7 @@ public class BattleSystem : MonoBehaviour
             yield return new WaitForSeconds(1f);
             yield return targetUnit.PlayBreakOutAnimation();
 
-            yield return battleDialogueBox.TypeDialog($"{targetUnit.Monster.Base.MonsterName} broke out of you binding spell.");
+            yield return battleDialogueBox.TypeDialog($"{targetUnit.Monster.Base.MonsterName} broke out of your binding spell.");
             Destroy(summoningCircleSprite);
 
         }

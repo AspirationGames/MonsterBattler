@@ -33,6 +33,12 @@ public class PauseMenu : MonoBehaviour, PlayerControls.IMenuActions
         GameController.Instance.ShowPartyScreen();
         
     }
+
+    public void OnInventory()
+    {
+        GameController.Instance.ShowInventoryScreen();
+        
+    }
     public void OnSave()
     {
         SavingSystem.i.Save("saveSlot1");
