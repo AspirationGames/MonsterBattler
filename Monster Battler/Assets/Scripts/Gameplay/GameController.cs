@@ -84,7 +84,7 @@ public class GameController : MonoBehaviour
 
     public void ShowPartyScreen()
     {
-        stateBeforePartyScreen = GameState.PartyScreen;
+        stateBeforePartyScreen = gameState;
         gameState = GameState.PartyScreen;
         partyScreen.gameObject.SetActive(true);
         partyScreen.SetPartyData(playerController.GetComponent<MonsterParty>().Monsters);
