@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class PauseMenu : MonoBehaviour, PlayerControls.IMenuActions
 {
      
+    
     PlayerControls menuControls;
 
     
@@ -25,6 +26,13 @@ public class PauseMenu : MonoBehaviour, PlayerControls.IMenuActions
         menuControls.Disable();
     }
     
+    //Inputs
+
+    public void OnMonsterParty()
+    {
+        GameController.Instance.ShowPartyScreen();
+        
+    }
     public void OnSave()
     {
         SavingSystem.i.Save("saveSlot1");
@@ -41,9 +49,10 @@ public class PauseMenu : MonoBehaviour, PlayerControls.IMenuActions
     {
         if(GameController.Instance.GameState == GameState.Paused && context.performed)
         {
-            Debug.Log("Exiting Menu");
-            this.gameObject.SetActive(false);
+            //Exit Menu
             GameController.Instance.PauseGame(false);
+            this.gameObject.SetActive(false);
+            
         }
     }
 }

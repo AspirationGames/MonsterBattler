@@ -2,15 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameState{ OverWorld, Battle, Dialog, CutScene, Paused}
+public enum GameState{ OverWorld, Battle, Dialog, CutScene, Paused, PartyScreen}
 public class GameController : MonoBehaviour
 {
     [SerializeField] PlayerController playerController;
     [SerializeField] BattleSystem battleSystem;
 
+    [SerializeField] PartyScreen partyScreen;
+
     Animator cameraAnimator;
     GameState gameState;
+    GameState stateBeforePartyScreen;
     GameState stateBeforePause;
+
+    
 
     public SceneDetails CurrentScene {get; private set;}
 
@@ -33,6 +38,7 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         battleSystem.OnBattleOver += EndBattle;
+        partyScreen.Init();
 
         DialogManager.Instance.OnDialogStart += () => gameState = GameState.Dialog;
         DialogManager.Instance.OnDialogEnd += () => 
@@ -74,6 +80,20 @@ public class GameController : MonoBehaviour
             gameState = stateBeforePause;
         }
 
+    }
+
+    public void ShowPartyScreen()
+    {
+        stateBeforePartyScreen = GameState.PartyScreen;
+        gameState = GameState.PartyScreen;
+        partyScreen.gameObject.SetActive(true);
+        partyScreen.SetPartyData(playerController.GetComponent<MonsterParty>().Monsters);
+    }
+    public void ClosePartyScreen()
+    {
+        gameState = stateBeforePartyScreen;
+        partyScreen.gameObject.SetActive(false);
+        
     }
 
     public void StartMonsterBattle()

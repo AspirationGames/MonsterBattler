@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PartyScreen : MonoBehaviour
 {
@@ -29,6 +30,21 @@ public class PartyScreen : MonoBehaviour
             }
         }
     }
+
+    public void OnSelect(int slotIndex)
+    {
+        var selectedMember = memberSlots[slotIndex];
+        Debug.Log("Selected member");
+
+    }
+
+    public void OnBack()
+    {
+        GameController.Instance.ClosePartyScreen();
+
+    }
+
+
 
     
 }
