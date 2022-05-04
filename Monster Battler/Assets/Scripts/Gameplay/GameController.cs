@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameState{ OverWorld, Battle, Dialog, CutScene, Paused, PartyScreen, InventoryScreen}
+public enum GameState{ OverWorld, Battle, Dialog, CutScene, Paused, PartyManagement, Inventory}
 public class GameController : MonoBehaviour
 {
     [SerializeField] PlayerController playerController;
@@ -17,7 +17,7 @@ public class GameController : MonoBehaviour
     GameState stateBeforePause;
 
     
-
+    public GameState PreviousState {get {return previousState;}}
     public SceneDetails CurrentScene {get; private set;}
 
     public SceneDetails PreviousScene {get; private set;}
@@ -85,10 +85,15 @@ public class GameController : MonoBehaviour
 
     public void ShowPartyScreen()
     {
+        if(gameState == GameState.Inventory) //if the party screen is call during the inventory state we will keep the game state in inventory.
+        {
+            partyScreen.gameObject.SetActive(true);
+            return;
+        }
+
         previousState = gameState;
-        gameState = GameState.PartyScreen;
+        gameState = GameState.PartyManagement;
         partyScreen.gameObject.SetActive(true);
-        partyScreen.SetPartyData(playerController.GetComponent<MonsterParty>().Monsters);
     }
     public void ClosePartyScreen()
     {
@@ -100,7 +105,7 @@ public class GameController : MonoBehaviour
     public void ShowInventoryScreen()
     {
         previousState = gameState;
-        gameState = GameState.InventoryScreen;
+        gameState = GameState.Inventory;
         inventoryScreen.gameObject.SetActive(true);
         
     }

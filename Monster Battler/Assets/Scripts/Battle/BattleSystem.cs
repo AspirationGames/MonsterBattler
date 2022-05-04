@@ -271,7 +271,7 @@ public class BattleSystem : MonoBehaviour
             battleState = BattleState.PlayerSwitch2;
             battleDialogueBox.EnableBackButton(false);
         }
-        partyScreen.SetPartyData(playerParty.Monsters);
+        
         partyScreen.gameObject.SetActive(true);
         battleDialogueBox.EnableActionSelector(false);
         StartCoroutine(battleDialogueBox.TypeDialog("Select a monster to switch in."));

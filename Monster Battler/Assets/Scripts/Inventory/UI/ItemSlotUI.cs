@@ -9,7 +9,9 @@ public class ItemSlotUI : MonoBehaviour
     [SerializeField] TextMeshProUGUI itemNameText;
     [SerializeField] TextMeshProUGUI itemQuantityText; 
 
-    public static event Action<ItemSlotUI> Hover;
+    public static event Action<ItemSlotUI> itemUIHover;
+
+    public static event Action<ItemSlotUI> itemUISelected;
 
     public void SetData(ItemSlot itemSlot)
     {
@@ -20,7 +22,13 @@ public class ItemSlotUI : MonoBehaviour
 
     public void OnHover()
     {
-        Hover(this);
+        itemUIHover(this);
+
+    }
+
+    public void OnSelect()
+    {
+        itemUISelected(this);
 
     }
 

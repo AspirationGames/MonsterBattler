@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine;
 public class MonsterParty : MonoBehaviour
 {
     [SerializeField] List<Monster> monsters;
+
+    public event Action OnUpdated;
 
     public List<Monster> Monsters
     {
@@ -66,6 +69,7 @@ public class MonsterParty : MonoBehaviour
         {
             SwapPartyPositions(monster, monsters[BattlePosition]);
 
+            OnUpdated?.Invoke();
         }
         else
         {
@@ -83,6 +87,8 @@ public class MonsterParty : MonoBehaviour
         monsters.Remove(incomingMonster);
         monsters.Insert(currentMonsterIndex, incomingMonster);
         monsters.Insert(incomingMonsterIndex, currentMonster);
+
+        OnUpdated?.Invoke();
     }
 
     public Monster FindNextHealthyMonster()
@@ -107,6 +113,7 @@ public class MonsterParty : MonoBehaviour
         if(monsters.Count < 4)
         {
             monsters.Add(monster);
+            OnUpdated?.Invoke();
         }
         else
         {
@@ -117,7 +124,13 @@ public class MonsterParty : MonoBehaviour
     public void RemoveMonster(Monster monster)
     {
         monsters.Remove(monster);
+        OnUpdated?.Invoke();
 
+    }
+
+    public static MonsterParty GetPlayerParty()
+    {
+        return FindObjectOfType<PlayerController>().GetComponent<MonsterParty>();
     }
 
 }

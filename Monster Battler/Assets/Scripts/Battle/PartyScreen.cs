@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,14 +9,20 @@ public class PartyScreen : MonoBehaviour
     PartyMemberUI[] memberSlots;
     List<Monster> monsters;
 
+    MonsterParty playerParty;
+
     public void Init()
     {
         memberSlots = GetComponentsInChildren<PartyMemberUI>(true);
+        playerParty = MonsterParty.GetPlayerParty();
+        SetPartyData();
+
+        playerParty.OnUpdated += SetPartyData;
     }
 
-    public void SetPartyData(List<Monster> monsters)
+    public void SetPartyData()
     {
-        this.monsters = monsters;
+        monsters = playerParty.Monsters;
 
         for (int i=0; i < memberSlots.Length; i++)
         {
@@ -31,10 +38,12 @@ public class PartyScreen : MonoBehaviour
         }
     }
 
-    public void OnSelect(int slotIndex)
+    public void OnSelect()
     {
-        var selectedMember = memberSlots[slotIndex];
-        Debug.Log("Selected member");
+        if(GameController.Instance.GameState == GameState.Inventory)
+        {
+            //use item on selected monster
+        }
 
     }
 

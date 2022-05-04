@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,7 @@ public class InventoryScreen : MonoBehaviour
     [SerializeField] Image itemIcon;
     [SerializeField] TextMeshProUGUI itemDesciption;
     
+    [SerializeField] PartyScreen partyScreen;
     Inventory inventory;
 
     private void Awake() 
@@ -24,7 +26,10 @@ public class InventoryScreen : MonoBehaviour
     private void Start() 
     {
         UpdateItemList();
-        ItemSlotUI.Hover += ItemSelected;
+        ItemSlotUI.itemUIHover += ItemHover;
+        ItemSlotUI.itemUISelected += ItemSelected;
+
+        
     }
 
     void UpdateItemList()
@@ -42,18 +47,35 @@ public class InventoryScreen : MonoBehaviour
             itemSlotUIObj.SetData(itemSlot);
 
         }
-
         
+        //Set Initial Item icon and descriptions
+        var item = inventory.ItemSlots[0].Item;
+        itemIcon.sprite = item.Icon;
+        itemDesciption.text = item.Description;
+    }
+
+    public void ItemHover(ItemSlotUI hoverItemSlotUI)
+    {
+
+        int hoverItemIndex = hoverItemSlotUI.transform.GetSiblingIndex(); //this returns the index of the item slot
+        var item = inventory.ItemSlots[hoverItemIndex].Item;
+        itemIcon.sprite = item.Icon;
+        itemDesciption.text = item.Description;
+          
     }
 
     public void ItemSelected(ItemSlotUI selectedItemSlotUI)
     {
-
-        int selectedItemIndex = selectedItemSlotUI.transform.GetSiblingIndex(); //this might be possible with just a gameobject too
+        int selectedItemIndex = selectedItemSlotUI.transform.GetSiblingIndex(); //this returns the index of the item slot
         var item = inventory.ItemSlots[selectedItemIndex].Item;
-        itemIcon.sprite = item.Icon;
-        itemDesciption.text = item.Description;
-          
+
+        OpenPartyScreen(); 
+    }
+
+    public void OpenPartyScreen()
+    {
+        GameController.Instance.ShowPartyScreen();
+
     }
 
     public void OnBack()
