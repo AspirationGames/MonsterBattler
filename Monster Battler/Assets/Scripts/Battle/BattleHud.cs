@@ -28,7 +28,7 @@ public class BattleHud : MonoBehaviour
         SetEXP();
 
         SetStatusImage();
-        monster.OnStatusChaged += SetStatusImage;
+        monster.OnStatusChanged += SetStatusImage;
 
     }
 

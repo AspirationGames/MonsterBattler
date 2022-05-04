@@ -14,15 +14,26 @@ public class PartyMemberUI : MonoBehaviour
     [SerializeField] TextMeshProUGUI hpText;
 
     Monster monster;
-    public void SetData(Monster mon)
+
+    public void Init(Monster mon)
     {
         monster = mon;
+        UpdateData();
+
+        monster.OnHPChanged += UpdateData;
+        monster.OnLevelChanged += UpdateData;
+        monster.OnStatusChanged += UpdateData;
+        
+
+    }
+
+    void UpdateData()
+    {
 
         nameText.text = monster.Base.MonsterName;
         levelText.text = "Lvl " + monster.Level.ToString();
         hpBar.SetHP((float) monster.HP / monster.MaxHP);
         hpText.text = monster.HP.ToString() + "/" + monster.MaxHP.ToString();
-
     }
 
     public IEnumerator UpdateHP()

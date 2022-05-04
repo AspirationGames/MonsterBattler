@@ -73,10 +73,9 @@ public class Monster
 
     public bool InBattle {get; set;} //flag for if monster is actively in battle
     public bool HpChanged {get; set;}
-
-    
-
-    public event System.Action OnStatusChaged; 
+    public event System.Action OnStatusChanged; 
+    public event System.Action OnHPChanged; 
+    public event System.Action OnLevelChanged;
 
 
     public void Init() //this method creates our pokemon
@@ -386,7 +385,7 @@ public class Monster
             Status = ConditionsDB.Conditions[conditionID];
             Status?.OnStart?.Invoke(this); //if the status has an on start method we will call it i.e. sleep
             StatusChangeMessages.Enqueue($"{Base.MonsterName} {Status.StartMessage}");
-            OnStatusChaged?.Invoke();
+            OnStatusChanged?.Invoke();
         }
         else
         {
@@ -399,7 +398,7 @@ public class Monster
     public void CureStatus()
     {
         Status = null;
-        OnStatusChaged?.Invoke();
+        OnStatusChanged?.Invoke();
     }
 
     public void SetVolatileStatus(ConditionID conditionID)
@@ -502,6 +501,7 @@ public class Monster
         if (Exp > Base.GetExpForLevel(level + 1))
         {
             ++level;
+            OnLevelChanged?.Invoke();
             return true;
         }
         
@@ -593,6 +593,7 @@ public class Monster
     public void UpdateHP(int damage)
     {
         HP = Mathf.Clamp(HP - damage, 0, MaxHP);
+        OnHPChanged?.Invoke();
         HpChanged = true;
     }
 

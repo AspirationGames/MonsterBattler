@@ -18,6 +18,7 @@ public class MonsterParty : MonoBehaviour
         set
         {
             monsters = value; //we need the set method in this case to be able to assign the monster party such as when loading game
+            OnUpdated?.Invoke();
         }
     }
 
