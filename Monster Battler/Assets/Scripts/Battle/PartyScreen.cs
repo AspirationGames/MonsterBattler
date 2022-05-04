@@ -11,6 +11,9 @@ public class PartyScreen : MonoBehaviour
 
     MonsterParty playerParty;
 
+    public event Action<Monster> monsterSelected;
+    public event Action screenClosed;
+
     public void Init()
     {
         memberSlots = GetComponentsInChildren<PartyMemberUI>(true);
@@ -38,17 +41,17 @@ public class PartyScreen : MonoBehaviour
         }
     }
 
-    public void OnSelect()
+    public void OnSelect(int monsterIndex)
     {
-        if(GameController.Instance.GameState == GameState.Inventory)
-        {
-            //use item on selected monster
-        }
+        Monster selectedMonster = playerParty.Monsters[monsterIndex];
+        monsterSelected?.Invoke(selectedMonster); //event to notify other scripts that require party member selection i.e. inventory
 
     }
 
-    public void OnBack()
+    public void ClosePartyScreen()
     {
+        screenClosed?.Invoke();
+
         GameController.Instance.ClosePartyScreen();
 
     }

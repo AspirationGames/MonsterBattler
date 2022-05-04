@@ -583,14 +583,21 @@ public class Monster
         bool killingMove = ( (HP - damage) < 1 );
         killingMove = damageDetails.KO;
 
-        UpdateHP(damage);
+        DecreaseHP(damage);
         
         return damageDetails;
 
         
     }
 
-    public void UpdateHP(int damage)
+    public void RestoreHP(int amount)
+    {
+        HP = Mathf.Clamp(HP + amount, 0, MaxHP);
+        OnHPChanged?.Invoke();
+        HpChanged = true;
+    }
+
+    public void DecreaseHP(int damage)
     {
         HP = Mathf.Clamp(HP - damage, 0, MaxHP);
         OnHPChanged?.Invoke();

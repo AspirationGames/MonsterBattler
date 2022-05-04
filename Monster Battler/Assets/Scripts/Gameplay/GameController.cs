@@ -97,6 +97,12 @@ public class GameController : MonoBehaviour
     }
     public void ClosePartyScreen()
     {
+        if(gameState == GameState.Inventory) //need to keep inventory state as is when using items
+        {
+            partyScreen.gameObject.SetActive(false);
+            return;    
+        }
+
         gameState = previousState;
         partyScreen.gameObject.SetActive(false);
         

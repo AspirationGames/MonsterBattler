@@ -34,6 +34,27 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
         dialogControls.Dialog.SetCallbacks(this);     
     }
 
+    public IEnumerator ShowDialogText(string text, bool waitForInput = false) //simple text messeage not dialogue if set to true the player will still need to give input to close dialogue
+    {
+        IsShowing = true;
+        dialogBox.SetActive(true);
+
+        yield return TypeDialog(text);
+        
+        if(waitForInput)
+        {
+            //This currently defualts to false
+            //we can require confirmaiton input here, but need to figure out how to implement with new inptu ssytem instead will just wait an extra second before closing dialgoue for now
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+
+
+        dialogBox.SetActive(false);
+        IsShowing = false;
+
+    }
     public IEnumerator ShowDialog(Dialog dialog, Action onFinished = null)
     {
         yield return new WaitForEndOfFrame();

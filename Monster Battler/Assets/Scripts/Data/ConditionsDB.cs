@@ -37,7 +37,7 @@ public class ConditionsDB
                 },
                 OnAfterTurn = (Monster monster) =>
                 {
-                    monster.UpdateHP(monster.MaxHP / 8);
+                    monster.DecreaseHP(monster.MaxHP / 8);
                     monster.StatusChangeMessages.Enqueue($"{monster.Base.MonsterName} was hurt by poison");
                 }
             }
@@ -62,7 +62,7 @@ public class ConditionsDB
                 },
                 OnAfterTurn = (Monster monster) =>
                 {
-                    monster.UpdateHP(monster.MaxHP / 16);
+                    monster.DecreaseHP(monster.MaxHP / 16);
                     monster.StatusChangeMessages.Enqueue($"{monster.Base.MonsterName} was hurt by burn");
                 }
             }
@@ -175,7 +175,7 @@ public class ConditionsDB
                         //Move confusionDamage = monster.Moves[Random.Range(0,3)]; //call a random move that the monster knows.
                         //monster.TakeDamage(confusionDamage, monster);
                         
-                        monster.UpdateHP(monster.MaxHP / 8);
+                        monster.DecreaseHP(monster.MaxHP / 8);
 
                         monster.StatusChangeMessages.Enqueue($"{monster.Base.MonsterName} hurt itself in its confusion.");
                         return false;
@@ -235,7 +235,7 @@ public class ConditionsDB
                 {
                     if(monster.Base.Type1 != MonsterType.Earth || monster.Base.Type2 != MonsterType.Earth)
                     {
-                        monster.UpdateHP(Mathf.RoundToInt((float)monster.MaxHP / 16f)); //damage monsters
+                        monster.DecreaseHP(Mathf.RoundToInt((float)monster.MaxHP / 16f)); //damage monsters
                         monster.StatusChangeMessages.Enqueue($"{monster.Base.MonsterName} is ravaged by the sandstorm");
                     }
                     else
