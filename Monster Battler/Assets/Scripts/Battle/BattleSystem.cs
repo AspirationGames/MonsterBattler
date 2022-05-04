@@ -579,7 +579,7 @@ public class BattleSystem : MonoBehaviour
             {
                 var movesWithPP = battleUnits[i].Monster.Moves.Where(x => x.AP > 0).ToList();
                 int randmomMoveIndex = UnityEngine.Random.Range(0, movesWithPP.Count);
-                int randomTargetIndex = UnityEngine.Random.Range(0,1);
+                int randomTargetIndex = UnityEngine.Random.Range(0,2);
                 selectedMoves.Insert(i, movesWithPP[randmomMoveIndex]);
                 selectedTargets.Insert(i, battleUnits[randomTargetIndex]);
                 selectedSwitch.Insert(i,null);
