@@ -436,6 +436,10 @@ PrefabInstance:
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 1749180314672643208, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: itemSlots.Array.data[3].item
+      value: 
+      objectReference: {fileID: 11400000, guid: 9e012e5f5b8159046b5240521844b47c, type: 2}
     - target: {fileID: 2719706079188800092, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
