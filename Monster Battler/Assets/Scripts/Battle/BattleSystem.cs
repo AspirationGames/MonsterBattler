@@ -8,12 +8,22 @@ using UnityEngine.InputSystem;
 using DG.Tweening;
 
 public enum BattleState 
-{PlayerAction1, PlayerAction2, PlayerMove1, PlayerMove2, PlayerTarget1, PlayerTarget2, PlayerSwitch1, PlayerSwitch2, EnemyAction1, EnemyAction2, Busy, PlayerFaintedSwitching, ForgettingMove, BattleOver}
+{
+    PlayerAction1, PlayerAction2, 
+    PlayerMove1, PlayerMove2, 
+    PlayerTarget1, PlayerTarget2, 
+    PlayerSwitch1, PlayerSwitch2, 
+    PlayerItem1, PlayerItem2,
+    EnemyAction1, EnemyAction2, 
+    Busy, PlayerFaintedSwitching, ForgettingMove, BattleOver
+    
+}
 public class BattleSystem : MonoBehaviour
 {
     [SerializeField] List<BattleUnit> battleUnits;
     [SerializeField] BattleDialogBox battleDialogueBox;
     [SerializeField] PartyScreen partyScreen;
+    [SerializeField] InventoryScreen inventoryScreen;
     [SerializeField] MoveSelectionUI moveSelectionUI;
 
     [SerializeField] EnemyAI enemyAI;
@@ -281,8 +291,24 @@ public class BattleSystem : MonoBehaviour
 
     public void SelectItem()
     {
-        if(battleState == BattleState.PlayerAction1)
+        if(battleState == BattleState.PlayerAction1) battleState = BattleState.PlayerItem1;
+
+        else if(battleState == BattleState.PlayerAction2)
         { 
+            battleState = BattleState.PlayerItem2;
+            battleDialogueBox.EnableBackButton(false);
+        }
+        
+        inventoryScreen.gameObject.SetActive(true);
+        battleDialogueBox.EnableActionSelector(false);
+        StartCoroutine(battleDialogueBox.TypeDialog("Select an item to use."));
+
+    }
+    public void OnItemSelected()
+    {
+        if(battleState == BattleState.PlayerItem1)
+        { 
+            
             battleState = BattleState.PlayerTarget1;
             selectedMoves.Insert(0,null);
             selectedSwitch.Insert(0, null);
@@ -291,7 +317,7 @@ public class BattleSystem : MonoBehaviour
             SelectTarget();
             
         }
-        else if(battleState == BattleState.PlayerAction2)
+        else if(battleState == BattleState.PlayerItem2)
         {
             battleState = BattleState.PlayerTarget2;
             selectedMoves.Insert(1,null);
@@ -315,6 +341,16 @@ public class BattleSystem : MonoBehaviour
             case BattleState.PlayerSwitch1:
                 battleState = BattleState.PlayerAction1;
                 partyScreen.gameObject.SetActive(false);
+                SelectAction();
+                break;
+            case BattleState.PlayerItem1:
+                if(inventoryScreen.InventoryScreenState == InventoryScreenState.PartyScreen) //prevents switching battle state back to far if in inventory section
+                {
+                    partyScreen.gameObject.SetActive(false);
+                    break;
+                }
+                battleState = BattleState.PlayerAction1;
+                inventoryScreen.gameObject.SetActive(false);
                 SelectAction();
                 break;
             case BattleState.PlayerTarget1:
@@ -351,6 +387,16 @@ public class BattleSystem : MonoBehaviour
             case BattleState.PlayerSwitch2:
                 battleState = BattleState.PlayerAction2;
                 partyScreen.gameObject.SetActive(false);
+                SelectAction();
+                break;
+            case BattleState.PlayerItem2:
+                if(inventoryScreen.InventoryScreenState == InventoryScreenState.PartyScreen) //prevents switching battle state back to far if in inventory section
+                {
+                    partyScreen.gameObject.SetActive(false);
+                    break;
+                }
+                battleState = BattleState.PlayerAction1;
+                inventoryScreen.gameObject.SetActive(false);
                 SelectAction();
                 break;
             case BattleState.PlayerTarget2:
@@ -445,6 +491,7 @@ public class BattleSystem : MonoBehaviour
 
     void SelectTarget()
     {   
+        
         battleDialogueBox.EnableMoveSelector(false);
         battleDialogueBox.EnableTargetSelector(true);
         battleDialogueBox.SetTargetNames(battleUnits);
@@ -483,9 +530,9 @@ public class BattleSystem : MonoBehaviour
         }
 
     }
-    public void OnSwitchSelected(int switchMonsterIndex)
+    public void OnPartyMemberSelected(int selectedMonsterIndex)
     {
-        var selectedMonster = playerParty.Monsters[switchMonsterIndex];
+        var selectedMonster = playerParty.Monsters[selectedMonsterIndex];
 
         if(selectedMonster.HP <= 0) //if the slected monster is fainted
         {
@@ -852,7 +899,7 @@ public class BattleSystem : MonoBehaviour
             if(!canAttack)
             {
                 yield return StatusChangeDialog(attackingMonster);
-                yield return attackingUnit.Hud.UpdateHP(); //this is in the event that the status causes damage (i.e. confusion);
+                //yield return attackingUnit.Hud.UpdateHPAsync(); //this is in the event that the status causes damage (i.e. confusion);
                 continue;
             }
             yield return StatusChangeDialog(attackingMonster); //expirments add a show status change here too for some reason.
@@ -906,7 +953,7 @@ public class BattleSystem : MonoBehaviour
                     {
                         targetUnit.PlayHitAnimation();
                         var damageDetails = targetMonster.TakeDamage(attackingMove, attackingMonster, battleFieldEffects.Weather);
-                        yield return targetUnit.Hud.UpdateHP();
+                        //yield return targetUnit.Hud.UpdateHPAsync();
                         yield return ShowDamageDetails(damageDetails);
                     }
 
@@ -955,7 +1002,7 @@ public class BattleSystem : MonoBehaviour
                 {
                     battleFieldEffects.Weather.OnWeather?.Invoke(unit.Monster);
                     yield return StatusChangeDialog(unit.Monster);
-                    yield return unit.Hud.UpdateHP();
+                    //yield return unit.Hud.UpdateHPAsync();
 
                     if(unit.Monster.HP <= 0)//if the monster FAINTS
                     {
@@ -1136,7 +1183,7 @@ public class BattleSystem : MonoBehaviour
             {
                 unit.Monster.OnAfterTurn();
                 yield return StatusChangeDialog(unit.Monster);
-                yield return unit.Hud.UpdateHP();
+                //yield return unit.Hud.UpdateHPAsync();
 
                 
 

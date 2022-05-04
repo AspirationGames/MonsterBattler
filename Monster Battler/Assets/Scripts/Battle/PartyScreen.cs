@@ -52,7 +52,14 @@ public class PartyScreen : MonoBehaviour
     {
         screenClosed?.Invoke();
 
-        GameController.Instance.ClosePartyScreen();
+        if(GameController.Instance.GameState == GameState.Battle)
+        {
+            return;
+        }
+        else
+        {
+            GameController.Instance.ClosePartyScreen();
+        }
 
     }
 

@@ -72,7 +72,6 @@ public class Monster
     public bool IsProtected{get; set;}
 
     public bool InBattle {get; set;} //flag for if monster is actively in battle
-    public bool HpChanged {get; set;}
     public event System.Action OnStatusChanged; 
     public event System.Action OnHPChanged; 
     public event System.Action OnLevelChanged;
@@ -594,14 +593,12 @@ public class Monster
     {
         HP = Mathf.Clamp(HP + amount, 0, MaxHP);
         OnHPChanged?.Invoke();
-        HpChanged = true;
     }
 
     public void DecreaseHP(int damage)
     {
         HP = Mathf.Clamp(HP - damage, 0, MaxHP);
         OnHPChanged?.Invoke();
-        HpChanged = true;
     }
 
     public void OnBattleOver() //used to reset values after battle is over

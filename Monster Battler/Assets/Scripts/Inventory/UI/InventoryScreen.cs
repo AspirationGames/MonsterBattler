@@ -19,8 +19,11 @@ public class InventoryScreen : MonoBehaviour
     Inventory inventory;
 
     InventoryScreenState inventoryScreenState;
+    public InventoryScreenState InventoryScreenState => inventoryScreenState;
     
     ItemSlot selectedItemSlot; 
+
+    public event Action<ItemSlot, Monster> UseItemInBattle;
 
     private void Awake() 
     {
@@ -86,11 +89,11 @@ public class InventoryScreen : MonoBehaviour
         {
             return;
         }
-        
+
         StartCoroutine(UseItem(selectedMonster));
     }
 
-    IEnumerator UseItem(Monster selectedMonster)
+    public IEnumerator UseItem(Monster selectedMonster)
     {
         inventoryScreenState = InventoryScreenState.Busy;
 
@@ -115,7 +118,10 @@ public class InventoryScreen : MonoBehaviour
 
     public void OpenPartyScreen()
     {
-        GameController.Instance.ShowPartyScreen();
+
+        partyScreen.gameObject.SetActive(true);
+
+        //GameController.Instance.ShowPartyScreen(); don't think we need this since we aren't changing the game state
 
     }
 

@@ -17,8 +17,16 @@ public class BattleHud : MonoBehaviour
     [SerializeField] List<Sprite> statusSprites;
 
     Monster monster;
+
+
     public void SetData(Monster mon)
     {
+        if(monster != null) //clears the previously subsribed monster from the below events
+        {
+            monster.OnStatusChanged -= SetStatusImage;
+            monster.OnHPChanged -= UpdateHP;
+        }
+
         monster = mon;
 
         nameText.text = monster.Base.MonsterName;
@@ -29,6 +37,7 @@ public class BattleHud : MonoBehaviour
 
         SetStatusImage();
         monster.OnStatusChanged += SetStatusImage;
+        monster.OnHPChanged += UpdateHP;
 
     }
 
@@ -75,16 +84,19 @@ public class BattleHud : MonoBehaviour
 
     }
 
-    public IEnumerator UpdateHP()
+    public void UpdateHP()
     {
-        if(monster.HpChanged)
-        {
-            yield return hpBar.SetHPSmooth((float) monster.HP / monster.MaxHP);
-            hpText.text = monster.HP.ToString() + "/" + monster.MaxHP.ToString();
-            monster.HpChanged = false;
-        }
+        StartCoroutine(UpdateHPAsync());
+    }
+
+    public IEnumerator UpdateHPAsync()
+    {
+        yield return hpBar.SetHPSmooth((float) monster.HP / monster.MaxHP);
+        hpText.text = monster.HP.ToString() + "/" + monster.MaxHP.ToString();
        
     }
+
+    
 
     public void SetStatusImage()
     {
