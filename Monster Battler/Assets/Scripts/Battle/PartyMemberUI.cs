@@ -15,6 +15,8 @@ public class PartyMemberUI : MonoBehaviour
 
     Monster monster;
 
+    [SerializeField] Image statusImage;
+    [SerializeField] List<Sprite> statusSprites;
     public void Init(Monster mon)
     {
         monster = mon;
@@ -22,7 +24,7 @@ public class PartyMemberUI : MonoBehaviour
 
         monster.OnHPChanged += UpdateData;
         monster.OnLevelChanged += UpdateData;
-        monster.OnStatusChanged += UpdateData;
+        monster.OnStatusChanged += SetStatusImage;
         
 
     }
@@ -42,5 +44,38 @@ public class PartyMemberUI : MonoBehaviour
        hpText.text = monster.HP.ToString() + "/" + monster.MaxHP.ToString();
     }
 
+    public void SetStatusImage()
+    {
+        if (monster.Status == null)
+        {
+            statusImage.enabled = false;
+        }
+        else
+        {
+            statusImage.enabled = true;
+            switch(monster.Status.Id)
+            {
+            case ConditionID.psn:
+                statusImage.sprite = statusSprites[0];
+                break;
+            case ConditionID.brn:
+                statusImage.sprite = statusSprites[1];
+                break;
+            case ConditionID.slp:
+                statusImage.sprite = statusSprites[2];
+                break;
+            case ConditionID.par:
+                statusImage.sprite = statusSprites[3];
+                break;
+            case ConditionID.frz:
+                statusImage.sprite = statusSprites[4];
+                break;
+            default:
+                statusImage.enabled = false;
+                break;
+
+            }
+        }
+    }
     
 }
