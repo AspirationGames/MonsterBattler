@@ -31,6 +31,11 @@ public class Move
         return saveData;
 
     }
+
+    public void RestoreAP(int amount)
+    {
+        AP = Mathf.Clamp(AP + amount, 0, Base.AP);
+    }
 }
 
 [System.Serializable]
