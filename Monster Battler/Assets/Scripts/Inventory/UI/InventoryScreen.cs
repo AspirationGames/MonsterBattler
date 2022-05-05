@@ -21,9 +21,7 @@ public class InventoryScreen : MonoBehaviour
     InventoryScreenState inventoryScreenState;
     public InventoryScreenState InventoryScreenState => inventoryScreenState;
     
-    ItemSlot selectedItemSlot; 
-
-    public event Action<ItemSlot, Monster> UseItemInBattle;
+    ItemSlot selectedItemSlot;
 
     private void Awake() 
     {
@@ -85,12 +83,37 @@ public class InventoryScreen : MonoBehaviour
 
     public void PartyMemberSelected(Monster selectedMonster)
     {
+        
         if(inventoryScreenState != InventoryScreenState.PartyScreen)
         {
             return;
         }
+        
+        inventoryScreenState = InventoryScreenState.Busy;
 
-        StartCoroutine(UseItem(selectedMonster));
+        //might want to consider turning this into a couroutine to help with button spamming to make sure dialogue printd
+
+        if(selectedItemSlot.Quantity == 0) //you are out of item
+        {
+            StartCoroutine(DialogManager.Instance.ShowDialogText($"You are out of {selectedItemSlot.Item.ItemName}."));
+            inventoryScreenState = InventoryScreenState.PartyScreen;
+        }
+        else if(!GetCanUseItem(selectedMonster)) //can't be used on monster
+        {
+            StartCoroutine(DialogManager.Instance.ShowDialogText($"{selectedItemSlot.Item.ItemName} won't have any effect on {selectedMonster.Base.MonsterName}."));
+            inventoryScreenState = InventoryScreenState.PartyScreen;
+        }
+        else if(GetCanUseItem(selectedMonster)) //you can use item
+        {
+            StartCoroutine(UseItem(selectedMonster));
+            DecreaseItemQuanity();
+        }
+        
+    }
+
+    public bool GetCanUseItem(Monster selectedMonster)
+    {
+       return inventory.CanUseItem(selectedItemSlot, selectedMonster);
     }
 
     public IEnumerator UseItem(Monster selectedMonster)
@@ -99,21 +122,26 @@ public class InventoryScreen : MonoBehaviour
 
         var usedItem = inventory.UseItem(selectedItemSlot, selectedMonster); //this method uses the item but also returns the item used from inventory script
 
-        if(usedItem != null)
+        
+        if(usedItem != null && GameController.Instance.GameState != GameState.Battle) //of mpt om batt;e ise Dialog manager and keep in party state
         {
            yield return DialogManager.Instance.ShowDialogText($"You used a {usedItem.ItemName}.");
+           inventoryScreenState = InventoryScreenState.PartyScreen; //I want the player to remain on party screen and can continue to use items if they would like.
         }
-        else if(selectedItemSlot.Quantity == 0)
+        else if(usedItem == null)
         {
-            yield return DialogManager.Instance.ShowDialogText($"You are out of {selectedItemSlot.Item.ItemName}.");
+            Debug.Log("item used was null. Check for errors");
         }
-        else
-        {
-            yield return DialogManager.Instance.ShowDialogText($"{selectedItemSlot.Item.ItemName} won't have any effect on {selectedMonster.Base.MonsterName}.");
-        }
-
-        inventoryScreenState = InventoryScreenState.PartyScreen; //I want the player to remain on party screen and can continue to use items if they would like.
         
+    }
+
+    public void IncreaseQuantity()
+    {
+        inventory.IncreaseQuantity(selectedItemSlot.Item);
+    }
+    public void DecreaseItemQuanity()
+    {
+        inventory.DecreaseQuantity(selectedItemSlot.Item);
     }
 
     public void OpenPartyScreen()

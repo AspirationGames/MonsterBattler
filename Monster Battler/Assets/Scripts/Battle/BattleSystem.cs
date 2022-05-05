@@ -42,7 +42,7 @@ public class BattleSystem : MonoBehaviour
     List<Monster> selectedSwitch = new List<Monster>();
     List<BattleUnit> selectedTargets = new List<BattleUnit>();
 
-    List<GameObject> selectedSpell = new List<GameObject>();
+    List<Monster> selectedItems = new List<Monster>();
 
     List<Monster> battleParticipants = new List<Monster>();
     MonsterParty playerParty;
@@ -243,7 +243,7 @@ public class BattleSystem : MonoBehaviour
             selectedMoves.Insert(i,null);
             selectedSwitch.Insert(i,null);
             selectedTargets.Insert(i, null);
-            selectedSpell.Insert(i,null);
+            selectedItems.Insert(i,null);
         }
         battleDialogueBox.EnableActionSelector(false);
         StartCoroutine(AttemptToFlee());
@@ -306,26 +306,12 @@ public class BattleSystem : MonoBehaviour
     }
     public void OnItemSelected()
     {
-        if(battleState == BattleState.PlayerItem1)
-        { 
-            
-            battleState = BattleState.PlayerTarget1;
-            selectedMoves.Insert(0,null);
-            selectedSwitch.Insert(0, null);
-            selectedSpell.Insert(0, summoningCircle);
-            battleDialogueBox.EnableActionSelector(false);
-            SelectTarget();
-            
-        }
-        else if(battleState == BattleState.PlayerItem2)
-        {
-            battleState = BattleState.PlayerTarget2;
-            selectedMoves.Insert(1,null);
-            selectedSwitch.Insert(1, null);
-            selectedSpell.Insert(1, summoningCircle);
-            battleDialogueBox.EnableActionSelector(false);
-            SelectTarget();
-        }
+
+        //Open Party Screen for items that need you to select a party member
+        partyScreen.gameObject.SetActive(true);
+        StartCoroutine(battleDialogueBox.TypeDialog("Select a monster to use item on."));
+        
+        
     }
 
     public void Back()
@@ -346,6 +332,7 @@ public class BattleSystem : MonoBehaviour
             case BattleState.PlayerItem1:
                 if(inventoryScreen.InventoryScreenState == InventoryScreenState.PartyScreen) //prevents switching battle state back to far if in inventory section
                 {
+                    inventoryScreen.PartyScreenClosed(); //resets inventory screen state to Inventory
                     partyScreen.gameObject.SetActive(false);
                     break;
                 }
@@ -357,27 +344,44 @@ public class BattleSystem : MonoBehaviour
                 battleState = BattleState.PlayerAction1; //note our if statment in Fight() method actually changes our battle state again
                 selectedMoves.RemoveAt(0);
                 selectedSwitch.RemoveAt(0); //clears skip index for switch list
+                selectedItems.RemoveAt(0); //clears skip index
                 battleDialogueBox.EnableTargetSelector(false);
                 SelectMove();
                 break;
-            case BattleState.PlayerAction2: 
-                switch (selectedMoves[0])
+            case BattleState.PlayerAction2:
+                
+                if(selectedMoves[0] != null) //you selected a move so reselect your target
                 {
-                    case null: //you selected switch during phase 1
-                        battleState = BattleState.PlayerSwitch1;
-                        selectedSwitch.RemoveAt(0);
-                        selectedMoves.RemoveAt(0);
-                        selectedTargets.RemoveAt(0);
-                        battleDialogueBox.EnableActionSelector(false);
-                        SelectSwitch();
-                        break;
-                    default: //re-select your target
-                        battleState = BattleState.PlayerTarget1;
-                        selectedTargets.RemoveAt(0);
-                        battleDialogueBox.EnableActionSelector(false);
-                        SelectTarget();
-                        break;
+                    battleState = BattleState.PlayerTarget1;
+                    selectedTargets.RemoveAt(0);
+                    battleDialogueBox.EnableActionSelector(false);
+                    SelectTarget();
+                    break;
                 }
+                else if(selectedSwitch[0] != null) //you selected to switch return to switch selection
+                {
+                    battleState = BattleState.PlayerAction1;
+                    selectedSwitch.RemoveAt(0);
+                    selectedMoves.RemoveAt(0);
+                    selectedTargets.RemoveAt(0);
+                    selectedItems.RemoveAt(0);
+                    battleDialogueBox.EnableActionSelector(false);
+                    SelectAction();
+                    break;
+                }
+                else if(selectedItems[0] != null) //you used an item in action 1 return to item selection
+                {
+                    battleState = BattleState.PlayerAction1;
+                    selectedSwitch.RemoveAt(0);
+                    selectedMoves.RemoveAt(0);
+                    selectedTargets.RemoveAt(0);
+                    selectedItems.RemoveAt(0);
+                    battleDialogueBox.EnableActionSelector(false);
+                    inventoryScreen.IncreaseQuantity(); //restore item quanity unless used again.
+                    SelectAction();
+                    break;
+                }
+                Debug.Log("Something went wrong with the back button. Check code.");
                 break;
             case BattleState.PlayerMove2:
                 battleState = BattleState.PlayerAction2;
@@ -392,10 +396,11 @@ public class BattleSystem : MonoBehaviour
             case BattleState.PlayerItem2:
                 if(inventoryScreen.InventoryScreenState == InventoryScreenState.PartyScreen) //prevents switching battle state back to far if in inventory section
                 {
+                    inventoryScreen.PartyScreenClosed(); //resets inventory screen state to Inventory
                     partyScreen.gameObject.SetActive(false);
                     break;
                 }
-                battleState = BattleState.PlayerAction1;
+                battleState = BattleState.PlayerAction2;
                 inventoryScreen.gameObject.SetActive(false);
                 SelectAction();
                 break;
@@ -403,6 +408,7 @@ public class BattleSystem : MonoBehaviour
                 battleState = BattleState.PlayerAction2; //note our if statment in Fight() method actually changes our battle state again
                 selectedMoves.RemoveAt(1);
                 selectedSwitch.RemoveAt(1); //clears skip index for switch list
+                selectedItems.RemoveAt(1); //clears skip index
                 battleDialogueBox.EnableTargetSelector(false);
                 SelectMove();
                 break;
@@ -416,6 +422,7 @@ public class BattleSystem : MonoBehaviour
 
         }
 
+        Debug.Log(battleState);
 
     }
 
@@ -436,7 +443,7 @@ public class BattleSystem : MonoBehaviour
                 battleState = BattleState.PlayerTarget1;
                 selectedMoves.Insert(0,selectedMove);
                 selectedSwitch.Insert(0,null);//skip value for switch
-                selectedSpell.Insert(0, null);
+                selectedItems.Insert(0, null);
 
                 if(selectedMove.Base.Target == MoveTarget.Self) //if move target is self
                 {
@@ -465,7 +472,7 @@ public class BattleSystem : MonoBehaviour
                 battleState = BattleState.PlayerTarget2;
                 selectedMoves.Insert(1,selectedMove);
                 selectedSwitch.Insert(1,null);//skip value for switch
-                selectedSpell.Insert(1, null);
+                selectedItems.Insert(1, null);
 
                 if(selectedMove.Base.Target == MoveTarget.Self) //if move target is self
                 {
@@ -534,6 +541,21 @@ public class BattleSystem : MonoBehaviour
     {
         var selectedMonster = playerParty.Monsters[selectedMonsterIndex];
 
+        if( battleState == BattleState.PlayerSwitch1 || 
+            battleState == BattleState.PlayerSwitch2 || 
+            battleState == BattleState.PlayerFaintedSwitching)
+        {
+            SetSwitchSelection(selectedMonster);
+        }
+
+        else if(battleState == BattleState.PlayerItem1 || battleState == BattleState.PlayerItem2)
+        {
+            SetItemSelection(selectedMonster);
+        }
+    }
+
+    void SetSwitchSelection(Monster selectedMonster)
+    {
         if(selectedMonster.HP <= 0) //if the slected monster is fainted
         {
             StartCoroutine(battleDialogueBox.TypeDialog($"{selectedMonster} is fainted."));
@@ -550,7 +572,7 @@ public class BattleSystem : MonoBehaviour
             // dummy numbers  to allow code to work
             selectedMoves.Insert(0,null);
             selectedTargets.Insert(0,null);
-            selectedSpell.Insert(0, null);
+            selectedItems.Insert(0, null);
 
             selectedMonster.InBattle = true; //We set the selected monster inbattle to prevent it from being selected again
 
@@ -577,7 +599,7 @@ public class BattleSystem : MonoBehaviour
             // dummy numbers  to allow code to work
             selectedMoves.Insert(1,null);
             selectedTargets.Insert(1,null);
-            selectedSpell.Insert(1, null);
+            selectedItems.Insert(1, null);
 
             selectedMonster.InBattle = true;
 
@@ -594,6 +616,55 @@ public class BattleSystem : MonoBehaviour
             partyScreen.gameObject.SetActive(false);
             battleState = BattleState.Busy; //switch back to busy state to allow for coroutines to finish.
         }
+
+    }
+
+    void SetItemSelection(Monster selectedMonster)
+    {
+        
+
+        if(!inventoryScreen.GetCanUseItem(selectedMonster)) //if the slected monster can't use the selected item
+        {
+            StartCoroutine(battleDialogueBox.TypeDialog($"{selectedMonster} can't use that item."));
+            return;
+        }
+        
+        else if(battleState == BattleState.PlayerItem1)
+        { 
+            //Set Null Values
+            selectedMoves.Insert(0,null);
+            selectedSwitch.Insert(0, null);
+            selectedTargets.Insert(0, null);
+
+            //set item use list
+            selectedItems.Insert(0, selectedMonster);
+            inventoryScreen.DecreaseItemQuanity(); //decrease quanity of item
+            
+            //close party screen and move to action 2
+            partyScreen.gameObject.SetActive(false);
+            inventoryScreen.gameObject.SetActive(false);
+            battleState = BattleState.PlayerAction2;
+            SelectAction();
+            
+        }
+        else if(battleState == BattleState.PlayerItem2)
+        {
+            //Set Null Values
+            selectedMoves.Insert(1,null);
+            selectedSwitch.Insert(1, null);
+            selectedTargets.Insert(1, null);
+
+            //Set item use list
+            selectedItems.Insert(1, selectedMonster);
+            inventoryScreen.DecreaseItemQuanity(); //decrease quanity of item
+            
+            //close party screen and move to Enemy Action selection
+            partyScreen.gameObject.SetActive(false);
+            inventoryScreen.gameObject.SetActive(false);
+            battleState = BattleState.EnemyAction1;
+            EnemyActionSelection();
+        }
+
     }
 
     void EnemyActionSelection()
@@ -614,7 +685,7 @@ public class BattleSystem : MonoBehaviour
             selectedSwitch.Insert(i,null);
         }
 
-        StartCoroutine(UseItems());
+        
     }
 
     void RandomEnemyMove() //Selects Random move for enemy
@@ -630,7 +701,7 @@ public class BattleSystem : MonoBehaviour
                 selectedMoves.Insert(i, movesWithPP[randmomMoveIndex]);
                 selectedTargets.Insert(i, battleUnits[randomTargetIndex]);
                 selectedSwitch.Insert(i,null);
-                selectedSpell.Insert(i,null);
+                selectedItems.Insert(i,null);
             }
             else
             {
@@ -639,8 +710,8 @@ public class BattleSystem : MonoBehaviour
             
         }
 
-        StartCoroutine(UseItems());
-
+        
+        PlayTurn();
         
     }
 
@@ -650,11 +721,42 @@ public class BattleSystem : MonoBehaviour
         selectedMoves.Insert(i, null);
         selectedTargets.Insert(i, null);
         selectedSwitch.Insert(i,null);
-        selectedSpell.Insert(i,null);
+        selectedItems.Insert(i,null);
     }
     
+    void PlayTurn()
+    {
+       StartCoroutine( UseItems() );
+
+    }
     
     IEnumerator UseItems()
+    {
+        battleState = BattleState.Busy;
+
+        for(int i=0; i < turnOrder.Count; i++)
+        {
+            BattleUnit currentUnit = turnOrder[i];
+            Monster itemTarget = selectedItems[battleUnits.IndexOf(currentUnit)];
+            
+
+            if(itemTarget == null)//if no item was initiated for this unit just continue onto the next turn
+            {
+              
+                continue;
+            }
+            else //uese items on target
+            {
+                yield return inventoryScreen.UseItem(itemTarget);
+                yield return battleDialogueBox.TypeDialog($"{itemTarget.Base.MonsterName} used and item.");
+            }
+        }
+
+        yield return SwitchMonsters();
+    }
+
+
+    IEnumerator CatchingItemsPlaceholder() //place holder coroutine for catching monsters
     {
 
         battleState = BattleState.Busy;
@@ -665,7 +767,7 @@ public class BattleSystem : MonoBehaviour
             BattleUnit currentUnit = turnOrder[i];
             Monster currentMonster = currentUnit.Monster;
 
-            if(selectedSpell[battleUnits.IndexOf(currentUnit)] == null)//if no spell was initiated for this turn just continue onto the next turn
+            if(selectedItems[battleUnits.IndexOf(currentUnit)] == null)//if no spell was initiated for this turn just continue onto the next turn
             {
               
                 continue;

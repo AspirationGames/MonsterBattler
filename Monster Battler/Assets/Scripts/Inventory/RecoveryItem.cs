@@ -21,7 +21,7 @@ public class RecoveryItem : ItemBase
     [SerializeField] bool revive;
     [SerializeField] bool maxRevive;
 
-    public override bool Use(Monster monster)
+    public override bool CanUse(Monster monster)
     {
         if(healAmount > 0)
         {
@@ -30,11 +30,18 @@ public class RecoveryItem : ItemBase
 
                 return false;
             }
-
-            monster.RestoreHP(healAmount);
+            else
+            {
+                return true;
+            }
         }
 
         return true;
+    }
+
+    public override void Use(Monster monster)
+    {
+        monster.RestoreHP(healAmount);
     }
 
 }

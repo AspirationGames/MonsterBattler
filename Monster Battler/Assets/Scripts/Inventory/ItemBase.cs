@@ -16,9 +16,14 @@ public class ItemBase : ScriptableObject
 
     public Sprite Icon => icon;
 
-    public virtual bool Use(Monster monster)
+    public virtual bool CanUse(Monster monster)
     {
         return false;
+
+    }
+    public virtual void Use(Monster monster)
+    {
+
 
     }
 }

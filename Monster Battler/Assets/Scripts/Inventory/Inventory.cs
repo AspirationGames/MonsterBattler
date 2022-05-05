@@ -17,29 +17,31 @@ public class Inventory : MonoBehaviour
         return FindObjectOfType<PlayerController>().GetComponent<Inventory>();
     }
 
-    public ItemBase UseItem(ItemSlot selectedItemSlot, Monster selectedMonster)
+    public bool CanUseItem(ItemSlot selectedItemSlot, Monster selectedMonster)
     {
-        //first make sure selectedItemSlot still has quanity in the event the player continue to use
 
         if(selectedItemSlot.Quantity == 0)
         {
-            return null;
+            return false;
         }
 
         var item = selectedItemSlot.Item;
-        bool itemUsed = item.Use(selectedMonster);
-
-        if(itemUsed)
-        {
-            RemoveItem(item);
-            return item; //we return the item to be able to include it in dialogue
-        }
-
-        return null;
+        return item.CanUse(selectedMonster); //checks if you can use the item on the selected monster
 
     }
 
-    public void RemoveItem(ItemBase item)
+    public ItemBase UseItem(ItemSlot selectedItemSlot, Monster selectedMonster)
+    {
+
+        var item = selectedItemSlot.Item;
+        item.Use(selectedMonster);
+
+        return item;
+        
+
+    }
+
+    public void DecreaseQuantity(ItemBase item)
     {
         var itemSlot = ItemSlots.First(slot => slot.Item == item);
 
@@ -49,6 +51,26 @@ public class Inventory : MonoBehaviour
         {
             itemSlots.Remove(itemSlot);
         }
+
+        InventoryUpdated?.Invoke();
+    }
+
+    public void IncreaseQuantity(ItemBase item)
+    {
+        var itemSlot = ItemSlots.First(slot => slot.Item == item);
+
+        if(itemSlot.Quantity == 0)
+        {
+            itemSlots.Add(itemSlot);
+        }
+        else
+        {
+            itemSlot.Quantity++; //note need to figure out what to do if you get more than a single unit of an item.
+        }
+
+        
+
+        
 
         InventoryUpdated?.Invoke();
     }
