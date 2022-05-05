@@ -29,11 +29,11 @@ MonoBehaviour:
   growthRate: 1
   dsYield: 0
   learnableMoves:
-  - moveBase: {fileID: 11400000, guid: 1a2bd1ffa98218344867de026135f462, type: 2}
+  - moveBase: {fileID: 11400000, guid: beec11c45a89d9845a4c28380ad6788f, type: 2}
     moveLevel: 1
-  - moveBase: {fileID: 11400000, guid: 1a2bd1ffa98218344867de026135f462, type: 2}
+  - moveBase: {fileID: 11400000, guid: dd7a514fab729454cba15d5bcba39f1a, type: 2}
     moveLevel: 1
   - moveBase: {fileID: 11400000, guid: 74049db940c3af84eafff293f604b0e0, type: 2}
     moveLevel: 4
-  - moveBase: {fileID: 11400000, guid: 8d4798b4b683e4242bb2b08462595eec, type: 2}
+  - moveBase: {fileID: 11400000, guid: 8e9e14c447e9ec24aabc4e2fdc376d02, type: 2}
     moveLevel: 5
