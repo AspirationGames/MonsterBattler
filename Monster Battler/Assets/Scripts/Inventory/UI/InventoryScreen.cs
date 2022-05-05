@@ -106,7 +106,7 @@ public class InventoryScreen : MonoBehaviour
         else if(GetCanUseItem(selectedMonster)) //you can use item
         {
             StartCoroutine(UseItem(selectedMonster));
-            DecreaseItemQuanity();
+            
         }
         
     }
@@ -132,6 +132,8 @@ public class InventoryScreen : MonoBehaviour
         {
             Debug.Log("item used was null. Check for errors");
         }
+
+        DecreaseItemQuanity();
         
     }
 

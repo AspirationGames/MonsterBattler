@@ -96,6 +96,12 @@ public class BattleHud : MonoBehaviour
        
     }
 
+    public IEnumerator WaitForHPUpdate()
+    {
+
+        yield return new WaitUntil(() => hpBar.HPisUpdating == false); //waits until HP update is complete
+    }
+
     
 
     public void SetStatusImage()

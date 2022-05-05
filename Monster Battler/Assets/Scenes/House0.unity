@@ -132,11 +132,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8832480026388864700, guid: 3fbbb157fe64443439cb7c2bbcaa7d50, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8832480026388864700, guid: 3fbbb157fe64443439cb7c2bbcaa7d50, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -44.23
+      value: -48.26
       objectReference: {fileID: 0}
     - target: {fileID: 8832480026388864700, guid: 3fbbb157fe64443439cb7c2bbcaa7d50, type: 3}
       propertyPath: m_LocalPosition.y
@@ -196,6 +196,63 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3fbbb157fe64443439cb7c2bbcaa7d50, type: 3}
+--- !u!1001 &459777802
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2320578141089992005, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_Name
+      value: Town Elder NPC
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -48.24
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 21.27599
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
 --- !u!1001 &591522122
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -205,7 +262,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8289976277297443768, guid: 1681344bd36e2a343a45b5e1eaa64eae, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8289976277297443768, guid: 1681344bd36e2a343a45b5e1eaa64eae, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8274,7 +8331,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6097158584871049896, guid: 5e3f7eefc8c98744ebf048dc0f880ebe, type: 3}
       propertyPath: m_Tiles.Array.data[0].first.x
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6097158584871049896, guid: 5e3f7eefc8c98744ebf048dc0f880ebe, type: 3}
       propertyPath: m_Tiles.Array.data[0].first.y
@@ -8282,7 +8339,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6097158584871049896, guid: 5e3f7eefc8c98744ebf048dc0f880ebe, type: 3}
       propertyPath: m_Tiles.Array.data[1].first.x
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6097158584871049896, guid: 5e3f7eefc8c98744ebf048dc0f880ebe, type: 3}
       propertyPath: m_Tiles.Array.data[1].first.y
