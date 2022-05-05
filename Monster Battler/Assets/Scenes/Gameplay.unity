@@ -448,9 +448,21 @@ PrefabInstance:
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 1749180314672643208, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: itemSlots.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1749180314672643208, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: itemSlots.Array.data[3].item
       value: 
       objectReference: {fileID: 11400000, guid: 9e012e5f5b8159046b5240521844b47c, type: 2}
+    - target: {fileID: 1749180314672643208, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: itemSlots.Array.data[7].item
+      value: 
+      objectReference: {fileID: 11400000, guid: 85595d4f822e0bb418b6f9a1b78d7e93, type: 2}
+    - target: {fileID: 1749180314672643208, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: itemSlots.Array.data[7].quantity
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2719706079188800092, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
