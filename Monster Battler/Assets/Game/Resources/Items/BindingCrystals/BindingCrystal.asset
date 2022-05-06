@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1446abf907d79994cbd0ee9e06ced3c8, type: 3}
+  m_Name: BindingCrystal
+  m_EditorClassIdentifier: 
+  itemName: Binding
+  description: A crystal used to bind the soul of a monster to a Summoner.
+  icon: {fileID: -1465440840, guid: 0f6d3601731942544a030ddf17e2e3df, type: 3}
