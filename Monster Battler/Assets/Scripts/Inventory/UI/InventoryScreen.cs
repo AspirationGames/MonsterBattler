@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public enum InventoryScreenState{Inventory, PartyScreen, Busy}
+public enum InventoryScreenState{Inventory, PartyScreen, BindingTargetSelection, Busy}
 public class InventoryScreen : MonoBehaviour
 {
 
@@ -31,6 +31,8 @@ public class InventoryScreen : MonoBehaviour
 
     List<ItemSlot> currentItemSlots;
 
+    public event Action bindingSelected;
+
     private void Awake() 
     {
         
@@ -47,7 +49,7 @@ public class InventoryScreen : MonoBehaviour
         ItemSlotUI.itemUISelected += ItemSelected;
         inventory.InventoryUpdated += UpdateItemList;
         partyScreen.monsterSelected += PartyMemberSelected; //monster selected from party screen
-        partyScreen.screenClosed += PartyScreenClosed;
+        partyScreen.screenClosed += ResetInventoryState;
     }
 
     void UpdateItemList()
@@ -127,6 +129,16 @@ public class InventoryScreen : MonoBehaviour
         int selectedItemIndex = selectedItemSlotUI.transform.GetSiblingIndex(); //sets the selected item for use.
         selectedItemSlot = currentItemSlots[selectedItemIndex];
 
+        if(selectedCategoryIndex == (int)ItemCategory.BindingCrystals) //index "1" is for binding crystal. The Item category enum will return the int index of the Binding Cyrstal enum.
+        {
+            //we don't want to open the party screen but instead we should close out of inventory screen and run the binding crystal method from the battle system.
+            bindingSelected(); //event notification for battle system
+            inventoryScreenState = InventoryScreenState.BindingTargetSelection;
+            gameObject.SetActive(false); //closes the inventory screen
+            return;
+
+        }
+
         OpenPartyScreen(); //Open party screen to select monster to use item on
         inventoryScreenState = InventoryScreenState.PartyScreen;
         
@@ -202,11 +214,12 @@ public class InventoryScreen : MonoBehaviour
 
         partyScreen.gameObject.SetActive(true);
 
-        //GameController.Instance.ShowPartyScreen(); don't think we need this since we aren't changing the game state
+        //GameController.Instance.ShowPartyScreen(); don't think we need this since we aren't changing the game state. 
+        //We also don't want to use this because when we Open the party screen during battle we don't want to change the game state. 
 
     }
 
-    public void PartyScreenClosed()
+    public void ResetInventoryState()
     {
         inventoryScreenState = InventoryScreenState.Inventory;
     }

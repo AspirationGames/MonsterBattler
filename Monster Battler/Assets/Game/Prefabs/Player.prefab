@@ -292,6 +292,8 @@ MonoBehaviour:
     quantity: 2
   - item: {fileID: 11400000, guid: 85595d4f822e0bb418b6f9a1b78d7e93, type: 2}
     quantity: 1
+  - item: {fileID: 11400000, guid: d2072a3b894fb1a44805d466b6a77530, type: 2}
+    quantity: 1
   crystalSlots:
   - item: {fileID: 11400000, guid: c8d72ee760c7286419102bf38ada5f6a, type: 2}
     quantity: 10

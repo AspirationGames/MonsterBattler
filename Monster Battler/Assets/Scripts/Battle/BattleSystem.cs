@@ -56,7 +56,7 @@ public class BattleSystem : MonoBehaviour
 
     int escapeAttempts;
 
-
+    
     public void StartWildMonsterBattle(MonsterParty playerParty, MonsterParty wildMonsters)
     {
         this.playerParty = playerParty;
@@ -83,6 +83,9 @@ public class BattleSystem : MonoBehaviour
     
     public IEnumerator SetupBattle()
     {  
+        //Subscribe to item events
+        inventoryScreen.bindingSelected += SelectTarget;
+
         //Show player sprite
         playerImage.gameObject.SetActive(true);
         playerImage.sprite = player.Sprite;
@@ -292,7 +295,7 @@ public class BattleSystem : MonoBehaviour
         
     }
 
-    public void SelectItem()
+    public void SelectItem() //opens inventory
     {
         if(battleState == BattleState.PlayerAction1) battleState = BattleState.PlayerItem1;
 
@@ -306,14 +309,6 @@ public class BattleSystem : MonoBehaviour
         battleDialogueBox.EnableActionSelector(false);
         StartCoroutine(battleDialogueBox.TypeDialog("Select an item to use."));
 
-    }
-    public void OnItemSelected()
-    {
-
-        //Open Party Screen for items that need you to select a party member
-        StartCoroutine(battleDialogueBox.TypeDialog("Select a monster to use item on."));
-        
-        
     }
 
     public void Back()
@@ -334,8 +329,15 @@ public class BattleSystem : MonoBehaviour
             case BattleState.PlayerItem1:
                 if(inventoryScreen.InventoryScreenState == InventoryScreenState.PartyScreen) //prevents switching battle state back to far if in inventory section
                 {
-                    inventoryScreen.PartyScreenClosed(); //resets inventory screen state to Inventory
+                    inventoryScreen.ResetInventoryState(); //resets inventory screen state to Inventory
                     partyScreen.gameObject.SetActive(false);
+                    break;
+                }
+                else if(inventoryScreen.InventoryScreenState == InventoryScreenState.BindingTargetSelection)
+                {
+                    inventoryScreen.ResetInventoryState();
+                    battleDialogueBox.EnableTargetSelector(false);
+                    inventoryScreen.gameObject.SetActive(true); //re-open inventory
                     break;
                 }
                 battleState = BattleState.PlayerAction1;
@@ -388,8 +390,15 @@ public class BattleSystem : MonoBehaviour
             case BattleState.PlayerItem2:
                 if(inventoryScreen.InventoryScreenState == InventoryScreenState.PartyScreen) //prevents switching battle state back to far if in inventory section
                 {
-                    inventoryScreen.PartyScreenClosed(); //resets inventory screen state to Inventory
+                    inventoryScreen.ResetInventoryState(); //resets inventory screen state to Inventory
                     partyScreen.gameObject.SetActive(false);
+                    break;
+                }
+                else if(inventoryScreen.InventoryScreenState == InventoryScreenState.BindingTargetSelection)
+                {
+                    inventoryScreen.ResetInventoryState();
+                    battleDialogueBox.EnableTargetSelector(false);
+                    inventoryScreen.gameObject.SetActive(true); //re-open inventory
                     break;
                 }
                 battleState = BattleState.PlayerAction2;
@@ -487,16 +496,35 @@ public class BattleSystem : MonoBehaviour
 
     void SelectTarget()
     {   
-        
+        StartCoroutine(battleDialogueBox.TypeDialog("Select a target"));
+
         battleDialogueBox.EnableMoveSelector(false);
         battleDialogueBox.EnableTargetSelector(true);
         battleDialogueBox.SetTargetNames(battleUnits);
 
     }
 
-    public void OnTargetSelected(BattleUnit targetUnit)
+    public void OnTargetSelected(BattleUnit selectedTarget)
     {
-        //save selected targets
+
+        if( battleState == BattleState.PlayerTarget1 || 
+            battleState == BattleState.PlayerTarget2)
+        {
+            SetMoveTargets(selectedTarget);
+        }
+
+        else if(battleState == BattleState.PlayerItem1 || battleState == BattleState.PlayerItem2)
+        {
+           //try to use binding crystal on target
+          StartCoroutine(SetBindingTarget(selectedTarget));
+           
+        }
+
+    }
+
+    public void SetMoveTargets(BattleUnit targetUnit)
+    {
+        //save selected targets for moves
         if(battleState == BattleState.PlayerTarget1)
         {
             selectedTargets.Insert(0,targetUnit);
@@ -524,8 +552,11 @@ public class BattleSystem : MonoBehaviour
             EnemyActionSelection();
 
         }
-
     }
+
+    
+    
+
     public void OnPartyMemberSelected(int selectedMonsterIndex)
     {
         var selectedMonster = playerParty.Monsters[selectedMonsterIndex];
@@ -608,10 +639,12 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator SetItemTarget(Monster selectedMonster)
     {
+        yield return battleDialogueBox.TypeDialog("Select a monster to use item on.");
 
         if(!inventoryScreen.GetCanUseItem(selectedMonster)) //if the slected monster can't use the selected item
         {
-            yield return StartCoroutine(battleDialogueBox.TypeDialog($"{selectedMonster} can't use that item."));
+            yield return battleDialogueBox.TypeDialog($"{selectedMonster} can't use that item.");
+            yield return battleDialogueBox.TypeDialog("Select a monster to use item on.");
             yield break;
         }
         
@@ -654,6 +687,79 @@ public class BattleSystem : MonoBehaviour
             EnemyActionSelection();
         }
 
+    }
+
+    IEnumerator SetBindingTarget(BattleUnit targetUnit) //place holder coroutine for catching monsters
+    {
+        
+        if(isSummonerBattle)
+        {
+            yield return battleDialogueBox.TypeDialog($"That monster is already bound to another summoner.");
+            yield return battleDialogueBox.TypeDialog("Select a target");
+            yield break;
+        }
+        else if(targetUnit.IsPlayerMonster)
+        {
+            yield return battleDialogueBox.TypeDialog($"That monster is already bound to you.");
+            yield return battleDialogueBox.TypeDialog("Select a target");
+            yield break;
+        }
+        else if(battleState == BattleState.PlayerItem1)
+        {
+            //Set Null Values
+            selectedMoves.Insert(0,null);
+            selectedSwitch.Insert(0, null);
+            selectedTargets.Insert(0, null);
+
+            //close target selections
+            battleDialogueBox.EnableTargetSelector(false);
+
+            //Use Binding Crystal
+            inventoryScreen.DecreaseItemQuanity(); //because we are not using the use item method in the inventory screen script
+            yield return UsingBindingCrystal(targetUnit);
+
+            //player second action selection
+            battleState = BattleState.PlayerAction2;
+            SelectAction();
+
+        }
+        else if(battleState == BattleState.PlayerItem2)
+        {
+            //Set Null Values
+            selectedMoves.Insert(1,null);
+            selectedSwitch.Insert(1, null);
+            selectedTargets.Insert(1, null);
+            
+            //close target selections
+            battleDialogueBox.EnableTargetSelector(false);
+            
+
+            //Use Binding Crystal
+            inventoryScreen.DecreaseItemQuanity();
+            yield return UsingBindingCrystal(targetUnit);
+
+            //Enemy Action
+            battleState = BattleState.EnemyAction1;
+            EnemyActionSelection();
+
+        }
+
+
+        //Check for battle over after using binding crystal
+        if(!playerParty.HasHealthyMonster()) //player has no healthy monsters
+        {
+            yield return battleDialogueBox.TypeDialog("You Lose!");
+            yield return new WaitForSeconds(1f);
+            BattleOver(false);
+        }
+        else if(!enemyParty.HasHealthyMonster()) //enemy has no healthy monsters
+        {
+            yield return battleDialogueBox.TypeDialog("You Win!");
+            yield return new WaitForSeconds(1f);
+            BattleOver(true);
+        }
+        
+        
     }
 
     void EnemyActionSelection()
@@ -726,43 +832,11 @@ public class BattleSystem : MonoBehaviour
     }
 
 
-    IEnumerator UseBindingCrystal() //place holder coroutine for catching monsters
-    {
+    
 
+    IEnumerator UsingBindingCrystal(BattleUnit targetUnit)
+    {
         battleState = BattleState.Busy;
-
-        //yield return BindingSpell();
-
-        //Check for battle over
-
-        if(!playerParty.HasHealthyMonster()) //player has no healthy monsters
-        {
-            yield return battleDialogueBox.TypeDialog("You Lose!");
-            yield return new WaitForSeconds(1f);
-            BattleOver(false);
-        }
-        else if(!enemyParty.HasHealthyMonster()) //enemy has no healthy monsters
-        {
-            yield return battleDialogueBox.TypeDialog("You Win!");
-            yield return new WaitForSeconds(1f);
-            BattleOver(true);
-        }
-        else
-        {
-            yield return SwitchMonsters(); //continue battle
-        }
-        
-        
-    }
-
-    IEnumerator BindingSpell(BattleUnit targetUnit)
-    {
-
-        if(isSummonerBattle)
-        {
-            yield return battleDialogueBox.TypeDialog($"That monster is already bound to another summoner");
-            yield break;
-        }
 
         yield return battleDialogueBox.TypeDialog($"{player.Name} used a binding crystal.");
         var summoningCircleObj = Instantiate(summoningCircle, targetUnit.transform.position, Quaternion.identity);
