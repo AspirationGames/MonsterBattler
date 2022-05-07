@@ -14,14 +14,22 @@ public class InventoryScreen : MonoBehaviour
 
     [SerializeField] Image itemIcon;
     [SerializeField] TextMeshProUGUI itemDesciption;
+    [SerializeField] TextMeshProUGUI itemCategoryText;
     
     [SerializeField] PartyScreen partyScreen;
+
+    [SerializeField] Image leftArrow;
+    [SerializeField] Image rightArrow;
     Inventory inventory;
 
     InventoryScreenState inventoryScreenState;
     public InventoryScreenState InventoryScreenState => inventoryScreenState;
     
     ItemSlot selectedItemSlot;
+
+    int selectedCategoryIndex = 0;
+
+    List<ItemSlot> currentItemSlots;
 
     private void Awake() 
     {
@@ -31,6 +39,7 @@ public class InventoryScreen : MonoBehaviour
     
     private void Start() 
     {
+        SetItemCategory(0); //sets initial item category at index 0
         UpdateItemList();
         ItemSlotUI.itemUIHover += ItemHover;
         ItemSlotUI.itemUISelected += ItemSelected;
@@ -41,13 +50,14 @@ public class InventoryScreen : MonoBehaviour
 
     void UpdateItemList()
     {
+        
         //Clear all existing items
         foreach(Transform child in itemList.transform)
         {
             Destroy(child.gameObject);
         }
 
-        foreach(ItemSlot itemSlot in inventory.ItemSlots)
+        foreach(ItemSlot itemSlot in currentItemSlots)
         {
             var itemSlotUIObj = Instantiate(itemSlotUI, itemList.transform);
 
@@ -56,16 +66,55 @@ public class InventoryScreen : MonoBehaviour
         }
         
         //Set Initial Item icon and descriptions
-        var item = inventory.ItemSlots[0].Item;
-        itemIcon.sprite = item.Icon;
-        itemDesciption.text = item.Description;
+        if(currentItemSlots.Count > 0)
+        {
+            //Activate objects
+            itemIcon.gameObject.SetActive(true);
+            itemDesciption.gameObject.SetActive(true);
+
+            var item = currentItemSlots[0].Item;
+            itemIcon.sprite = item.Icon;
+            itemDesciption.text = item.Description;
+        }
+        else
+        {
+            //Deactivate objects
+            itemIcon.gameObject.SetActive(false);
+            itemDesciption.gameObject.SetActive(false);
+        }
+        
+    }
+
+    public void SetItemCategory(int indexChange)
+    {
+        selectedCategoryIndex = selectedCategoryIndex + indexChange;
+        //Set Category
+        if(selectedCategoryIndex > Inventory.ItemCategories.Count - 1) //if we go 1 above the index maximum
+        {
+            selectedCategoryIndex = 0;
+        }
+        else if(selectedCategoryIndex < 0) //if we go below zero
+        {
+            selectedCategoryIndex = Inventory.ItemCategories.Count - 1;
+        }
+        
+
+
+        //Update current item slots based on category
+        currentItemSlots = inventory.currentItemSlotsCategory(selectedCategoryIndex);
+
+        //Change Category Test
+        itemCategoryText.text = Inventory.ItemCategories[selectedCategoryIndex];
+
+        //Update category list and current item slots
+        UpdateItemList();
     }
 
     public void ItemHover(ItemSlotUI hoverItemSlotUI)
     {
 
         int hoverItemIndex = hoverItemSlotUI.transform.GetSiblingIndex(); //this returns the index of the item slot
-        var item = inventory.ItemSlots[hoverItemIndex].Item;
+        var item = currentItemSlots[hoverItemIndex].Item;
         itemIcon.sprite = item.Icon;
         itemDesciption.text = item.Description;
           
@@ -74,7 +123,7 @@ public class InventoryScreen : MonoBehaviour
     public void ItemSelected(ItemSlotUI selectedItemSlotUI)
     {
         int selectedItemIndex = selectedItemSlotUI.transform.GetSiblingIndex(); //sets the selected item for use.
-        selectedItemSlot = inventory.ItemSlots[selectedItemIndex];
+        selectedItemSlot = currentItemSlots[selectedItemIndex];
 
         OpenPartyScreen(); //Open party screen to select monster to use item on
         inventoryScreenState = InventoryScreenState.PartyScreen;

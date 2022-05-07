@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1446abf907d79994cbd0ee9e06ced3c8, type: 3}
   m_Name: BindingCrystal
   m_EditorClassIdentifier: 
-  itemName: Binding
+  itemName: Binding Crystal
   description: A crystal used to bind the soul of a monster to a Summoner.
   icon: {fileID: -1465440840, guid: 0f6d3601731942544a030ddf17e2e3df, type: 3}

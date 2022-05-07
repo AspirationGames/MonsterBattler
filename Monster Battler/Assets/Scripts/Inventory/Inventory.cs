@@ -6,14 +6,30 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    [SerializeField] List<ItemSlot> itemSlots;
+    [SerializeField] List<ItemSlot> recoveryItemSlots;
     [SerializeField] List<ItemSlot> crystalSlots;
-    [SerializeField] List<ItemSlot> scrollSlots;
+    [SerializeField] List<ItemSlot> spellSlots; //TMs and HMs
 
+    List<List<ItemSlot>> itemSlots;
 
+    List<ItemSlot> currentItemSlots;
     public event Action InventoryUpdated;
 
-    public List<ItemSlot> ItemSlots => itemSlots;
+    private void Awake() 
+    {
+        itemSlots = new List<List<ItemSlot>>(){recoveryItemSlots, crystalSlots, spellSlots};    
+    }
+
+    public static List<string> ItemCategories {get; set;} = new List<string>()
+    {
+        "RECOVERY ITEMS", "BINDING CRYSTALS", "SPELL BOOKS & SCROLLS"
+    };
+
+    public List<ItemSlot> currentItemSlotsCategory(int itemCategoryIndex)
+    {
+        currentItemSlots = itemSlots[itemCategoryIndex];
+        return currentItemSlots;
+    } 
     
     public static Inventory GetInventory()
     {
@@ -46,13 +62,13 @@ public class Inventory : MonoBehaviour
 
     public void DecreaseQuantity(ItemBase item)
     {
-        var itemSlot = ItemSlots.First(slot => slot.Item == item);
+        var itemSlot = currentItemSlots.First(slot => slot.Item == item);
 
         itemSlot.Quantity--;
 
         if(itemSlot.Quantity == 0)
         {
-            itemSlots.Remove(itemSlot);
+            currentItemSlots.Remove(itemSlot);
         }
 
         InventoryUpdated?.Invoke();
@@ -60,20 +76,16 @@ public class Inventory : MonoBehaviour
 
     public void IncreaseQuantity(ItemBase item)
     {
-        var itemSlot = ItemSlots.First(slot => slot.Item == item);
+        var itemSlot = currentItemSlots.First(slot => slot.Item == item);
 
         if(itemSlot.Quantity == 0)
         {
-            itemSlots.Add(itemSlot);
+            currentItemSlots.Add(itemSlot);
         }
         else
         {
             itemSlot.Quantity++; //note need to figure out what to do if you get more than a single unit of an item.
         }
-
-        
-
-        
 
         InventoryUpdated?.Invoke();
     }

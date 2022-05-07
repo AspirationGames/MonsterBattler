@@ -283,18 +283,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edd13935e78730f45b14cbeec1ef8902, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemSlots:
+  recoveryItemSlots:
   - item: {fileID: 11400000, guid: cb3fd8a94a90516449606c33099da8bc, type: 2}
     quantity: 5
-  - item: {fileID: 11400000, guid: abf554f784aff0c41a875f1b715927cc, type: 2}
-    quantity: 2
-  - item: {fileID: 11400000, guid: d2072a3b894fb1a44805d466b6a77530, type: 2}
-    quantity: 5
-  - item: {fileID: 11400000, guid: abf554f784aff0c41a875f1b715927cc, type: 2}
-    quantity: 2
   - item: {fileID: 11400000, guid: e5289a492fd345045990059e40b8657a, type: 2}
     quantity: 2
   - item: {fileID: 11400000, guid: 29d85fb6665e22d49ade81f025a7ab9d, type: 2}
     quantity: 2
   - item: {fileID: 11400000, guid: 85595d4f822e0bb418b6f9a1b78d7e93, type: 2}
     quantity: 1
+  crystalSlots:
+  - item: {fileID: 11400000, guid: c8d72ee760c7286419102bf38ada5f6a, type: 2}
+    quantity: 10
+  - item: {fileID: 11400000, guid: bbdd762b432d22b46ae5dd5f86551b23, type: 2}
+    quantity: 10
+  spellSlots: []
