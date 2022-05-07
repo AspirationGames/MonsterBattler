@@ -41,6 +41,8 @@ public class InventoryScreen : MonoBehaviour
     {
         SetItemCategory(0); //sets initial item category at index 0
         UpdateItemList();
+        
+
         ItemSlotUI.itemUIHover += ItemHover;
         ItemSlotUI.itemUISelected += ItemSelected;
         inventory.InventoryUpdated += UpdateItemList;
