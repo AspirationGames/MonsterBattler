@@ -102,7 +102,14 @@ public class BattleHud : MonoBehaviour
         yield return new WaitUntil(() => hpBar.HPisUpdating == false); //waits until HP update is complete
     }
 
-    
+    public void ClearData()
+    {
+        if(monster != null) //clears the previously subsribed monster from the below events
+        {
+            monster.OnStatusChanged -= SetStatusImage;
+            monster.OnHPChanged -= UpdateHP;
+        }
+    }
 
     public void SetStatusImage()
     {

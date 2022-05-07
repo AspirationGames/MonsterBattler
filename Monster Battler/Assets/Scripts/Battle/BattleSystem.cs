@@ -311,7 +311,6 @@ public class BattleSystem : MonoBehaviour
     {
 
         //Open Party Screen for items that need you to select a party member
-        partyScreen.gameObject.SetActive(true);
         StartCoroutine(battleDialogueBox.TypeDialog("Select a monster to use item on."));
         
         
@@ -727,35 +726,12 @@ public class BattleSystem : MonoBehaviour
     }
 
 
-    IEnumerator CatchingItemsPlaceholder() //place holder coroutine for catching monsters
+    IEnumerator UseBindingCrystal() //place holder coroutine for catching monsters
     {
 
         battleState = BattleState.Busy;
 
-
-        // for(int i=0; i < turnOrder.Count; i++)
-        // {
-        //     BattleUnit currentUnit = turnOrder[i];
-        //     Monster currentMonster = currentUnit.Monster;
-
-        //     if(selectedItems[battleUnits.IndexOf(currentUnit)] == null)//if no spell was initiated for this turn just continue onto the next turn
-        //     {
-              
-        //         continue;
-        //     }
-        //     else
-        //     {
-        //         BattleUnit targetUnit = selectedTargets[battleUnits.IndexOf(currentUnit)];
-                
-        //         if(targetUnit.Monster.HP <= 0 || !targetUnit.Monster.InBattle)
-        //         {
-        //             continue; //don't use spell if target is dead or gone. Maybe add dialog here later. 
-        //         }
-
-        //         yield return BindingSpell(targetUnit);
-                
-        //     }
-        // }
+        //yield return BindingSpell();
 
         //Check for battle over
 
@@ -782,12 +758,18 @@ public class BattleSystem : MonoBehaviour
     IEnumerator BindingSpell(BattleUnit targetUnit)
     {
 
+        if(isSummonerBattle)
+        {
+            yield return battleDialogueBox.TypeDialog($"That monster is already bound to another summoner");
+            yield break;
+        }
+
         yield return battleDialogueBox.TypeDialog($"{player.Name} used a binding crystal.");
         var summoningCircleObj = Instantiate(summoningCircle, targetUnit.transform.position, Quaternion.identity);
         var summoningCircleSprite = summoningCircleObj.GetComponent<SpriteRenderer>();
 
         //Animations
-         yield return summoningCircleSprite.transform.DORotate(new Vector3 (0f,0f, -5000f), 2f, RotateMode.Fast).WaitForCompletion();
+        yield return summoningCircleSprite.transform.DORotate(new Vector3 (0f,0f, -5000f), 2f, RotateMode.Fast).WaitForCompletion();
         yield return targetUnit.PlayBindingAnimation();
         yield return summoningCircleSprite.DOFade(0,0.5f).WaitForCompletion();
 
@@ -1592,7 +1574,8 @@ public class BattleSystem : MonoBehaviour
             enemyParty.Monsters.Clear();
         }
 
-
+        
+        battleUnits.ForEach(u => u.Hud.ClearData()); //unsubsribes units from events until start of next battle
         turnOrder.Clear(); //reset all units in turn.
         battleParticipants.Clear(); //clear list of battle participants
         playerParty.Monsters.ForEach(m => m.OnBattleOver()); //rests for each monster in party
