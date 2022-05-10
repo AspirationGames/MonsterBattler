@@ -263,6 +263,7 @@ public class InventoryScreen : MonoBehaviour
             //Teach Move
             selectedMonster.LearnMove(newMove);
             yield return DialogManager.Instance.ShowDialogText($"{selectedMonster.Base.MonsterName} learned {spellItem.MoveToLearn.MoveName}.");
+            DecreaseItemQuanity();
         }
         else
         {
@@ -276,37 +277,8 @@ public class InventoryScreen : MonoBehaviour
 
         }
 
-        if(!spellItem.IsBook) //if spell item is not a book we decrease quantity
-        {
-            DecreaseItemQuanity();
-        }
-
         inventoryScreenState = InventoryScreenState.PartyScreen;
 
-    }
-
-    public void OnMoveForget(int moveIndex)
-    {
-        DialogManager.Instance.CloseDialog();
-        if(moveIndex == MonsterBase.MaxNumberOfMoves)
-        {
-            //player doesn't want to learn new move
-            StartCoroutine(DialogManager.Instance.ShowDialogText($"{monsterLearning.Base.MonsterName} did not learn {moveToLearn.MoveName}."));
-        }
-        else
-        {
-            //replace selected move with new move
-            var selectedMove = monsterLearning.Moves[moveIndex].Base;
-            StartCoroutine(DialogManager.Instance.ShowDialogText($"{monsterLearning.Base.MonsterName} forgot {selectedMove.MoveName} and learned {moveToLearn.MoveName}."));
-
-            monsterLearning.Moves[moveIndex] = new Move(moveToLearn); //replaces selected move with instance of the new move
-
-        }
-
-        moveToLearn = null;
-        monsterLearning = null;
-
-        inventoryScreenState = InventoryScreenState.Busy;
     }
 
     IEnumerator ChooseMoveToForget(Monster selectedMonster, MoveBase newMove)
@@ -325,6 +297,33 @@ public class InventoryScreen : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
     }
+
+    public void OnMoveForget(int moveIndex)
+    {
+        DialogManager.Instance.CloseDialog();
+        if(moveIndex == MonsterBase.MaxNumberOfMoves)
+        {
+            //player doesn't want to learn new move
+            StartCoroutine(DialogManager.Instance.ShowDialogText($"{monsterLearning.Base.MonsterName} did not learn {moveToLearn.MoveName}."));
+        }
+        else
+        {
+            //replace selected move with new move
+            var selectedMove = monsterLearning.Moves[moveIndex].Base;
+            StartCoroutine(DialogManager.Instance.ShowDialogText($"{monsterLearning.Base.MonsterName} forgot {selectedMove.MoveName} and learned {moveToLearn.MoveName}."));
+
+            monsterLearning.Moves[moveIndex] = new Move(moveToLearn); //replaces selected move with instance of the new move
+            DecreaseItemQuanity();
+
+        }
+
+        moveToLearn = null;
+        monsterLearning = null;
+
+        inventoryScreenState = InventoryScreenState.Busy;
+    }
+
+    
 
     public ItemBase GetSelectedItem()
     {
