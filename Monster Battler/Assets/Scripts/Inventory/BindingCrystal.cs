@@ -7,6 +7,8 @@ public class BindingCrystal : ItemBase
 {
     [SerializeField] float catchRateModifier = 1;
     [SerializeField] Sprite summoningCircleSprite;
+
+    public override bool CanUsedOutsideBattle => false;
     public override bool CanUse(Monster monster)
     {
         return true;

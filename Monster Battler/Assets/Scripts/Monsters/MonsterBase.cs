@@ -36,6 +36,7 @@ public class MonsterBase : ScriptableObject
 
     [Header("MovePool")]
     [SerializeField] List<LearnableMove> learnableMoves;
+    [SerializeField] List<MoveBase> learnableMovesByItems;
 
     public static int MaxNumberOfMoves {get; set;} = 4;
 
@@ -175,6 +176,11 @@ public class MonsterBase : ScriptableObject
     public List<LearnableMove> LearnableMoves
     {
         get{return learnableMoves;}
+    }
+
+    public List<MoveBase> LearnableMovesByItems
+    {
+        get{return learnableMovesByItems;}
     }
 
 }    

@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
-public enum InventoryScreenState{Inventory, PartyScreen, BindingTargetSelection, Busy}
+public enum InventoryScreenState{Inventory, PartyScreen, BindingTargetSelection, ForgettingMove, Busy}
 public class InventoryScreen : MonoBehaviour
 {
 
@@ -20,6 +21,9 @@ public class InventoryScreen : MonoBehaviour
 
     [SerializeField] Image leftArrow;
     [SerializeField] Image rightArrow;
+
+    [SerializeField] MoveSelectionUI moveSelectionUI;
+    [SerializeField] BattleDialogBox battleDialogueBox; //place holder until we find a better method to implement
     Inventory inventory;
 
     InventoryScreenState inventoryScreenState;
@@ -28,10 +32,10 @@ public class InventoryScreen : MonoBehaviour
     ItemSlot selectedItemSlot;
 
     int selectedCategoryIndex = 0;
-
     List<ItemSlot> currentItemSlots;
-
     public event Action bindingSelected;
+    MoveBase moveToLearn; //new Move monster is trying to learn
+    Monster monsterLearning; //The monster trying to learn a new move
 
     private void Awake() 
     {
@@ -126,17 +130,33 @@ public class InventoryScreen : MonoBehaviour
 
     public void ItemSelected(ItemSlotUI selectedItemSlotUI)
     {
+
+        if(inventoryScreenState != InventoryScreenState.Inventory)
+        {
+            return;
+        }
+
+        inventoryScreenState = InventoryScreenState.Busy;
         int selectedItemIndex = selectedItemSlotUI.transform.GetSiblingIndex(); //sets the selected item for use.
         selectedItemSlot = currentItemSlots[selectedItemIndex];
 
-        if(selectedCategoryIndex == (int)ItemCategory.BindingCrystals) //index "1" is for binding crystal. The Item category enum will return the int index of the Binding Cyrstal enum.
+
+        if(!selectedItemSlot.Item.CanUsedOutsideBattle && GameController.Instance.GameState != GameState.Battle) //if item can't be used outside of battle
         {
-            if(GameController.Instance.GameState != GameState.Battle) //if not in battle
-            {
-                StartCoroutine(DialogManager.Instance.ShowDialogText($"You can't use {selectedItemSlot.Item.ItemName} outside of battles."));
-                return;
-            }
-            //we don't want to open the party screen but instead we should close out of inventory screen and run the binding crystal method from the battle system.
+            StartCoroutine(DialogManager.Instance.ShowDialogText($"You can't use {selectedItemSlot.Item.ItemName} outside of battles."));
+            inventoryScreenState = InventoryScreenState.Inventory;
+            return;
+        }
+        if(!selectedItemSlot.Item.CanUsedInBattle && GameController.Instance.GameState == GameState.Battle) //if the item can't be used in battle
+        {
+            StartCoroutine(battleDialogueBox.TypeDialog($"You can't use {selectedItemSlot.Item.ItemName} during battles."));
+            inventoryScreenState = InventoryScreenState.Inventory;
+            return;
+        }
+            
+        
+        if(selectedCategoryIndex == (int)ItemCategory.BindingCrystals) //Binding crystals use a battle system event
+        {
             
             bindingSelected(); //event notification for battle system
             inventoryScreenState = InventoryScreenState.BindingTargetSelection;
@@ -147,6 +167,9 @@ public class InventoryScreen : MonoBehaviour
 
         OpenPartyScreen(); //Open party screen to select monster to use item on
         inventoryScreenState = InventoryScreenState.PartyScreen;
+        
+
+        
         
     }
 
@@ -189,9 +212,18 @@ public class InventoryScreen : MonoBehaviour
     {
         inventoryScreenState = InventoryScreenState.Busy;
 
+
+        var spellItem = GetSelectedItem() as SpellItem; //this will return null if item is not a spell item
+        
+        if(spellItem != null) //Handles Spell Items
+        {   
+            yield return HandleSpellItems(selectedMonster, spellItem);
+            yield break;
+        }
+        
+        //Use Recovery Items       
         var usedItem = inventory.UseItem(selectedItemSlot, selectedMonster); //this method uses the item but also returns the item used from inventory script
 
-        
         if(usedItem != null && GameController.Instance.GameState != GameState.Battle) //of mpt om batt;e ise Dialog manager and keep in party state
         {
            yield return DialogManager.Instance.ShowDialogText($"You used a {usedItem.ItemName}.");
@@ -206,6 +238,94 @@ public class InventoryScreen : MonoBehaviour
         
     }
 
+    IEnumerator HandleSpellItems(Monster selectedMonster, SpellItem spellItem)
+    {
+        var newMove = spellItem.MoveToLearn;
+        
+
+        if(!spellItem.CanLearnMove(selectedMonster)) //monster can't learn move
+        {
+            yield return DialogManager.Instance.ShowDialogText($"{selectedMonster.Base.MonsterName} cannot learn {spellItem.MoveToLearn.MoveName}.");
+            inventoryScreenState = InventoryScreenState.PartyScreen;
+            yield break;
+        }
+
+        if(selectedMonster.HasMove(newMove)) // monster already knows move
+        {
+            yield return DialogManager.Instance.ShowDialogText($"{selectedMonster.Base.MonsterName} already knows {spellItem.MoveToLearn.MoveName}.");
+            inventoryScreenState = InventoryScreenState.PartyScreen;
+            yield break;
+        }
+
+        
+        if(selectedMonster.Moves.Count < MonsterBase.MaxNumberOfMoves) //if the monster has less than 4 we can teach the move
+        {
+            //Teach Move
+            selectedMonster.LearnMove(newMove);
+            yield return DialogManager.Instance.ShowDialogText($"{selectedMonster.Base.MonsterName} learned {spellItem.MoveToLearn.MoveName}.");
+        }
+        else
+        {
+            //player will need to forget a move
+            yield return DialogManager.Instance.ShowDialogText($"{selectedMonster.Base.MonsterName} wants to learn {newMove.MoveName}.");
+            yield return DialogManager.Instance.ShowDialogText($"But {selectedMonster.Base.MonsterName} already knows {MonsterBase.MaxNumberOfMoves} moves.");
+            yield return DialogManager.Instance.ShowDialogText($"Forget a move so that {selectedMonster.Base.MonsterName} can learn {newMove.MoveName}.");
+            //add in yes or no option
+            yield return ChooseMoveToForget(selectedMonster, newMove);
+
+
+        }
+
+        if(!spellItem.IsBook) //if spell item is not a book we decrease quantity
+        {
+            DecreaseItemQuanity();
+        }
+
+        inventoryScreenState = InventoryScreenState.PartyScreen;
+
+    }
+
+    public void OnMoveForget(int moveIndex)
+    {
+        DialogManager.Instance.CloseDialog();
+        if(moveIndex == MonsterBase.MaxNumberOfMoves)
+        {
+            //player doesn't want to learn new move
+            StartCoroutine(DialogManager.Instance.ShowDialogText($"{monsterLearning.Base.MonsterName} did not learn {moveToLearn.MoveName}."));
+        }
+        else
+        {
+            //replace selected move with new move
+            var selectedMove = monsterLearning.Moves[moveIndex].Base;
+            StartCoroutine(DialogManager.Instance.ShowDialogText($"{monsterLearning.Base.MonsterName} forgot {selectedMove.MoveName} and learned {moveToLearn.MoveName}."));
+
+            monsterLearning.Moves[moveIndex] = new Move(moveToLearn); //replaces selected move with instance of the new move
+
+        }
+
+        moveToLearn = null;
+        monsterLearning = null;
+
+        inventoryScreenState = InventoryScreenState.Busy;
+    }
+
+    IEnumerator ChooseMoveToForget(Monster selectedMonster, MoveBase newMove)
+    {
+        inventoryScreenState = InventoryScreenState.ForgettingMove;
+        yield return DialogManager.Instance.ShowDialogText("Choose a move to forget.", false, false);
+        moveSelectionUI.gameObject.SetActive(true);
+        moveSelectionUI.SetMoveData(selectedMonster.Moves.Select(x => x.Base).ToList(), newMove);
+        moveSelectionUI.SetMonsterImage(selectedMonster);
+        monsterLearning = selectedMonster;
+        moveToLearn = newMove;
+        
+        yield return new WaitUntil(() => inventoryScreenState != InventoryScreenState.ForgettingMove);
+        moveSelectionUI.gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(2f);
+
+    }
+
     public ItemBase GetSelectedItem()
     {
         return selectedItemSlot.Item;
@@ -217,6 +337,11 @@ public class InventoryScreen : MonoBehaviour
     }
     public void DecreaseItemQuanity()
     {
+        if(selectedItemSlot.Item.isReusable) //if it is reusable then we don't decrease quanity
+        {
+            return;
+        }
+
         inventory.DecreaseQuantity(selectedItemSlot.Item);
     }
 
@@ -224,6 +349,12 @@ public class InventoryScreen : MonoBehaviour
     {
 
         partyScreen.gameObject.SetActive(true);
+
+        if(selectedItemSlot.Item is SpellItem)
+        {
+            //show if spell item is usable
+            partyScreen.ShowIfSpellisUsable(selectedItemSlot.Item as SpellItem);
+        }
 
         //GameController.Instance.ShowPartyScreen(); don't think we need this since we aren't changing the game state. 
         //We also don't want to use this because when we Open the party screen during battle we don't want to change the game state. 

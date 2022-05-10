@@ -1227,7 +1227,7 @@ public class BattleSystem : MonoBehaviour
                         {
                             if(monster.Moves.Count < MonsterBase.MaxNumberOfMoves)
                             {
-                                monster.LearnMove(newMove);
+                                monster.LearnMove(newMove.Base);
 
                                 yield return battleDialogueBox.TypeDialog($"{monster.Base.MonsterName} learned {newMove.Base.MoveName}!");
 
@@ -1236,8 +1236,8 @@ public class BattleSystem : MonoBehaviour
                             {
                                 //player will need to forget a move
                                 yield return battleDialogueBox.TypeDialog($"{monster.Base.MonsterName} wants to learn {newMove.Base.MoveName}.");
-                                yield return battleDialogueBox.TypeDialog($"But {monster.Base.MonsterName} already knows too many moves.");
-                                yield return battleDialogueBox.TypeDialog($"Forget a move so that {monster.Base.MonsterName} can learn {newMove.Base.MoveName}?");
+                                yield return battleDialogueBox.TypeDialog($"But {monster.Base.MonsterName} already {MonsterBase.MaxNumberOfMoves} moves.");
+                                yield return battleDialogueBox.TypeDialog($"Forget a move so that {monster.Base.MonsterName} can learn {newMove.Base.MoveName}.");
                                 //add in yes or no option
                                 yield return ChooseMoveToForget(monster, newMove.Base);
                                 

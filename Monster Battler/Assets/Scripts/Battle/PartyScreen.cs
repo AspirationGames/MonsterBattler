@@ -48,6 +48,30 @@ public class PartyScreen : MonoBehaviour
 
     }
 
+    public void ShowIfSpellisUsable(SpellItem spellItem)
+    {
+        for (int i = 0; i < monsters.Count; i++)
+        {
+           string message = spellItem.CanLearnMove(monsters[i]) ? "ABLE !" : "NOT ABLE!";
+
+            if(monsters[i].HasMove(spellItem.MoveToLearn))
+            {
+                message = "ALREADY LEARNED";
+            }
+            
+            
+            memberSlots[i].SetMessageText(message);
+        }
+    }
+
+    public void ClearUIMessages()
+    {
+        for (int i = 0; i < monsters.Count; i++)
+        {   
+            memberSlots[i].SetMessageText("");
+        }
+    }
+
     public void ClosePartyScreen()
     {
         screenClosed?.Invoke();
@@ -61,6 +85,7 @@ public class PartyScreen : MonoBehaviour
             GameController.Instance.ClosePartyScreen();
         }
 
+        ClearUIMessages();
     }
 
 

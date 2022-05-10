@@ -34,7 +34,7 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
         dialogControls.Dialog.SetCallbacks(this);     
     }
 
-    public IEnumerator ShowDialogText(string text, bool waitForInput = false) //simple text messeage not dialogue if set to true the player will still need to give input to close dialogue
+    public IEnumerator ShowDialogText(string text, bool waitForInput = false, bool autoClose = true) //simple text messeage not dialogue if set to true the player will still need to give input to close dialogue
     {
         IsShowing = true;
         dialogBox.SetActive(true);
@@ -50,10 +50,17 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
         yield return new WaitForSeconds(0.5f);
 
 
+        if(autoClose == true)
+        {
+            CloseDialog();
+        }
+        
+    }
 
+    public void CloseDialog()
+    {
         dialogBox.SetActive(false);
         IsShowing = false;
-
     }
     public IEnumerator ShowDialog(Dialog dialog, Action onFinished = null)
     {

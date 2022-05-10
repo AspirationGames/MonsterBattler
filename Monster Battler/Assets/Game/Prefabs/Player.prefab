@@ -299,4 +299,8 @@ MonoBehaviour:
     quantity: 10
   - item: {fileID: 11400000, guid: bbdd762b432d22b46ae5dd5f86551b23, type: 2}
     quantity: 10
-  spellSlots: []
+  spellSlots:
+  - item: {fileID: 11400000, guid: 0b933de1080e0f34f870ab84f8440e7f, type: 2}
+    quantity: 1
+  - item: {fileID: 11400000, guid: 69766a718d0128c4a8f8f54f665f21fe, type: 2}
+    quantity: 5

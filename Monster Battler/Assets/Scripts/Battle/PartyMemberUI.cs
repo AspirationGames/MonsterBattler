@@ -13,6 +13,8 @@ public class PartyMemberUI : MonoBehaviour
     [SerializeField] HPBar hpBar;
     [SerializeField] TextMeshProUGUI hpText;
 
+    [SerializeField] TextMeshProUGUI messageText;
+
     Monster monster;
 
     [SerializeField] Image statusImage;
@@ -21,6 +23,7 @@ public class PartyMemberUI : MonoBehaviour
     {
         monster = mon;
         UpdateData();
+        SetMessageText("");
 
         monster.OnHPChanged += UpdateData;
         monster.OnLevelChanged += UpdateData;
@@ -76,6 +79,11 @@ public class PartyMemberUI : MonoBehaviour
 
             }
         }
+    }
+
+    public void SetMessageText(string message)
+    {
+        messageText.text = message;
     }
     
 }

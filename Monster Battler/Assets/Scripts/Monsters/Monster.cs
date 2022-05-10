@@ -513,14 +513,19 @@ public class Monster
         return Base.LearnableMoves.Where(x => x.MoveLevel == level).FirstOrDefault();
     }
 
-    public void LearnMove(LearnableMove newMove)
+    public void LearnMove(MoveBase newMove)
     {
         if(Moves.Count > MonsterBase.MaxNumberOfMoves)
         {
             return;
         }
 
-        Moves.Add(new Move(newMove.Base));
+        Moves.Add(new Move(newMove));
+    }
+
+    public bool HasMove(MoveBase moveToCheck)
+    {
+        return Moves.Count(m => m.Base == moveToCheck) > 0; //returns true if monster already has move
     }
 
     //Stat Properties
