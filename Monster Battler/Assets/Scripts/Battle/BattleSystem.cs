@@ -743,21 +743,6 @@ public class BattleSystem : MonoBehaviour
             EnemyActionSelection();
 
         }
-
-
-        //Check for battle over after using binding crystal
-        if(!playerParty.HasHealthyMonster()) //player has no healthy monsters
-        {
-            yield return battleDialogueBox.TypeDialog("You Lose!");
-            yield return new WaitForSeconds(1f);
-            BattleOver(false);
-        }
-        else if(!enemyParty.HasHealthyMonster()) //enemy has no healthy monsters
-        {
-            yield return battleDialogueBox.TypeDialog("You Win!");
-            yield return new WaitForSeconds(1f);
-            BattleOver(true);
-        }
         
         
     }
@@ -837,17 +822,20 @@ public class BattleSystem : MonoBehaviour
     IEnumerator UsingBindingCrystal(BattleUnit targetUnit)
     {
         battleState = BattleState.Busy;
+        BindingCrystal bindingCrystal = (BindingCrystal)inventoryScreen.GetSelectedItem();
 
-        yield return battleDialogueBox.TypeDialog($"{player.Name} used a binding crystal.");
+        yield return battleDialogueBox.TypeDialog($"{player.Name} used a {bindingCrystal.ItemName}.");
+        
         var summoningCircleObj = Instantiate(summoningCircle, targetUnit.transform.position, Quaternion.identity);
         var summoningCircleSprite = summoningCircleObj.GetComponent<SpriteRenderer>();
-
+        summoningCircleSprite.sprite = bindingCrystal.SummoningCircleSprite;
         //Animations
         yield return summoningCircleSprite.transform.DORotate(new Vector3 (0f,0f, -5000f), 2f, RotateMode.Fast).WaitForCompletion();
         yield return targetUnit.PlayBindingAnimation();
         yield return summoningCircleSprite.DOFade(0,0.5f).WaitForCompletion();
 
-        int flashCount = AttemptToBindMonster(targetUnit.Monster);
+        
+        int flashCount = AttemptToBindMonster(targetUnit.Monster, bindingCrystal);
                 
         for(int x=0; x< Mathf.Min(flashCount, 3); ++x) //Flashing Circle 
         {
@@ -874,6 +862,21 @@ public class BattleSystem : MonoBehaviour
             yield return battleDialogueBox.TypeDialog($"{targetUnit.Monster.Base.MonsterName} has been added to your party");
             Destroy(summoningCircleSprite);
 
+            //Check for battle over after using binding crystal
+            if(!playerParty.HasHealthyMonster()) //player has no healthy monsters
+            {
+                yield return battleDialogueBox.TypeDialog("You Lose!");
+                yield return new WaitForSeconds(1f);
+                BattleOver(false);
+            }
+            else if(!enemyParty.HasHealthyMonster()) //enemy has no healthy monsters
+            {
+                yield return battleDialogueBox.TypeDialog("You Win!");
+                yield return new WaitForSeconds(1f);
+                BattleOver(true);
+            }
+            
+
         }
         else
         {
@@ -887,10 +890,11 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    int AttemptToBindMonster(Monster monster)
+    int AttemptToBindMonster(Monster monster, BindingCrystal bindingCrystal)
     {
+
         float statusBonus = ConditionsDB.GetStatusBonus(monster.Status);
-        float catchChance = (3 * monster.MaxHP - 2 * monster.HP) * monster.Base.CatchRate * statusBonus / (3 * monster.MaxHP);
+        float catchChance = (3 * monster.MaxHP - 2 * monster.HP) * monster.Base.CatchRate * bindingCrystal.CatchRateModifier * statusBonus / (3 * monster.MaxHP);
 
         if(catchChance >= 255)
         {

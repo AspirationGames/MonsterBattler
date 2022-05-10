@@ -131,7 +131,13 @@ public class InventoryScreen : MonoBehaviour
 
         if(selectedCategoryIndex == (int)ItemCategory.BindingCrystals) //index "1" is for binding crystal. The Item category enum will return the int index of the Binding Cyrstal enum.
         {
+            if(GameController.Instance.GameState != GameState.Battle) //if not in battle
+            {
+                StartCoroutine(DialogManager.Instance.ShowDialogText($"You can't use {selectedItemSlot.Item.ItemName} outside of battles."));
+                return;
+            }
             //we don't want to open the party screen but instead we should close out of inventory screen and run the binding crystal method from the battle system.
+            
             bindingSelected(); //event notification for battle system
             inventoryScreenState = InventoryScreenState.BindingTargetSelection;
             gameObject.SetActive(false); //closes the inventory screen
@@ -200,6 +206,11 @@ public class InventoryScreen : MonoBehaviour
         
     }
 
+    public ItemBase GetSelectedItem()
+    {
+        return selectedItemSlot.Item;
+    }
+
     public void IncreaseQuantity()
     {
         inventory.IncreaseQuantity(selectedItemSlot.Item);
@@ -218,7 +229,6 @@ public class InventoryScreen : MonoBehaviour
         //We also don't want to use this because when we Open the party screen during battle we don't want to change the game state. 
 
     }
-
     public void ResetInventoryState()
     {
         inventoryScreenState = InventoryScreenState.Inventory;
