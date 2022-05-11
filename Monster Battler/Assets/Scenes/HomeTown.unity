@@ -91070,9 +91070,17 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6197021835260261602, guid: 03c501168094cf94fbf9d47e677618ee, type: 3}
+      propertyPath: monsters.Array.data[0].level
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197021835260261602, guid: 03c501168094cf94fbf9d47e677618ee, type: 3}
       propertyPath: monsters.Array.data[1]._base
       value: 
       objectReference: {fileID: 11400000, guid: 424fb588cf7627c4f9b0c80bc5b7d64f, type: 2}
+    - target: {fileID: 6197021835260261602, guid: 03c501168094cf94fbf9d47e677618ee, type: 3}
+      propertyPath: monsters.Array.data[1].level
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 6197021835260261602, guid: 03c501168094cf94fbf9d47e677618ee, type: 3}
       propertyPath: monsters.Array.data[1].personality
       value: 17

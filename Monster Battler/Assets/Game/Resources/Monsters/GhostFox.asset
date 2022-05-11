@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30520e625ab1aac49b844bb99066645f, type: 3}
   m_Name: GhostFox
   m_EditorClassIdentifier: 
-  monsterName: Spooker
+  monsterName: Shirosune
   description: 
   frontSprite: {fileID: 21300000, guid: fec06956677d092489d341430ff6ecbd, type: 3}
   backSprite: {fileID: 0}
@@ -29,3 +29,4 @@ MonoBehaviour:
   growthRate: 0
   dsYield: 0
   learnableMoves: []
+  learnableMovesByItems: []
