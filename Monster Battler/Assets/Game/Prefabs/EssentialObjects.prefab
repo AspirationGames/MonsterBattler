@@ -1094,6 +1094,7 @@ GameObject:
   - component: {fileID: 6221295679950159431}
   - component: {fileID: 6221295679950159429}
   - component: {fileID: 6221295679950159428}
+  - component: {fileID: 4104966767252228199}
   m_Layer: 5
   m_Name: MoveDetails
   m_TagString: Untagged
@@ -1166,6 +1167,40 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4104966767252228199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6221295679950159430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 623b2ad64f57eeb45a7c736273543681, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveTypeImage: {fileID: 6221295680112930511}
+  attackCategoryImage: {fileID: 6221295680796292658}
+  powerText: {fileID: 6221295680240703726}
+  accuracyText: {fileID: 6221295680576073009}
+  apText: {fileID: 6221295681546120674}
+  typeImages:
+  - {fileID: 930024427, guid: 047ba52f81a088c40a7527f6a21ae8df, type: 3}
+  - {fileID: 1290325675, guid: 047ba52f81a088c40a7527f6a21ae8df, type: 3}
+  - {fileID: 906163801, guid: 047ba52f81a088c40a7527f6a21ae8df, type: 3}
+  - {fileID: -1887080000, guid: 047ba52f81a088c40a7527f6a21ae8df, type: 3}
+  - {fileID: -768858005, guid: 047ba52f81a088c40a7527f6a21ae8df, type: 3}
+  - {fileID: -1377512784, guid: 047ba52f81a088c40a7527f6a21ae8df, type: 3}
+  - {fileID: 2136595751, guid: 047ba52f81a088c40a7527f6a21ae8df, type: 3}
+  - {fileID: 2087087167, guid: 047ba52f81a088c40a7527f6a21ae8df, type: 3}
+  - {fileID: -438070909, guid: 047ba52f81a088c40a7527f6a21ae8df, type: 3}
+  - {fileID: -625117047, guid: 047ba52f81a088c40a7527f6a21ae8df, type: 3}
+  - {fileID: 1604308016, guid: 047ba52f81a088c40a7527f6a21ae8df, type: 3}
+  - {fileID: 1013224928, guid: 047ba52f81a088c40a7527f6a21ae8df, type: 3}
+  attackCategoryImages:
+  - {fileID: 1223227978, guid: 2c8b06098dddfec4fab31321697bffe0, type: 3}
+  - {fileID: -493087061, guid: 2c8b06098dddfec4fab31321697bffe0, type: 3}
+  - {fileID: -103309649, guid: 2c8b06098dddfec4fab31321697bffe0, type: 3}
 --- !u!1 &6221295679995232468
 GameObject:
   m_ObjectHideFlags: 0
@@ -1427,6 +1462,7 @@ GameObject:
   - component: {fileID: 6221295680098142093}
   - component: {fileID: 6221295680098142092}
   - component: {fileID: 6221295680098142095}
+  - component: {fileID: 2387187457010387080}
   m_Layer: 5
   m_Name: MoveButton3
   m_TagString: Untagged
@@ -1549,6 +1585,51 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2387187457010387080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6221295680098142081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6221295681799553052}
+          m_TargetAssemblyTypeName: BattleSystem, Assembly-CSharp
+          m_MethodName: OnMoveHover
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 2
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6221295681799553052}
+          m_TargetAssemblyTypeName: BattleSystem, Assembly-CSharp
+          m_MethodName: OnMoveHoverExit
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 2
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &6221295680112930497
 GameObject:
   m_ObjectHideFlags: 0
@@ -1637,6 +1718,7 @@ GameObject:
   - component: {fileID: 6221295680193008563}
   - component: {fileID: 6221295680193008562}
   - component: {fileID: 6221295680193008565}
+  - component: {fileID: 6061171046856529723}
   m_Layer: 5
   m_Name: MoveButton1
   m_TagString: Untagged
@@ -1759,6 +1841,51 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6061171046856529723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6221295680193008567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6221295681799553052}
+          m_TargetAssemblyTypeName: BattleSystem, Assembly-CSharp
+          m_MethodName: OnMoveHover
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6221295681799553052}
+          m_TargetAssemblyTypeName: BattleSystem, Assembly-CSharp
+          m_MethodName: OnMoveHoverExit
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &6221295680197410521
 GameObject:
   m_ObjectHideFlags: 0
@@ -1847,7 +1974,7 @@ GameObject:
   - component: {fileID: 6221295680240703727}
   - component: {fileID: 6221295680240703726}
   m_Layer: 5
-  m_Name: AcurracyText (1)
+  m_Name: Power Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2452,6 +2579,7 @@ GameObject:
   - component: {fileID: 6221295680470070479}
   - component: {fileID: 6221295680470070478}
   - component: {fileID: 6221295680470070465}
+  - component: {fileID: 4192176413645426616}
   m_Layer: 5
   m_Name: MoveButton4
   m_TagString: Untagged
@@ -2574,6 +2702,51 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &4192176413645426616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6221295680470070467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6221295681799553052}
+          m_TargetAssemblyTypeName: BattleSystem, Assembly-CSharp
+          m_MethodName: OnMoveHover
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 3
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6221295681799553052}
+          m_TargetAssemblyTypeName: BattleSystem, Assembly-CSharp
+          m_MethodName: OnMoveHoverExit
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 3
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &6221295680489583523
 GameObject:
   m_ObjectHideFlags: 0
@@ -3118,7 +3291,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 10, y: -40}
+  m_AnchoredPosition: {x: 15.299988, y: -40}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &6221295680576073022
@@ -3183,7 +3356,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -3212,7 +3385,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -169.55202, w: 0}
+  m_margin: {x: -3.017653, y: 0, z: -169.55202, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -3761,7 +3934,7 @@ GameObject:
   - component: {fileID: 6221295680796292659}
   - component: {fileID: 6221295680796292658}
   m_Layer: 5
-  m_Name: MoveType Image (1)
+  m_Name: Pys/Sp attack Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4468,6 +4641,7 @@ GameObject:
   - component: {fileID: 6221295681085206171}
   - component: {fileID: 6221295681085206170}
   - component: {fileID: 6221295681085206173}
+  - component: {fileID: 2017803269913578924}
   m_Layer: 5
   m_Name: MoveButton2
   m_TagString: Untagged
@@ -4590,6 +4764,51 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2017803269913578924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6221295681085206175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6221295681799553052}
+          m_TargetAssemblyTypeName: BattleSystem, Assembly-CSharp
+          m_MethodName: OnMoveHover
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 1
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6221295681799553052}
+          m_TargetAssemblyTypeName: BattleSystem, Assembly-CSharp
+          m_MethodName: OnMoveHoverExit
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 1
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &6221295681105351565
 GameObject:
   m_ObjectHideFlags: 0
@@ -5413,7 +5632,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -5442,7 +5661,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -33.669983, w: 0}
+  m_margin: {x: 3.5147152, y: 0, z: -33.669983, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -6092,6 +6311,7 @@ MonoBehaviour:
   playerImage: {fileID: 6221295681197749252}
   enemyImage: {fileID: 6221295680668440133}
   summoningCircle: {fileID: 6306770569201455278, guid: 4a9aefeac83448542914d7964f1fa487, type: 3}
+  moveDetailsUI: {fileID: 4104966767252228199}
   turnOrder: []
 --- !u!1 &6221295681828603571
 GameObject:

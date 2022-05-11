@@ -33,6 +33,8 @@ public class BattleSystem : MonoBehaviour
 
     [SerializeField] GameObject summoningCircle;
 
+    [SerializeField] MoveDetailsUI moveDetailsUI;
+
     BattleState battleState;
 
     public event Action<bool> OnBattleOver;    
@@ -540,6 +542,28 @@ public class BattleSystem : MonoBehaviour
 
         
 
+    }
+
+    public void OnMoveHover(int moveIndex)
+    {
+        if(battleState == BattleState.PlayerMove1)
+        {
+            Monster monster = battleUnits[0].Monster;
+            Move move = monster.Moves[moveIndex];
+            moveDetailsUI.gameObject.SetActive(true); 
+            moveDetailsUI.ShowMoveDetails(move);
+        }
+        else if(battleState == BattleState.PlayerMove2)
+        {
+            Monster monster = battleUnits[1].Monster;
+            Move move = monster.Moves[moveIndex];
+            moveDetailsUI.gameObject.SetActive(true); 
+            moveDetailsUI.ShowMoveDetails(move);
+        }
+    }
+    public void OnMoveHoverExit()
+    {
+        moveDetailsUI.gameObject.SetActive(false);
     }
 
 

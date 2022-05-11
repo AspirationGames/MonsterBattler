@@ -447,22 +447,6 @@ PrefabInstance:
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
-    - target: {fileID: 1749180314672643208, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
-      propertyPath: itemSlots.Array.size
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1749180314672643208, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
-      propertyPath: itemSlots.Array.data[3].item
-      value: 
-      objectReference: {fileID: 11400000, guid: 9e012e5f5b8159046b5240521844b47c, type: 2}
-    - target: {fileID: 1749180314672643208, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
-      propertyPath: itemSlots.Array.data[7].item
-      value: 
-      objectReference: {fileID: 11400000, guid: 85595d4f822e0bb418b6f9a1b78d7e93, type: 2}
-    - target: {fileID: 1749180314672643208, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
-      propertyPath: itemSlots.Array.data[7].quantity
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2719706079188800092, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -513,78 +497,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3760714493145874395, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
-      propertyPath: monsters.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
-      propertyPath: monsters.Array.data[0]._base
-      value: 
-      objectReference: {fileID: 11400000, guid: 149c32699cedbe04c8af6b598da1c975, type: 2}
-    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
-      propertyPath: monsters.Array.data[0].level
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
-      propertyPath: monsters.Array.data[1]._base
-      value: 
-      objectReference: {fileID: 11400000, guid: 57d0a29cc67460745b766488d455f982, type: 2}
-    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
-      propertyPath: monsters.Array.data[1].level
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
-      propertyPath: monsters.Array.data[2]._base
-      value: 
-      objectReference: {fileID: 11400000, guid: e517362a48ec6f24da07555dc4a1f493, type: 2}
-    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
-      propertyPath: monsters.Array.data[0].personality
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
-      propertyPath: monsters.Array.data[1].personality
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
-      propertyPath: monsters.Array.data[0].naturalSkillSpeed
-      value: 31
-      objectReference: {fileID: 0}
-    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
-      propertyPath: monsters.Array.data[1].naturalSkillSpeed
-      value: 31
-      objectReference: {fileID: 0}
-    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
-      propertyPath: monsters.Array.data[0].developedSkillMaxHP
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
-      propertyPath: monsters.Array.data[0].developedSkillSpeed
-      value: 252
-      objectReference: {fileID: 0}
-    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
-      propertyPath: monsters.Array.data[1].developedSkillMaxHP
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
-      propertyPath: monsters.Array.data[1].developedSkillSpeed
-      value: 252
-      objectReference: {fileID: 0}
-    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
-      propertyPath: monsters.Array.data[0].developedSkillAttack
-      value: 252
-      objectReference: {fileID: 0}
-    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
-      propertyPath: monsters.Array.data[1].developedSkillAttack
-      value: 252
-      objectReference: {fileID: 0}
-    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
-      propertyPath: monsters.Array.data[0].developedSkillSpAttack
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
-      propertyPath: monsters.Array.data[1].developedSkillSpAttack
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6221295680788380489, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
@@ -808,7 +720,7 @@ MonoBehaviour:
     developedSkillSpDefense: 0
     developedSkillSpeed: 0
   - _base: {fileID: 11400000, guid: 424fb588cf7627c4f9b0c80bc5b7d64f, type: 2}
-    level: 6
+    level: 10
     personality: 21
     naturalSkillMaxHP: 14
     naturalSkillAttack: 18
@@ -816,12 +728,12 @@ MonoBehaviour:
     naturalSkillSpAttack: 11
     naturalSkillSpDefense: 16
     naturalSkillSpeed: 24
-    developedSkillMaxHP: 0
-    developedSkillAttack: 0
-    developedSkillDefense: 0
-    developedSkillSpAttack: 0
-    developedSkillSpDefense: 0
-    developedSkillSpeed: 0
+    developedSkillMaxHP: 114
+    developedSkillAttack: 65
+    developedSkillDefense: 80
+    developedSkillSpAttack: 71
+    developedSkillSpDefense: 77
+    developedSkillSpeed: 112
 --- !u!1 &1908092092 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7702003041761851707, guid: bfb193b448fcb64468ea1166b24b1f3a, type: 3}
@@ -855,19 +767,64 @@ MonoBehaviour:
   wildMonsters:
   - _base: {fileID: 11400000, guid: 424fb588cf7627c4f9b0c80bc5b7d64f, type: 2}
     level: 5
-    personality: 0
-    naturalSkillMaxHP: 0
-    naturalSkillAttack: 0
-    naturalSkillDefense: 0
-    naturalSkillSpAttack: 0
-    naturalSkillSpDefense: 0
-    naturalSkillSpeed: 0
-    developedSkillMaxHP: 0
-    developedSkillAttack: 0
-    developedSkillDefense: 0
-    developedSkillSpAttack: 0
-    developedSkillSpDefense: 0
-    developedSkillSpeed: 0
+    personality: 3
+    naturalSkillMaxHP: 8
+    naturalSkillAttack: 7
+    naturalSkillDefense: 3
+    naturalSkillSpAttack: 10
+    naturalSkillSpDefense: 6
+    naturalSkillSpeed: 3
+    developedSkillMaxHP: 32
+    developedSkillAttack: 56
+    developedSkillDefense: 44
+    developedSkillSpAttack: 48
+    developedSkillSpDefense: 26
+    developedSkillSpeed: 90
+  - _base: {fileID: 11400000, guid: e517362a48ec6f24da07555dc4a1f493, type: 2}
+    level: 5
+    personality: 8
+    naturalSkillMaxHP: 8
+    naturalSkillAttack: 10
+    naturalSkillDefense: 13
+    naturalSkillSpAttack: 10
+    naturalSkillSpDefense: 10
+    naturalSkillSpeed: 3
+    developedSkillMaxHP: 32
+    developedSkillAttack: 56
+    developedSkillDefense: 61
+    developedSkillSpAttack: 48
+    developedSkillSpDefense: 84
+    developedSkillSpeed: 90
+  - _base: {fileID: 11400000, guid: 57d0a29cc67460745b766488d455f982, type: 2}
+    level: 5
+    personality: 15
+    naturalSkillMaxHP: 8
+    naturalSkillAttack: 10
+    naturalSkillDefense: 13
+    naturalSkillSpAttack: 10
+    naturalSkillSpDefense: 30
+    naturalSkillSpeed: 12
+    developedSkillMaxHP: 50
+    developedSkillAttack: 86
+    developedSkillDefense: 114
+    developedSkillSpAttack: 81
+    developedSkillSpDefense: 84
+    developedSkillSpeed: 90
+  - _base: {fileID: 11400000, guid: 149c32699cedbe04c8af6b598da1c975, type: 2}
+    level: 5
+    personality: 10
+    naturalSkillMaxHP: 8
+    naturalSkillAttack: 28
+    naturalSkillDefense: 13
+    naturalSkillSpAttack: 10
+    naturalSkillSpDefense: 11
+    naturalSkillSpeed: 28
+    developedSkillMaxHP: 50
+    developedSkillAttack: 86
+    developedSkillDefense: 114
+    developedSkillSpAttack: 81
+    developedSkillSpDefense: 60
+    developedSkillSpeed: 252
 --- !u!1001 &7702003041774230872
 PrefabInstance:
   m_ObjectHideFlags: 0
