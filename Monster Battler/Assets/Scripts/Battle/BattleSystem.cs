@@ -15,7 +15,7 @@ public enum BattleState
     PlayerSwitch1, PlayerSwitch2, 
     PlayerItem1, PlayerItem2,
     EnemyAction1, EnemyAction2, 
-    Busy, PlayerFaintedSwitching, ForgettingMove, BattleOver
+    Busy, PlayerFaintedSwitching, ForgettingMove,BattleOver
     
 }
 public class BattleSystem : MonoBehaviour
@@ -314,17 +314,21 @@ public class BattleSystem : MonoBehaviour
     public void SelectSwitch()
     {
 
-        if(battleState == BattleState.PlayerAction1) battleState = BattleState.PlayerSwitch1;
-
+        if(battleState == BattleState.PlayerAction1)
+        {
+            battleState = BattleState.PlayerSwitch1;
+            StartCoroutine(battleDialogueBox.TypeDialog("Select a monster to switch in."));
+        } 
         else if(battleState == BattleState.PlayerAction2)
         { 
             battleState = BattleState.PlayerSwitch2;
             battleDialogueBox.EnableBackButton(false);
+            StartCoroutine(battleDialogueBox.TypeDialog("Select a monster to switch in."));
         }
         
         partyScreen.gameObject.SetActive(true);
         battleDialogueBox.EnableActionSelector(false);
-        StartCoroutine(battleDialogueBox.TypeDialog("Select a monster to switch in."));
+        
         
         
     }
@@ -865,10 +869,20 @@ public class BattleSystem : MonoBehaviour
             targetUnit.Monster.InBattle = false;
             turnOrder.Remove(targetUnit);
             targetUnit.Hud.gameObject.SetActive(false);
-            playerParty.AddMonster(targetUnit.Monster);
             enemyParty.RemoveMonster(targetUnit.Monster);
 
-            yield return battleDialogueBox.TypeDialog($"{targetUnit.Monster.Base.MonsterName} has been added to your party");
+            if(playerParty.Monsters.Count == 4) //player already has max monsters
+            {
+                //captured monster will be sent to storage
+                yield return battleDialogueBox.TypeDialog($"You can't have more than 4 monsters bound to you at once.");
+                yield return battleDialogueBox.TypeDialog($"{targetUnit.Monster.Base.MonsterName}'s crystal will be teleported to your private storage at the Academy.");
+            }
+            else
+            {
+                playerParty.AddMonster(targetUnit.Monster);
+                yield return battleDialogueBox.TypeDialog($"{targetUnit.Monster.Base.MonsterName} has been added to your party");
+            }
+            
             Destroy(summoningCircleSprite);
 
             //Check for battle over after using binding crystal
