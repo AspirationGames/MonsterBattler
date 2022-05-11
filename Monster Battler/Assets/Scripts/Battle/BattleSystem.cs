@@ -1634,6 +1634,8 @@ public class BattleSystem : MonoBehaviour
         {
             foreach (BattleUnit unit in battleUnits)
             {
+                if(!unit.isActiveAndEnabled) continue;
+                
                 if (unit.IsPlayerMonster && unit.Monster.HP > 0)
                 {
                     targetUnit = unit;
