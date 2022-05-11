@@ -129,6 +129,8 @@ public class BattleSystem : MonoBehaviour
                 //sort party selection screen. This is to account for monster fainting during battle but not being switched (APD code)
                 playerParty.SortParty(incomingMonster, battleUnits.IndexOf(unit));
 
+                yield return battleDialogueBox.TypeDialog($"{player.Name} summoned {unit.Monster.Base.MonsterName}.");
+
             }
             else
             {
@@ -143,21 +145,30 @@ public class BattleSystem : MonoBehaviour
                 unit.Setup(incomingMonster); 
                 unit.Monster.InBattle = true;
                 turnOrder.Add(unit);
+
+                if(isSummonerBattle)
+                {
+                    yield return battleDialogueBox.TypeDialog($"{summoner.Name} summoned {unit.Monster.Base.MonsterName}.");
+                }
+                else if(!isSummonerBattle)
+                {
+                    yield return battleDialogueBox.TypeDialog($"A wild {unit.Monster.Base.MonsterName} appeared infront of you.");
+                }
                 
             }
             
         }
 
-        if(!isSummonerBattle)
-        {
-            yield return battleDialogueBox.TypeDialog($"{player.Name} summoned {battleUnits[0].Monster.Base.MonsterName} and {battleUnits[1].Monster.Base.MonsterName}.");
-            yield return battleDialogueBox.TypeDialog($"A {battleUnits[2].Monster.Base.MonsterName} and {battleUnits[3].Monster.Base.MonsterName} appeared infront of you!");
-        }
-        else if(isSummonerBattle)
-        {
-            yield return battleDialogueBox.TypeDialog($"{player.Name} summoned {battleUnits[0].Monster.Base.MonsterName} and {battleUnits[1].Monster.Base.MonsterName}.");
-            yield return battleDialogueBox.TypeDialog($"{summoner.Name} summoned {battleUnits[2].Monster.Base.MonsterName} and {battleUnits[3].Monster.Base.MonsterName}.");
-        }
+        // if(!isSummonerBattle)
+        // {
+        //     yield return battleDialogueBox.TypeDialog($"{player.Name} summoned {battleUnits[0].Monster.Base.MonsterName} and {battleUnits[1].Monster.Base.MonsterName}.");
+        //     yield return battleDialogueBox.TypeDialog($"A {battleUnits[2].Monster.Base.MonsterName} {battleUnits[3].Monster.Base.MonsterName} appeared infront of you!");
+        // }
+        // else if(isSummonerBattle)
+        // {
+        //     yield return battleDialogueBox.TypeDialog($"{player.Name} summoned {battleUnits[0].Monster.Base.MonsterName} {battleUnits[1]?.Monster.Base.MonsterName}.");
+        //     yield return battleDialogueBox.TypeDialog($"{summoner.Name} summoned {battleUnits[2].Monster.Base.MonsterName} {battleUnits[3].Monster.Base.MonsterName}.");
+        // }
         
 
         escapeAttempts = 0;
@@ -235,7 +246,7 @@ public class BattleSystem : MonoBehaviour
         if(battleState == BattleState.PlayerAction2)
         {
 
-            if(!battleUnits[1].Monster.InBattle) //player unit 2 is dead or missing
+            if(!battleUnits[1].isActiveAndEnabled) //player unit 2 is dead or missing
             {
 
                 battleDialogueBox.EnableActionSelector(false);
@@ -244,7 +255,7 @@ public class BattleSystem : MonoBehaviour
                 battleState = BattleState.EnemyAction1;
                 EnemyActionSelection();
             }
-            else if(!battleUnits[0].Monster.InBattle) //if player unit 1 is missing you also need to enable run button
+            else if(!battleUnits[0].isActiveAndEnabled) //if player unit 1 is missing you also need to enable run button
             {
                 SkipUnit(0);
                 StartCoroutine(battleDialogueBox.TypeDialog($"What will you do?"));
@@ -1067,8 +1078,8 @@ public class BattleSystem : MonoBehaviour
             Monster targetMonster = targetUnit.Monster;
             attackingMove.AP--; 
 
-          
-            if(targetMonster.HP <= 0 || !targetMonster.InBattle) // check if target is alive or has been removed from battle.
+            
+            if(!targetUnit.isActiveAndEnabled || targetMonster.HP <= 0 || !targetMonster.InBattle) // check if target is alive or has been removed from battle.
             {
                 FindNewTarget(attackingUnit, ref targetMonster, ref targetUnit);
             }
