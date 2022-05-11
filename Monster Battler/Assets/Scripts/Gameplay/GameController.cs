@@ -39,6 +39,9 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
+        //create initial save for game
+        SavingSystem.i.Save("saveSlot1");
+
         battleSystem.OnBattleOver += EndBattle;
         partyScreen.Init();
 

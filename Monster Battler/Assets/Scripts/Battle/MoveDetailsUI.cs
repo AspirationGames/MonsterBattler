@@ -42,8 +42,6 @@ public class MoveDetailsUI : MonoBehaviour
         var attackType = move.Base.Category;
         int categoryIndex = (int)attackType;
 
-        Debug.Log(categoryIndex);
-
         attackCategoryImage.sprite = attackCategoryImages[categoryIndex];
     }
 }
