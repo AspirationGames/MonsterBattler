@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 
 public enum ItemCategory{RecoveryItems, BindingCrystals, Spells}
-public class Inventory : MonoBehaviour
+public class Inventory : MonoBehaviour, ISavable
 {
     [SerializeField] List<ItemSlot> recoveryItemSlots;
     [SerializeField] List<ItemSlot> crystalSlots;
@@ -90,6 +90,32 @@ public class Inventory : MonoBehaviour
 
         InventoryUpdated?.Invoke();
     }
+
+    public object CaptureState()
+    {
+        var saveData = new InventorySaveData
+        {
+            sRecoveryItems = recoveryItemSlots.Select(i => i.GetSaveData()).ToList(),
+            sCrystals = crystalSlots.Select(i => i.GetSaveData()).ToList(),
+            sSpells = spellSlots.Select(i => i.GetSaveData()).ToList(),
+        };
+
+        return saveData;
+    }
+
+    public void RestoreState(object state)
+    {
+        var saveData = (InventorySaveData)state;
+
+        recoveryItemSlots = saveData.sRecoveryItems.Select(i => new ItemSlot(i)).ToList();
+        crystalSlots = saveData.sCrystals.Select(i => new ItemSlot(i)).ToList();
+        spellSlots = saveData.sSpells.Select(i => new ItemSlot(i)).ToList();
+
+        itemSlots = new List<List<ItemSlot>>(){recoveryItemSlots, crystalSlots, spellSlots};
+
+        InventoryUpdated?.Invoke();
+    }
+
 }
 
 [Serializable]
@@ -98,15 +124,46 @@ public class ItemSlot
     [SerializeField] ItemBase item;
     [SerializeField] int quantity;
 
+    public ItemSlot(ItemSaveData saveData) //initializer to reload item data
+    {
+        item = ItemDB.GetItemByName(saveData.sItemName);
+        quantity = saveData.sQuantity;
+    }
+
     public ItemBase Item => item;
     public int Quantity
     {
        get  => quantity;
        set  => quantity = value;
-
-
     }
 
+    public ItemSaveData GetSaveData() //get Item Slot save data
+    {
+        var saveData = new ItemSaveData()
+        {
+            sItemName = item.ItemName,
+            sQuantity = quantity
+        };
+
+        return saveData;
+    }
     
+
+}
+
+[Serializable]
+public class ItemSaveData
+{
+    public string sItemName;
+    public int sQuantity;
+}
+
+
+[Serializable]
+public class InventorySaveData //list of our item save data. We should have one per category
+{
+    public List<ItemSaveData> sRecoveryItems;
+    public List<ItemSaveData> sCrystals;
+    public List<ItemSaveData> sSpells;
 
 }

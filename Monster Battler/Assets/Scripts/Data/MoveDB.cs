@@ -17,7 +17,7 @@ public class MoveDB
             
             if(moves.ContainsKey(move.MoveName)) //if the dictionary already contains the name of the move it is trying to add
             {
-                Debug.Log($"Two moves have the {move.MoveName} unable to add duplicate, check game object named {move.name}");
+                Debug.Log($"Two moves have the name {move.MoveName} unable to add duplicate, check game object named {move.name}");
 
             }
 
