@@ -23,6 +23,7 @@ public class PartyMemberUI : MonoBehaviour
     {
         monster = mon;
         UpdateData();
+        SetStatusImage();
         SetMessageText("");
 
         monster.OnHPChanged += UpdateData;
