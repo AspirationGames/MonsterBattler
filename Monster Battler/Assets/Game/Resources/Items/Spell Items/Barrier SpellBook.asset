@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Barrier SpellBook
   m_EditorClassIdentifier: 
   itemName: Book of Knowledge
-  description: Teaches a monster how to create a magical barrier that shields the
-    user from damage. Using this move repeatedly can cause it to fail.
+  description: Teaches a monster the move Barrier. A move that can shield the user
+    from attack
   icon: {fileID: 136823484, guid: 0f6d3601731942544a030ddf17e2e3df, type: 3}
   moveToLearn: {fileID: 11400000, guid: 97715df7f6d643148a41af98aa9a19d9, type: 2}
   isBook: 1

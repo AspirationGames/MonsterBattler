@@ -13,15 +13,20 @@ MonoBehaviour:
   m_Name: SuperSonic
   m_EditorClassIdentifier: 
   moveName: Super Sonic
-  description: 
+  description: 'Using super sonic waves it can confuse its targets. '
   type: 1
+  target: 0
   power: 0
-  accuracy: 55
+  accuracy: 65
   alwaysHits: 0
   ap: 15
+  priority: 0
   category: 2
   effects:
     stageChange: []
     statusEffect: 0
     volatileStatusEffect: 6
-  target: 0
+    weather: 0
+    timeWarp: 0
+    protect: 0
+  secondaryEffects: []

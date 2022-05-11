@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: ScortchingSun
   m_EditorClassIdentifier: 
   moveName: Scortching Sun
-  description: 
-  type: 7
+  description: 'Worships the sun and in return is blessed with its warm embrace during
+    battle. '
+  type: 3
+  target: 1
   power: 0
   accuracy: 0
   alwaysHits: 1
@@ -26,5 +28,6 @@ MonoBehaviour:
     statusEffect: 0
     volatileStatusEffect: 0
     weather: 7
+    timeWarp: 0
+    protect: 0
   secondaryEffects: []
-  target: 1

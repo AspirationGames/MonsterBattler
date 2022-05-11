@@ -211,6 +211,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2320578141089992004, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1398214434, guid: 2aef0c80e99e00a4f9a0ae5f25ea1770, type: 3}
     - target: {fileID: 2320578141089992005, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
       propertyPath: m_Name
       value: Healer NPC

@@ -283,7 +283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6405624a68aa2c84dbc80f26d9d3c7aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  summonerName: Rival
+  summonerName: Academy First Year
   sprite: {fileID: 21300000, guid: 4eef51574e64c3d4c84f239c0e2b6e99, type: 3}
   dialog:
     lines:
@@ -341,7 +341,22 @@ MonoBehaviour:
     developedSkillSpAttack: 0
     developedSkillSpDefense: 0
     developedSkillSpeed: 252
-  - _base: {fileID: 11400000, guid: 424fb588cf7627c4f9b0c80bc5b7d64f, type: 2}
+  - _base: {fileID: 11400000, guid: 57d0a29cc67460745b766488d455f982, type: 2}
+    level: 6
+    personality: 10
+    naturalSkillMaxHP: 31
+    naturalSkillAttack: 0
+    naturalSkillDefense: 0
+    naturalSkillSpAttack: 31
+    naturalSkillSpDefense: 0
+    naturalSkillSpeed: 0
+    developedSkillMaxHP: 252
+    developedSkillAttack: 252
+    developedSkillDefense: 0
+    developedSkillSpAttack: 0
+    developedSkillSpDefense: 0
+    developedSkillSpeed: 0
+  - _base: {fileID: 11400000, guid: 149c32699cedbe04c8af6b598da1c975, type: 2}
     level: 6
     personality: 10
     naturalSkillMaxHP: 0
@@ -353,6 +368,21 @@ MonoBehaviour:
     developedSkillMaxHP: 0
     developedSkillAttack: 252
     developedSkillDefense: 0
+    developedSkillSpAttack: 0
+    developedSkillSpDefense: 0
+    developedSkillSpeed: 252
+  - _base: {fileID: 11400000, guid: 3a52e4b3e3ade3441b1a21cac884d952, type: 2}
+    level: 6
+    personality: 22
+    naturalSkillMaxHP: 31
+    naturalSkillAttack: 0
+    naturalSkillDefense: 31
+    naturalSkillSpAttack: 0
+    naturalSkillSpDefense: 0
+    naturalSkillSpeed: 0
+    developedSkillMaxHP: 252
+    developedSkillAttack: 0
+    developedSkillDefense: 252
     developedSkillSpAttack: 0
     developedSkillSpDefense: 0
     developedSkillSpeed: 252

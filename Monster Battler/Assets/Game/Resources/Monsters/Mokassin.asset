@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30520e625ab1aac49b844bb99066645f, type: 3}
+  m_Name: Mokassin
+  m_EditorClassIdentifier: 
+  monsterName: Mokassin
+  description: 
+  frontSprite: {fileID: 21300000, guid: 8acad5068a0b39243a4fa765775dcf4e, type: 3}
+  backSprite: {fileID: 21300000, guid: 8acad5068a0b39243a4fa765775dcf4e, type: 3}
+  type1: 4
+  type2: 11
+  maxHP: 40
+  attack: 60
+  defense: 45
+  spAttack: 40
+  spDefense: 50
+  speed: 55
+  catchRate: 255
+  expYield: 60
+  growthRate: 2
+  dsYield: 0
+  learnableMoves:
+  - moveBase: {fileID: 11400000, guid: 74049db940c3af84eafff293f604b0e0, type: 2}
+    moveLevel: 1
+  - moveBase: {fileID: 11400000, guid: 70b9ecb3bd4ed584a9ec8fd9348c54da, type: 2}
+    moveLevel: 1
+  - moveBase: {fileID: 11400000, guid: cbab3ba68e90cec4b8be3af4a0a081b3, type: 2}
+    moveLevel: 5
+  - moveBase: {fileID: 11400000, guid: 1a2bd1ffa98218344867de026135f462, type: 2}
+    moveLevel: 10
+  learnableMovesByItems:
+  - {fileID: 11400000, guid: 97715df7f6d643148a41af98aa9a19d9, type: 2}
+  - {fileID: 11400000, guid: 70b9ecb3bd4ed584a9ec8fd9348c54da, type: 2}

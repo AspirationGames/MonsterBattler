@@ -13,15 +13,20 @@ MonoBehaviour:
   m_Name: Petrify
   m_EditorClassIdentifier: 
   moveName: Petrify
-  description: Paralyzes the target with fear
+  description: Paralyzes the target with fear.
   type: 6
+  target: 0
   power: 0
   accuracy: 100
   alwaysHits: 0
   ap: 15
+  priority: 0
   category: 2
   effects:
     stageChange: []
     statusEffect: 4
     volatileStatusEffect: 0
-  target: 0
+    weather: 0
+    timeWarp: 0
+    protect: 0
+  secondaryEffects: []

@@ -15,18 +15,29 @@ MonoBehaviour:
   monsterName: Shirosune
   description: 
   frontSprite: {fileID: 21300000, guid: fec06956677d092489d341430ff6ecbd, type: 3}
-  backSprite: {fileID: 0}
-  type1: 0
-  type2: 0
-  maxHP: 0
-  attack: 0
-  defense: 0
-  spAttack: 0
-  spDefense: 0
-  speed: 0
+  backSprite: {fileID: 21300000, guid: fec06956677d092489d341430ff6ecbd, type: 3}
+  type1: 6
+  type2: 7
+  maxHP: 50
+  attack: 55
+  defense: 50
+  spAttack: 40
+  spDefense: 50
+  speed: 55
   catchRate: 255
-  expYield: 0
-  growthRate: 0
+  expYield: 60
+  growthRate: 2
   dsYield: 0
-  learnableMoves: []
-  learnableMovesByItems: []
+  learnableMoves:
+  - moveBase: {fileID: 11400000, guid: dd7a514fab729454cba15d5bcba39f1a, type: 2}
+    moveLevel: 1
+  - moveBase: {fileID: 11400000, guid: 1a2bd1ffa98218344867de026135f462, type: 2}
+    moveLevel: 1
+  - moveBase: {fileID: 11400000, guid: 86f443dd7462cff48a44c3444074f180, type: 2}
+    moveLevel: 5
+  - moveBase: {fileID: 11400000, guid: 7f7d91a151601ff44b6fdfbe4945e036, type: 2}
+    moveLevel: 15
+  learnableMovesByItems:
+  - {fileID: 11400000, guid: 97715df7f6d643148a41af98aa9a19d9, type: 2}
+  - {fileID: 11400000, guid: 8e9e14c447e9ec24aabc4e2fdc376d02, type: 2}
+  - {fileID: 11400000, guid: 7f7d91a151601ff44b6fdfbe4945e036, type: 2}

@@ -285,18 +285,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recoveryItemSlots:
   - item: {fileID: 11400000, guid: cb3fd8a94a90516449606c33099da8bc, type: 2}
-    quantity: 5
+    quantity: 10
   - item: {fileID: 11400000, guid: e5289a492fd345045990059e40b8657a, type: 2}
-    quantity: 2
+    quantity: 5
   - item: {fileID: 11400000, guid: 29d85fb6665e22d49ade81f025a7ab9d, type: 2}
-    quantity: 2
+    quantity: 5
   - item: {fileID: 11400000, guid: 85595d4f822e0bb418b6f9a1b78d7e93, type: 2}
-    quantity: 1
+    quantity: 5
   - item: {fileID: 11400000, guid: d2072a3b894fb1a44805d466b6a77530, type: 2}
-    quantity: 1
+    quantity: 10
+  - item: {fileID: 11400000, guid: 6f76de78280485848ba6f8ab7e889b3a, type: 2}
+    quantity: 5
   crystalSlots:
   - item: {fileID: 11400000, guid: c8d72ee760c7286419102bf38ada5f6a, type: 2}
-    quantity: 10
+    quantity: 20
   - item: {fileID: 11400000, guid: bbdd762b432d22b46ae5dd5f86551b23, type: 2}
     quantity: 10
   spellSlots:

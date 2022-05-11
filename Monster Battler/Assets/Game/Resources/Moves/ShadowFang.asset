@@ -13,13 +13,20 @@ MonoBehaviour:
   m_Name: ShadowFang
   m_EditorClassIdentifier: 
   moveName: ShadowFang
-  description: 
+  description: Attacks with a vampiric bite.
   type: 5
+  target: 0
   power: 45
   accuracy: 100
+  alwaysHits: 0
   ap: 25
+  priority: 0
   category: 0
   effects:
     stageChange: []
     statusEffect: 0
-  target: 0
+    volatileStatusEffect: 0
+    weather: 0
+    timeWarp: 0
+    protect: 0
+  secondaryEffects: []

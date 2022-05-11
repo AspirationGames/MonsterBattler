@@ -211,10 +211,11 @@ public enum MonsterType
     Water,
     Shadow,
     Necro,
-    Solar,
+    Ice,
     Bug,
     Flying,
-    Earth
+    Earth,
+    Venom,
 
 }
 
@@ -275,17 +276,18 @@ public enum Personality
 public class TypeChart
 {
     static float[][] chart = 
-    {    //                 NOR GRS FIR WAT SHD NEC SOL BUG FLY
-        /*NOR*/ new float[]{1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f},
-        /*GRS*/ new float[]{1f,.5f,.5f, 2f, 1f, 1f, 1f,.5f,.5f},
-        /*FIR*/ new float[]{1f, 2f,.5f,.5f, 1f, 1f, 1f, 2f, 1f},
-        /*WAT*/ new float[]{1f,.5f, 2f,.5f, 1f, 1f, 1f, 1f, 1f},
-        /*SHD*/ new float[]{1f, 1f, 2f, 1f,.5f, 2f, 2f, 1f, 1f},
-        /*NEC*/ new float[]{1f, 1f, 1f, 1f,.5f,.5f,.5f, 1f, 1f},
-        /*SOL*/ new float[]{1f, 1f, 1f, 1f, 2f, 2f, 1f, 1f, 1f},
-        /*BUG*/ new float[]{1f, 2f, 1f, 1f, 1f, 1f, 1f, 1f, 1f},
-        /*FLY*/ new float[]{1f, 2f, 1f, 1f, 1f, 1f, 1f, 1f, 1f},
-        /*ERT*/ new float[]{1f,.5f, 2f, 1f, 1f, 1f, 1f, 1f, 0f},
+    {    //                 NOR GRS FIR WAT SHD NEC ICE BUG FLY ERT VEN
+        /*NOR*/ new float[]{1f, 1f, 1f, 1f,.5f,.5f, 1f, 1f, 1f, 1f, 1f},
+        /*GRS*/ new float[]{1f,.5f,.5f, 2f, 1f, 1f,.5f,.5f,.5f, 2f,.5f},
+        /*FIR*/ new float[]{1f, 2f,.5f,.5f, 2f, 1f, 2f, 2f, 1f,.5f, 1f},
+        /*WAT*/ new float[]{1f,.5f, 2f,.5f, 1f, 1f,.5f, 1f, 1f, 2f, 1f},
+        /*SHD*/ new float[]{2f, 1f, 1f, 1f,.5f,.5f,.5f, 1f, 1f, 1f, 1f},
+        /*NEC*/ new float[]{1f, 1f, 1f, 1f,.5f,.5f, 1f, 1f, 1f, 1f, 1f},
+        /*ICE*/ new float[]{1f, 2f,.5f,.5f, 1f,.5f,.5f, 2f, 2f, 1f, 1f},
+        /*BUG*/ new float[]{1f, 2f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f},
+        /*FLY*/ new float[]{1f, 2f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f},
+        /*ERT*/ new float[]{1f,.5f, 2f, 1f, 1f, 1f, 1f, 1f, 0f, 1f, 2f},
+        /*VEN*/ new float[]{1f, 2f, 1f, 1f,.5f,.5f, 1f, 1f, 1f, 1f, 1f},
         
 
     };

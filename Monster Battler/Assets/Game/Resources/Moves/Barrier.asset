@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Barrier
   m_EditorClassIdentifier: 
   moveName: Barrier
-  description: 
+  description: Protects the user from damage
   type: 1
   target: 1
   power: 0

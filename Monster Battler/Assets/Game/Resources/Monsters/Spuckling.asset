@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30520e625ab1aac49b844bb99066645f, type: 3}
+  m_Name: Spuckling
+  m_EditorClassIdentifier: 
+  monsterName: Spuckling
+  description: 
+  frontSprite: {fileID: 21300000, guid: 87a02fb3cd8d52045b55ca886c04c73b, type: 3}
+  backSprite: {fileID: 21300000, guid: f883ce339cb28df4099fe93906d4defd, type: 3}
+  type1: 4
+  type2: 0
+  maxHP: 55
+  attack: 45
+  defense: 50
+  spAttack: 65
+  spDefense: 65
+  speed: 40
+  catchRate: 255
+  expYield: 60
+  growthRate: 2
+  dsYield: 0
+  learnableMoves:
+  - moveBase: {fileID: 11400000, guid: beec11c45a89d9845a4c28380ad6788f, type: 2}
+    moveLevel: 1
+  - moveBase: {fileID: 11400000, guid: a1f864e9c868eb1468c4b805def211e5, type: 2}
+    moveLevel: 1
+  - moveBase: {fileID: 11400000, guid: 8e9e14c447e9ec24aabc4e2fdc376d02, type: 2}
+    moveLevel: 4
+  - moveBase: {fileID: 11400000, guid: 86f443dd7462cff48a44c3444074f180, type: 2}
+    moveLevel: 15
+  - moveBase: {fileID: 11400000, guid: 7f7d91a151601ff44b6fdfbe4945e036, type: 2}
+    moveLevel: 20
+  learnableMovesByItems:
+  - {fileID: 11400000, guid: 97715df7f6d643148a41af98aa9a19d9, type: 2}
+  - {fileID: 11400000, guid: 8e9e14c447e9ec24aabc4e2fdc376d02, type: 2}
+  - {fileID: 11400000, guid: 7f7d91a151601ff44b6fdfbe4945e036, type: 2}
