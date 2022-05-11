@@ -24,6 +24,8 @@ public class GameController : MonoBehaviour
 
     public static GameController Instance {get; private set;}
 
+    Fader fader;
+
     private void Awake() 
     {
         cameraAnimator = GetComponent<Animator>();
@@ -38,6 +40,8 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
+        fader = FindObjectOfType<Fader>();
+
         battleSystem.OnBattleOver += EndBattle;
         partyScreen.Init();
 
@@ -168,16 +172,28 @@ public class GameController : MonoBehaviour
     private void EndBattle(bool won)
     {
 
-        if(summoner != null && won == true) //if summoner battle
+        if(summoner != null && won) //if summoner battle
         {
             summoner.BattleLost();
             summoner = null;
+        }
+
+        if(!won) //if player lost
+        {
+            StartCoroutine(ReloadLastSave());
         }
 
         gameState = GameState.OverWorld;
         battleSystem.gameObject.SetActive(false);
         
 
+    }
+
+    public IEnumerator ReloadLastSave()
+    {
+        yield return fader.FadeIn(1f);
+        SavingSystem.i.Load("saveSlot1");
+        yield return fader.FadeOut(0.5f);
     }
 
     public void SetCurrentScene(SceneDetails currScene)

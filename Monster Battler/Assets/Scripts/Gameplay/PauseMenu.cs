@@ -48,7 +48,8 @@ public class PauseMenu : MonoBehaviour, PlayerControls.IMenuActions
 
     public void OnLoad()
     {
-        SavingSystem.i.Load("saveSlot1");
+        StartCoroutine( GameController.Instance.ReloadLastSave() );
+        //SavingSystem.i.Load("saveSlot1");
 
     }
 
