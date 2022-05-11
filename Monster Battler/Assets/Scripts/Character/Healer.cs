@@ -16,6 +16,7 @@ public class Healer : MonoBehaviour
         foreach(Monster monster in playerParty.Monsters) //heals each monster in the party
         {
             monster.Heal();
+            monster.CureStatus();
         }
 
         playerParty.PartyUpdated();
