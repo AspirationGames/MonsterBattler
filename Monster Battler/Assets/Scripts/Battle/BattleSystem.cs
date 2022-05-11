@@ -214,17 +214,53 @@ public class BattleSystem : MonoBehaviour
 
    void SelectAction()
     {
+        if(battleState == BattleState.PlayerAction1)
+        {
+            if(!battleUnits[0].Monster.InBattle) //player unit 1 is dead
+            {
+                battleDialogueBox.EnableActionSelector(false);
+                battleDialogueBox.EnableRunButton(false);
+                battleState = BattleState.PlayerAction2; //this should lead to player action 2
 
-        StartCoroutine(battleDialogueBox.TypeDialog($"What will you do?"));
+            }
+            else
+            {
+                StartCoroutine(battleDialogueBox.TypeDialog($"What will you do?"));
+                battleDialogueBox.EnableActionSelector(true);
+                battleDialogueBox.EnableRunButton(true);
+            }
 
-        battleDialogueBox.EnableActionSelector(true);
-        battleDialogueBox.EnableRunButton(true);
+        }
 
         if(battleState == BattleState.PlayerAction2)
         {
+
+            if(!battleUnits[1].Monster.InBattle) //player unit 2 is dead or missing
+            {
+
+                battleDialogueBox.EnableActionSelector(false);
+                battleDialogueBox.EnableRunButton(false);
+                SkipUnit(1);
+                battleState = BattleState.EnemyAction1;
+                EnemyActionSelection();
+            }
+            else if(!battleUnits[0].Monster.InBattle) //if player unit 1 is missing you also need to enable run button
+            {
+                SkipUnit(0);
+                StartCoroutine(battleDialogueBox.TypeDialog($"What will you do?"));
+                battleDialogueBox.EnableActionSelector(true);
+                battleDialogueBox.EnableRunButton(true);
+                battleDialogueBox.EnableBackButton(true);
+            }
+            else
+            {
+                StartCoroutine(battleDialogueBox.TypeDialog($"What will you do?"));
+                battleDialogueBox.EnableActionSelector(true);
+                battleDialogueBox.EnableRunButton(false);
+                battleDialogueBox.EnableBackButton(true);
+            }
             
-            battleDialogueBox.EnableRunButton(false);
-            battleDialogueBox.EnableBackButton(true);
+            
 
             //Disable back button if item was used on Action 1
             if(selectedMoves[0] == null && selectedSwitch[0] == null) //player didn't switch or attack during action 1 so the must have used an item
@@ -247,9 +283,7 @@ public class BattleSystem : MonoBehaviour
 
         for(int i = 0; i < 2; ++i) //passes turn for player 
         {
-            selectedMoves.Insert(i,null);
-            selectedSwitch.Insert(i,null);
-            selectedTargets.Insert(i, null);
+            SkipUnit(i);
         }
         battleDialogueBox.EnableActionSelector(false);
         StartCoroutine(AttemptToFlee());
@@ -529,19 +563,8 @@ public class BattleSystem : MonoBehaviour
         {
             selectedTargets.Insert(0,targetUnit);
             battleDialogueBox.EnableTargetSelector(false);
-
-            if(battleUnits[1].isActiveAndEnabled)//check if player has active second unit
-            {
-                battleState = BattleState.PlayerAction2;
-                SelectAction();
-            }
-            else //player has no active second unit
-            {
-                SkipUnit(1);
-                battleDialogueBox.EnableTargetSelector(false);
-                battleState = BattleState.EnemyAction1;
-                EnemyActionSelection();
-            }
+            battleState = BattleState.PlayerAction2;
+            SelectAction();
             
         }
         else if(battleState == BattleState.PlayerTarget2)
@@ -592,24 +615,11 @@ public class BattleSystem : MonoBehaviour
             // dummy numbers  to allow code to work
             selectedMoves.Insert(0,null);
             selectedTargets.Insert(0,null);
-
             selectedMonster.InBattle = true; //We set the selected monster inbattle to prevent it from being selected again
 
-            if(battleUnits[1].isActiveAndEnabled) //player has an active second unit
-            {
-                partyScreen.gameObject.SetActive(false);
-                battleState = BattleState.PlayerAction2;
-                SelectAction();
-            }
-            else //player has no active second unit
-            {
-                SkipUnit(1);
-                partyScreen.gameObject.SetActive(false);
-                battleDialogueBox.EnableBackButton(false);
-                battleState = BattleState.EnemyAction1;
-                EnemyActionSelection();
-            }
-            
+            partyScreen.gameObject.SetActive(false);
+            battleState = BattleState.PlayerAction2;
+            SelectAction();
             
         }
         else if(battleState == BattleState.PlayerSwitch2)
@@ -796,7 +806,6 @@ public class BattleSystem : MonoBehaviour
 
     void SkipUnit(int i) //sets all action values to null for a given unit inded
     {
-        
         selectedMoves.Insert(i, null);
         selectedTargets.Insert(i, null);
         selectedSwitch.Insert(i,null);
@@ -1188,6 +1197,7 @@ public class BattleSystem : MonoBehaviour
     IEnumerator HandleMonsterKill(BattleUnit faintedUnit)
     {
         //Fainted
+        faintedUnit.Monster.InBattle = false;
         faintedUnit.PlayFaintAnimation();
         faintedUnit.Hud.gameObject.SetActive(false); 
         yield return battleDialogueBox.TypeDialog($"{faintedUnit.Monster.Base.MonsterName} fainted.");
@@ -1497,7 +1507,6 @@ public class BattleSystem : MonoBehaviour
         Monster incomingMonster = enemyParty.FindNextHealthyMonster(); //Place Holder for more robust enemy logic
         
 
-        faintedMonster.InBattle = false;
         incomingMonster.InBattle = true;
         faintedUnit.Setup(incomingMonster);
         battleDialogueBox.SetMoveNames(incomingMonster.Moves);
@@ -1524,7 +1533,7 @@ public class BattleSystem : MonoBehaviour
         Monster faintedMonster = faintedUnit.Monster;
         Monster incomingMonster = selectedSwitch[0];
 
-        faintedMonster.InBattle = false;
+        //incoming monster is set to be in battle at time of selection.
         faintedUnit.Setup(incomingMonster);
         battleDialogueBox.SetMoveNames(incomingMonster.Moves);
         yield return battleDialogueBox.TypeDialog($"Go  {incomingMonster.Base.MonsterName}!");
