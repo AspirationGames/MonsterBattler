@@ -24,8 +24,6 @@ public class GameController : MonoBehaviour
 
     public static GameController Instance {get; private set;}
 
-    Fader fader;
-
     private void Awake() 
     {
         cameraAnimator = GetComponent<Animator>();
@@ -41,8 +39,6 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        fader = FindObjectOfType<Fader>();
-
         battleSystem.OnBattleOver += EndBattle;
         partyScreen.Init();
 
@@ -192,9 +188,9 @@ public class GameController : MonoBehaviour
 
     public IEnumerator ReloadLastSave()
     {
-        yield return fader.FadeIn(1f);
+        yield return Fader.Instance.FadeIn(1f);
         SavingSystem.i.Load("saveSlot1");
-        yield return fader.FadeOut(0.5f);
+        yield return Fader.Instance.FadeOut(0.5f);
     }
 
     public void SetCurrentScene(SceneDetails currScene)

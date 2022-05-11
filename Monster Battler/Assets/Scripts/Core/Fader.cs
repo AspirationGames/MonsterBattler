@@ -9,8 +9,11 @@ public class Fader : MonoBehaviour
     
     Image image;
 
+    public static Fader Instance {get; private set;}
+
     void Awake() 
     {
+        Instance = this;
         image = GetComponent<Image>();    
     }
 

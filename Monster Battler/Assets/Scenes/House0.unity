@@ -205,7 +205,24 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2320578141089992005, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
       propertyPath: m_Name
-      value: Town Elder NPC
+      value: Healer NPC
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992024, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: dialog.lines.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992024, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: dialog.lines.Array.data[0]
+      value: Hi your monsters look like they could use some healing. Let me heal
+        them for you.
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992024, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: dialog.lines.Array.data[1]
+      value: Take care and good luck!
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992024, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: movementPattern.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
       propertyPath: m_RootOrder
@@ -253,6 +270,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+--- !u!1 &459777803 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2320578141089992005, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+  m_PrefabInstance: {fileID: 459777802}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &459777804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 459777803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9fcf70fcffdcbb4385000a13ef1d917, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &591522122
 PrefabInstance:
   m_ObjectHideFlags: 0

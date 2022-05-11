@@ -528,6 +528,13 @@ public class Monster
         return Moves.Count(m => m.Base == moveToCheck) > 0; //returns true if monster already has move
     }
 
+    public void Heal() //fully heal monster
+    {
+        HP = MaxHP;
+        OnHPChanged?.Invoke();
+
+    }
+
     //Stat Properties
     
     public int MaxHP {get; private set;}

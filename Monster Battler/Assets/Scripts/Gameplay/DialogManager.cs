@@ -73,7 +73,9 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
         onDialogFinished = onFinished;
         dialogBox.SetActive(true);
         dialogControls.Enable();
-        StartCoroutine(TypeDialog(dialog.Lines[0]));
+        
+        yield return TypeDialog(dialog.Lines[0]);
+        //StartCoroutine(TypeDialog(dialog.Lines[0])); //old line commented out for healer script
     }
 
     public void OnConfirm(InputAction.CallbackContext context)

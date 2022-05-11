@@ -129,6 +129,11 @@ public class MonsterParty : MonoBehaviour
 
     }
 
+    public void PartyUpdated() //used to trigger update event from other scripts
+    {
+        OnUpdated?.Invoke();
+    }
+
     public static MonsterParty GetPlayerParty()
     {
         return FindObjectOfType<PlayerController>().GetComponent<MonsterParty>();

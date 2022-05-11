@@ -9,19 +9,28 @@ public class NPCController : MonoBehaviour, Interactable
     [SerializeField] List<Vector2> movementPattern;
     [SerializeField] float timeBetweenPattern;
     Character character;
-
+    Healer healer;
     NPCState npcState;
     float idleTime = 0f;
     int currentPattern = 0;
 
     void Awake() 
     {
-        character = GetComponent<Character>();    
+        character = GetComponent<Character>();
+        healer = GetComponent<Healer>();    
     }
     public void Interact(Transform initiator)
     {   
+        
         if(npcState == NPCState.Idle)
         {
+            if(healer != null) //npc is a healer
+            {
+                character.LookTowards(initiator.position);
+                StartCoroutine(healer.Heal(initiator, dialog));
+                return;
+            }
+
             npcState = NPCState.Dialog;
             character.LookTowards(initiator.position);
             StartCoroutine( DialogManager.Instance.ShowDialog(dialog, () => 
