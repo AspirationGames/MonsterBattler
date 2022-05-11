@@ -75,6 +75,8 @@ public class Character : MonoBehaviour
     public void HandleUpdate()
     {
         characterAnimator.IsMoving = IsMoving;
+
+        
     }
 
     bool IsPathClear(Vector3 targetPosition)
