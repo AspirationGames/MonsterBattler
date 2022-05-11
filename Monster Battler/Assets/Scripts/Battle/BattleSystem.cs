@@ -758,6 +758,8 @@ public class BattleSystem : MonoBehaviour
 
         }
         
+        //After binding target is selected make sure to reset inventory state
+        inventoryScreen.ResetInventoryState();
         
     }
 

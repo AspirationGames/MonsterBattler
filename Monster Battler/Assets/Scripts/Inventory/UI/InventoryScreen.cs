@@ -157,7 +157,7 @@ public class InventoryScreen : MonoBehaviour
         
         if(selectedCategoryIndex == (int)ItemCategory.BindingCrystals) //Binding crystals use a battle system event
         {
-            
+            Debug.Log("binding crystal selected");
             bindingSelected(); //event notification for battle system
             inventoryScreenState = InventoryScreenState.BindingTargetSelection;
             gameObject.SetActive(false); //closes the inventory screen
