@@ -349,6 +349,11 @@ public class InventoryScreen : MonoBehaviour
 
         partyScreen.gameObject.SetActive(true);
 
+        if(GameController.Instance.GameState == GameState.Battle) //if in battle we show message in battle dialog box
+        {
+            StartCoroutine(battleDialogueBox.TypeDialog($"Select a monster to use {selectedItemSlot.Item.ItemName}."));
+        }
+
         if(selectedItemSlot.Item is SpellItem)
         {
             //show if spell item is usable

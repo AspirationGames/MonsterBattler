@@ -382,13 +382,14 @@ public class BattleSystem : MonoBehaviour
                 {
                     inventoryScreen.ResetInventoryState(); //resets inventory screen state to Inventory
                     partyScreen.gameObject.SetActive(false);
+                    SelectItem();
                     break;
                 }
                 else if(inventoryScreen.InventoryScreenState == InventoryScreenState.BindingTargetSelection)
                 {
                     inventoryScreen.ResetInventoryState();
                     battleDialogueBox.EnableTargetSelector(false);
-                    inventoryScreen.gameObject.SetActive(true); //re-open inventory
+                    SelectItem();
                     break;
                 }
                 battleState = BattleState.PlayerAction1;
@@ -443,13 +444,14 @@ public class BattleSystem : MonoBehaviour
                 {
                     inventoryScreen.ResetInventoryState(); //resets inventory screen state to Inventory
                     partyScreen.gameObject.SetActive(false);
+                    SelectItem();
                     break;
                 }
                 else if(inventoryScreen.InventoryScreenState == InventoryScreenState.BindingTargetSelection)
                 {
                     inventoryScreen.ResetInventoryState();
                     battleDialogueBox.EnableTargetSelector(false);
-                    inventoryScreen.gameObject.SetActive(true); //re-open inventory
+                    SelectItem();
                     break;
                 }
                 battleState = BattleState.PlayerAction2;
@@ -688,12 +690,12 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator SetItemTarget(Monster selectedMonster)
     {
-        yield return battleDialogueBox.TypeDialog("Select a monster to use item on.");
+        
 
         if(!inventoryScreen.GetCanUseItem(selectedMonster)) //if the slected monster can't use the selected item
         {
             yield return battleDialogueBox.TypeDialog($"{selectedMonster} can't use that item.");
-            yield return battleDialogueBox.TypeDialog("Select a monster to use item on.");
+            yield return battleDialogueBox.TypeDialog($"select a monster to use {inventoryScreen.GetSelectedItem().ItemName}.");
             yield break;
         }
         
@@ -862,8 +864,11 @@ public class BattleSystem : MonoBehaviour
     {
         battleState = BattleState.Busy;
 
+        var item = inventoryScreen.GetSelectedItem();
         yield return inventoryScreen.UseItem(itemTarget);
-        yield return battleDialogueBox.TypeDialog($"{player.Name} used an item on {itemTarget.Base.MonsterName}.");
+        yield return battleDialogueBox.TypeDialog($"{player.Name} used an {item.ItemName} on {itemTarget.Base.MonsterName}.");
+
+        inventoryScreen.ResetInventoryState();
     }
 
 
@@ -948,6 +953,8 @@ public class BattleSystem : MonoBehaviour
             Destroy(summoningCircleSprite);
 
         }
+
+        inventoryScreen.ResetInventoryState();
     }
 
     int AttemptToBindMonster(Monster monster, BindingCrystal bindingCrystal)
@@ -1635,7 +1642,7 @@ public class BattleSystem : MonoBehaviour
             foreach (BattleUnit unit in battleUnits)
             {
                 if(!unit.isActiveAndEnabled) continue;
-                
+
                 if (unit.IsPlayerMonster && unit.Monster.HP > 0)
                 {
                     targetUnit = unit;
@@ -1675,8 +1682,9 @@ public class BattleSystem : MonoBehaviour
         battleState = BattleState.Busy;
         ++ escapeAttempts;
 
-        int playerSpeed = battleUnits[0].Monster.Speed + battleUnits[1].Monster.Speed;
-        int enemeySpeed = battleUnits[2].Monster.Speed + battleUnits[3].Monster.Speed;
+        
+        int playerSpeed = playerParty.Monsters[UnityEngine.Random.Range(0, playerParty.Monsters.Count)].Speed;
+        int enemeySpeed = enemyParty.Monsters[UnityEngine.Random.Range(0, enemyParty.Monsters.Count)].Speed;
 
         if(enemeySpeed < playerSpeed)
         {
