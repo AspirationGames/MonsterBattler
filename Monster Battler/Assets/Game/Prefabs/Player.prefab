@@ -152,8 +152,53 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsters:
+  - _base: {fileID: 11400000, guid: 149c32699cedbe04c8af6b598da1c975, type: 2}
+    level: 17
+    personality: 13
+    naturalSkillMaxHP: 31
+    naturalSkillAttack: 31
+    naturalSkillDefense: 31
+    naturalSkillSpAttack: 31
+    naturalSkillSpDefense: 31
+    naturalSkillSpeed: 31
+    developedSkillMaxHP: 252
+    developedSkillAttack: 0
+    developedSkillDefense: 0
+    developedSkillSpAttack: 0
+    developedSkillSpDefense: 0
+    developedSkillSpeed: 252
+  - _base: {fileID: 11400000, guid: e517362a48ec6f24da07555dc4a1f493, type: 2}
+    level: 17
+    personality: 15
+    naturalSkillMaxHP: 31
+    naturalSkillAttack: 31
+    naturalSkillDefense: 31
+    naturalSkillSpAttack: 31
+    naturalSkillSpDefense: 31
+    naturalSkillSpeed: 31
+    developedSkillMaxHP: 252
+    developedSkillAttack: 0
+    developedSkillDefense: 0
+    developedSkillSpAttack: 0
+    developedSkillSpDefense: 0
+    developedSkillSpeed: 252
+  - _base: {fileID: 11400000, guid: 57d0a29cc67460745b766488d455f982, type: 2}
+    level: 17
+    personality: 15
+    naturalSkillMaxHP: 31
+    naturalSkillAttack: 31
+    naturalSkillDefense: 31
+    naturalSkillSpAttack: 31
+    naturalSkillSpDefense: 31
+    naturalSkillSpeed: 31
+    developedSkillMaxHP: 252
+    developedSkillAttack: 0
+    developedSkillDefense: 0
+    developedSkillSpAttack: 0
+    developedSkillSpDefense: 0
+    developedSkillSpeed: 252
   - _base: {fileID: 11400000, guid: 424fb588cf7627c4f9b0c80bc5b7d64f, type: 2}
-    level: 5
+    level: 17
     personality: 2
     naturalSkillMaxHP: 31
     naturalSkillAttack: 31

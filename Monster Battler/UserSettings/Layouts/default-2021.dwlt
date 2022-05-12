@@ -120,7 +120,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 57
+  controlID: 87138
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -171,7 +171,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 200}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 58
+  controlID: 87139
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -273,8 +273,8 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 278
-    y: 73
+    x: 1
+    y: 19
     width: 1537
     height: 770
   m_ViewDataDictionary: {fileID: 0}
@@ -291,7 +291,7 @@ MonoBehaviour:
   m_TextureFilterMode: 0
   m_TextureHideFlags: 61
   m_RenderIMGUI: 1
-  m_EnterPlayModeBehavior: 0
+  m_EnterPlayModeBehavior: 1
   m_UseMipMap: 0
   m_VSyncEnabled: 0
   m_Gizmos: 0
@@ -314,7 +314,7 @@ MonoBehaviour:
     m_HSlider: 0
     m_VSlider: 0
     m_IgnoreScrollWheelUntilClicked: 0
-    m_EnableMouseInput: 1
+    m_EnableMouseInput: 0
     m_EnableSliderZoomHorizontal: 0
     m_EnableSliderZoomVertical: 0
     m_UniformScale: 1
@@ -322,24 +322,24 @@ MonoBehaviour:
     m_DrawArea:
       serializedVersion: 2
       x: 0
-      y: 0
-      width: 1537
-      height: 770
-    m_Scale: {x: 0.712963, y: 0.712963}
-    m_Translation: {x: 768.5, y: 385}
+      y: 21
+      width: 2560
+      height: 1267
+    m_Scale: {x: 1, y: 1}
+    m_Translation: {x: 1280, y: 633.5}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -1077.8961
-      y: -540
-      width: 2155.7922
-      height: 1080
+      x: -1280
+      y: -633.5
+      width: 2560
+      height: 1267
     m_MinimalGUI: 1
-  m_defaultScale: 0.712963
-  m_LastWindowPixelSize: {x: 1537, y: 770}
+  m_defaultScale: 1
+  m_LastWindowPixelSize: {x: 2560, y: 1288}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 01000000000000000000
@@ -376,23 +376,23 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 9ee9ffff
-      m_LastClickedID: -5730
-      m_ExpandedIDs: b0e9ffff36ecffff18f9ffffa8f9ffff06fbffff388900005a8b0000
+      m_SelectedIDs: 
+      m_LastClickedID: 0
+      m_ExpandedIDs: a677efff9c89efff909aefff4e56f0ff9e28f1ff226cf1ff926ef1ff20e4f1ff2ce4f1ff26ebf1ff78eef1ff1aeff1ff1228f2ff1e28f2ff347bf2ff8c7cf2ff107ef2ff78e3f2ff1af3f2ffe4fdf2ff0c0df3ff0418f3ff101cf3ffd655f3ffba63f3ff6675f3ffb676f3ffb686f3ff5288f3ff5898f3ff8e9af3ff44aafeff04abfeff00b0feff06b0feff36b0feff42b0feffd2bcfeff60eafeff0ef0fffff8fafffff4ffffffe8630000843103000a3e0300924a0300d8de0300a0df0300bcdf030036cd040052cd0400
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: SummonerNPCGirl (1)
-        m_OriginalName: SummonerNPCGirl (1)
+        m_Name: 
+        m_OriginalName: 
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: -5730
+        m_UserData: 0
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 0
+        m_OriginalEventType: 11
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 6}
       m_SearchString: 
@@ -649,9 +649,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 58.36192, y: -57.555542, z: -0.24034794}
+    m_Target: {x: 61.095394, y: -59.027134, z: -0.073985614}
     speed: 2
-    m_Value: {x: 58.36192, y: -57.555542, z: -0.24034794}
+    m_Value: {x: 61.095394, y: -59.027134, z: -0.073985614}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -702,9 +702,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 12.9329
+    m_Target: 7.867144
     speed: 2
-    m_Value: 12.9329
+    m_Value: 7.867144
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -770,22 +770,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Game/Prefabs
+    - Assets/Game/Resources/Monsters
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 48
   m_LastFolders:
-  - Assets/Game/Prefabs
+  - Assets/Game/Resources/Monsters
   m_LastFoldersGridSize: 48
   m_LastProjectPath: C:\Users\apdia\Documents\GitHub\MonsterBattler\Monster Battler
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 98750000
-    m_LastClickedID: 30104
-    m_ExpandedIDs: 00000000387500003a7500003c7500003e75000040750000b075000000ca9a3b
+    scrollPos: {x: 0, y: 89}
+    m_SelectedIDs: a6800000
+    m_LastClickedID: 32934
+    m_ExpandedIDs: 000000003e800000408000004480000046800000b280000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -813,7 +813,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000387500003a7500003c7500003e75000040750000
+    m_ExpandedIDs: 000000003e800000408000004480000046800000b280000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -840,8 +840,8 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: c6230000d06200001a680000f4600000a067000094650000e6d5000028670000628f000068290000e06a00004867000034870000c0680000d87e0000227a0000ca69000012680000ca680000f2800000aa4b02008c6a000000000000286e0000d6bf000064a2000058720000
+    m_HadKeyboardFocusLastEvent: 0
+    m_ExpandedInstanceIDs: c6230000d06200001a680000f4600000a067000094650000e6d5000028670000628f000068290000e06a00004867000034870000c0680000d87e0000227a0000ca69000012680000ca680000f2800000aa4b02008c6a000000000000286e0000d6bf000064a20000587200009274000094740000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

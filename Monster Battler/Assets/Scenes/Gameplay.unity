@@ -499,6 +499,150 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[0]._base
+      value: 
+      objectReference: {fileID: 11400000, guid: e517362a48ec6f24da07555dc4a1f493, type: 2}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[0].level
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[1]._base
+      value: 
+      objectReference: {fileID: 11400000, guid: 149c32699cedbe04c8af6b598da1c975, type: 2}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[1].level
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[2]._base
+      value: 
+      objectReference: {fileID: 11400000, guid: 57d0a29cc67460745b766488d455f982, type: 2}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[2].level
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[3]._base
+      value: 
+      objectReference: {fileID: 11400000, guid: 424fb588cf7627c4f9b0c80bc5b7d64f, type: 2}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[3].level
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[1].personality
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[2].personality
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[3].personality
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[1].naturalSkillMaxHP
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[1].naturalSkillSpeed
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[2].naturalSkillMaxHP
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[2].naturalSkillSpeed
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[3].naturalSkillMaxHP
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[3].naturalSkillSpeed
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[1].naturalSkillAttack
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[2].naturalSkillAttack
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[3].naturalSkillAttack
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[1].developedSkillMaxHP
+      value: 252
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[1].developedSkillSpeed
+      value: 252
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[1].naturalSkillDefense
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[2].developedSkillMaxHP
+      value: 252
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[2].developedSkillSpeed
+      value: 252
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[2].naturalSkillDefense
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[3].developedSkillMaxHP
+      value: 252
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[3].developedSkillSpeed
+      value: 252
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[3].naturalSkillDefense
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[1].naturalSkillSpAttack
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[2].naturalSkillSpAttack
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[3].naturalSkillSpAttack
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[1].naturalSkillSpDefense
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[2].naturalSkillSpDefense
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[3].naturalSkillSpDefense
+      value: 31
+      objectReference: {fileID: 0}
     - target: {fileID: 6221295680788380489, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: m_RootOrder
       value: 4

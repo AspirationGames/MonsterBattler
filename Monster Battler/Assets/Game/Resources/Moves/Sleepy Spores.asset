@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: Sleepy Spores
   description: Releases spores from it's body that puts targets to sleep.
-  type: 0
+  type: 2
   target: 0
   power: 0
   accuracy: 75
