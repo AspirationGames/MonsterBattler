@@ -164,7 +164,7 @@ public class GameController : MonoBehaviour
     public void OnEnterSummonerFOV(SummonerController summoner)
     {
         gameState = GameState.CutScene;
-        StartCoroutine(summoner.TriggerMageBattle(playerController));
+        StartCoroutine(summoner.TriggerSummonerBattle(playerController));
     }
     
     private void EndBattle(bool won)

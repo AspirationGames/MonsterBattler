@@ -33,26 +33,24 @@ public class SummonerController : MonoBehaviour, Interactable, ISavable
         character.HandleUpdate();
     }
 
-    public void Interact(Transform initiator)
+    public IEnumerator Interact(Transform initiator)
     {
         character.LookTowards(initiator.position);
 
         if(!battleLost)
         {
-            StartCoroutine(DialogManager.Instance.ShowDialog(dialog, () => 
-            {
+            yield return DialogManager.Instance.ShowDialog(dialog);
             GameController.Instance.StartSummonerBattle(this);
-            }));
         }
         else
         {
-            StartCoroutine(DialogManager.Instance.ShowDialog(postBattleDialog));
+            yield return DialogManager.Instance.ShowDialog(postBattleDialog);
         }
 
         
     }
 
-    public IEnumerator TriggerMageBattle(PlayerController player)
+    public IEnumerator TriggerSummonerBattle(PlayerController player)
     {
         //Exclamation Mark
         exclamation.SetActive(true);
@@ -66,14 +64,8 @@ public class SummonerController : MonoBehaviour, Interactable, ISavable
         yield return character.Move(moveVector);
 
         //Dialog and Start Battle
-        StartCoroutine( DialogManager.Instance.ShowDialog(dialog, () => 
-        { 
-            //Start Battle
-            GameController.Instance.StartSummonerBattle(this);
-             
-        } ) );
-
-        
+        yield return  DialogManager.Instance.ShowDialog(dialog);
+        GameController.Instance.StartSummonerBattle(this);
         
     }
 

@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions, IS
         }
         else if(context.performed)
         {
-            Interact();
+           StartCoroutine( Interact() );
         }
             
     }
@@ -105,7 +105,7 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions, IS
         
     }
 
-    void Interact()
+    IEnumerator Interact()
     {
         var faceDirection = new Vector3(character.CharacterAnimator.MoveX, character.CharacterAnimator.MoveY);
 
@@ -117,7 +117,7 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions, IS
         
         if (interactableCollider != null)
         {
-            interactableCollider.GetComponent<Interactable>()?.Interact(transform); //finds Interactable interace. Any interactable items should have this interface attached to their class
+            yield return interactableCollider.GetComponent<Interactable>()?.Interact(transform); //finds Interactable interace. Any interactable items should have this interface attached to their class
         }
 
     }

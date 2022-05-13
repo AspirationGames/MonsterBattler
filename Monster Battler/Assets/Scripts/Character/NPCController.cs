@@ -19,25 +19,24 @@ public class NPCController : MonoBehaviour, Interactable
         character = GetComponent<Character>();
         healer = GetComponent<Healer>();    
     }
-    public void Interact(Transform initiator)
+    public IEnumerator Interact(Transform initiator)
     {   
         
         if(npcState == NPCState.Idle)
         {
-            if(healer != null) //npc is a healer
+            if(healer != null) //npc is a healer.. this is place holder code
             {
                 character.LookTowards(initiator.position);
                 StartCoroutine(healer.Heal(initiator, dialog));
-                return;
+                yield break;
             }
 
             npcState = NPCState.Dialog;
             character.LookTowards(initiator.position);
-            StartCoroutine( DialogManager.Instance.ShowDialog(dialog, () => 
-            {
-                idleTime = 0f;
-                npcState = NPCState.Idle;
-            }));
+            
+            yield return DialogManager.Instance.ShowDialog(dialog);
+            idleTime = 0f;
+            npcState = NPCState.Idle;
         }
         
     }

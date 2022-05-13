@@ -17,12 +17,7 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
 
     public event Action OnDialogStart;
     public event Action OnDialogEnd;
-
-    Dialog dialog;
-    Action onDialogFinished;
-    int currentLine = 0;
-
-    bool isTyping;
+    bool isConfirmed;
 
     PlayerControls dialogControls;
 
@@ -62,42 +57,37 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
         dialogBox.SetActive(false);
         IsShowing = false;
     }
-    public IEnumerator ShowDialog(Dialog dialog, Action onFinished = null)
+    public IEnumerator ShowDialog(Dialog dialog)
     {
         yield return new WaitForEndOfFrame();
         
         OnDialogStart?.Invoke();
-
-        IsShowing = true;
-        this.dialog = dialog;
-        onDialogFinished = onFinished;
         dialogBox.SetActive(true);
+        IsShowing = true;
         dialogControls.Enable();
         
-        yield return TypeDialog(dialog.Lines[0]);
-        //StartCoroutine(TypeDialog(dialog.Lines[0])); //old line commented out for healer script
+        
+        foreach(var line in dialog.Lines)
+        {
+            yield return TypeDialog(line);
+            yield return new WaitUntil(() => isConfirmed);
+
+        }
+        
+        dialogBox.SetActive(false);
+        IsShowing = false;
+        OnDialogEnd?.Invoke();
+        dialogControls.Disable();
+        
+        //yield return TypeDialog(dialog.Lines[0]); //removing for now to test foreah loop
+        
     }
 
     public void OnConfirm(InputAction.CallbackContext context)
     {
         
-        if(!isTyping && context.performed && GameController.Instance.GameState == GameState.Dialog)
-        {
-            ++currentLine;
-            if(currentLine < dialog.Lines.Count)
-            {
-                StartCoroutine(TypeDialog(dialog.Lines[currentLine]));
-            }
-            else //close dialog
-            {
-                currentLine = 0;
-                IsShowing = false;
-                dialogBox.SetActive(false);
-                onDialogFinished?.Invoke(); //NPC action
-                OnDialogEnd?.Invoke(); //Player Action
-                dialogControls.Disable();
-            }
-        }
+        isConfirmed = context.performed;
+        
     }
 
     public void HandleUpdate()
@@ -108,8 +98,6 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
 
     public IEnumerator TypeDialog(string line)
     {
-        isTyping = true;
-
         dialogText.text = "";
         foreach(var letter in line.ToCharArray()) //loops through each letter in string 1 by 1
         {
@@ -117,8 +105,6 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
             
             yield return new WaitForSeconds(1f/lettersPerSecond); //waits for a portion of a second
         }
-
-        isTyping = false;
         
     }
 
