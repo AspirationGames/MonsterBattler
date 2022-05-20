@@ -109,7 +109,7 @@ public class InventoryScreen : MonoBehaviour
 
 
         //Update current item slots based on category
-        currentItemSlots = inventory.currentItemSlotsCategory(selectedCategoryIndex);
+        currentItemSlots = inventory.SetCurrentItemSlots(selectedCategoryIndex);
 
         //Change Category Test
         itemCategoryText.text = Inventory.ItemCategories[selectedCategoryIndex];

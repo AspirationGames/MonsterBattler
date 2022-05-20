@@ -26,7 +26,7 @@ public class Inventory : MonoBehaviour, ISavable
         "RECOVERY ITEMS", "BINDING CRYSTALS", "SPELL BOOKS & SCROLLS"
     };
 
-    public List<ItemSlot> currentItemSlotsCategory(int itemCategoryIndex)
+    public List<ItemSlot> SetCurrentItemSlots(int itemCategoryIndex)
     {
         currentItemSlots = itemSlots[itemCategoryIndex];
         return currentItemSlots;
@@ -61,6 +61,33 @@ public class Inventory : MonoBehaviour, ISavable
 
     }
 
+    public void AddItem(ItemBase item, int addedQuantity=1)
+    {
+        int itemCategoryIndex = (int)GetItemCategory(item);
+        SetCurrentItemSlots(itemCategoryIndex);
+        
+        var itemSlot = currentItemSlots.FirstOrDefault(slot => slot.Item == item); //checks if an item slot alrady exist for the item being added
+
+        if(itemSlot != null)
+        {
+            IncreaseQuantity(item, addedQuantity);
+        }
+        else
+        {
+            currentItemSlots.Add(new ItemSlot()
+            {
+                Item = item,
+                Quantity = addedQuantity
+                
+            }
+            );
+        }
+
+        InventoryUpdated?.Invoke();
+        
+
+    }
+
     public void DecreaseQuantity(ItemBase item)
     {
         var itemSlot = currentItemSlots.First(slot => slot.Item == item);
@@ -75,20 +102,33 @@ public class Inventory : MonoBehaviour, ISavable
         InventoryUpdated?.Invoke();
     }
 
-    public void IncreaseQuantity(ItemBase item)
+    public void IncreaseQuantity(ItemBase item, int addedQuantity=1)
     {
         var itemSlot = currentItemSlots.First(slot => slot.Item == item);
 
-        if(itemSlot.Quantity == 0)
-        {
-            currentItemSlots.Add(itemSlot);
-        }
-        else
-        {
-            itemSlot.Quantity++; //note need to figure out what to do if you get more than a single unit of an item.
-        }
+        itemSlot.Quantity += addedQuantity;
 
         InventoryUpdated?.Invoke();
+    }
+
+    public ItemCategory GetItemCategory(ItemBase item)
+    {
+        if(item is RecoveryItem)
+        {
+            return ItemCategory.RecoveryItems;
+        }
+        else if(item is BindingCrystal)
+        {
+            return ItemCategory.BindingCrystals;
+        }
+        else if(item is SpellItem)
+        {
+            return ItemCategory.Spells;
+        }
+
+        Debug.Log("Item class is not accounted for in Get Item Category fucntion");
+        return ItemCategory.RecoveryItems;
+
     }
 
     public object CaptureState()
@@ -124,13 +164,17 @@ public class ItemSlot
     [SerializeField] ItemBase item;
     [SerializeField] int quantity;
 
+    public ItemSlot()
+    {
+        
+    }
     public ItemSlot(ItemSaveData saveData) //initializer to reload item data
     {
         item = ItemDB.GetItemByName(saveData.sItemName);
         quantity = saveData.sQuantity;
     }
 
-    public ItemBase Item => item;
+    public ItemBase Item { get => item; set => item = value;}
     public int Quantity
     {
        get  => quantity;

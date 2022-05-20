@@ -31,6 +31,7 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
 
     public IEnumerator ShowDialogText(string text, bool waitForInput = false, bool autoClose = true) //simple text messeage not dialogue if set to true the player will still need to give input to close dialogue
     {
+        OnDialogStart?.Invoke();
         IsShowing = true;
         dialogBox.SetActive(true);
 
@@ -49,6 +50,8 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
         {
             CloseDialog();
         }
+
+        
         
     }
 
@@ -56,6 +59,7 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
     {
         dialogBox.SetActive(false);
         IsShowing = false;
+        OnDialogEnd?.Invoke();
     }
     public IEnumerator ShowDialog(Dialog dialog)
     {

@@ -43,11 +43,15 @@ public class GameController : MonoBehaviour
         battleSystem.OnBattleOver += EndBattle;
         partyScreen.Init();
 
-        DialogManager.Instance.OnDialogStart += () => gameState = GameState.Dialog;
+        DialogManager.Instance.OnDialogStart += () => 
+        {
+            previousState = gameState;
+            gameState = GameState.Dialog;
+        };
         DialogManager.Instance.OnDialogEnd += () => 
         {   
             if(gameState == GameState.Dialog) //we need this if statement for events we go from dialogue to battle
-                gameState = GameState.OverWorld;
+                gameState = previousState;
         };
     }
 
