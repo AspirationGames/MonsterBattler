@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: Ignite
   description: burns the target
-  type: 0
+  type: 3
   target: 0
   power: 0
   accuracy: 100
