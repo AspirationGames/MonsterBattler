@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemGiver : MonoBehaviour
+public class ItemGiver : MonoBehaviour, ISavable
 {
     
     [SerializeField] ItemBase giveItem;
@@ -33,5 +33,13 @@ public class ItemGiver : MonoBehaviour
         return giveItem != null && giveItemQuantity > 0 && !itemGiven;
     }
 
+    public object CaptureState()
+    {
+        return itemGiven;
+    }
 
+    public void RestoreState(object state)
+    {
+        itemGiven = (bool)state;
+    }
 }
