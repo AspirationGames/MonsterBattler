@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2320578141089992024}
   - component: {fileID: 2320578141089992030}
   - component: {fileID: 2320578141089992031}
+  - component: {fileID: 5020338001091817171}
   m_Layer: 8
   m_Name: NPC
   m_TagString: Untagged
@@ -76,7 +77,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1779222723
-  m_SortingLayer: 3
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: -996098071, guid: 304d50df6b1a3474b98f48ba4c0dbc35, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -204,3 +205,20 @@ MonoBehaviour:
   - {fileID: 278664933, guid: 304d50df6b1a3474b98f48ba4c0dbc35, type: 3}
   - {fileID: -1976316793, guid: 304d50df6b1a3474b98f48ba4c0dbc35, type: 3}
   defaultDirection: 1
+--- !u!114 &5020338001091817171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2320578141089992005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 071d573c2684ee14b8b0e1e826d01ee5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  giveItem: {fileID: 0}
+  dialog:
+    lines:
+    - 
+    - 

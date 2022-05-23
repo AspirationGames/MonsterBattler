@@ -9,14 +9,17 @@ public class NPCController : MonoBehaviour, Interactable
     [SerializeField] List<Vector2> movementPattern;
     [SerializeField] float timeBetweenPattern;
     Character character;
+    ItemGiver itemGiver;
     Healer healer;
     NPCState npcState;
     float idleTime = 0f;
     int currentPattern = 0;
 
+
     void Awake() 
     {
         character = GetComponent<Character>();
+        itemGiver = GetComponent<ItemGiver>();
         healer = GetComponent<Healer>();    
     }
     public IEnumerator Interact(Transform initiator)
@@ -24,17 +27,23 @@ public class NPCController : MonoBehaviour, Interactable
         
         if(npcState == NPCState.Idle)
         {
-            if(healer != null) //npc is a healer.. this is place holder code
-            {
-                character.LookTowards(initiator.position);
-                StartCoroutine(healer.Heal(initiator, dialog));
-                yield break;
-            }
 
             npcState = NPCState.Dialog;
             character.LookTowards(initiator.position);
+
+            if(itemGiver != null && itemGiver.CanGiveItem())
+            {
+                yield return itemGiver.GiveItem(initiator.GetComponent<PlayerController>());
+            }
+            else if(healer != null) //npc is a healer.. this is place holder code
+            {
+                yield return healer.Heal(initiator, dialog);
+            }
+            else
+            {
+                yield return DialogManager.Instance.ShowDialog(dialog);
+            }
             
-            yield return DialogManager.Instance.ShowDialog(dialog);
             idleTime = 0f;
             npcState = NPCState.Idle;
         }

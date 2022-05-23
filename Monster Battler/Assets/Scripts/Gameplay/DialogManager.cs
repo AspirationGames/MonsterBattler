@@ -50,7 +50,7 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
         {
             CloseDialog();
         }
-
+        OnDialogEnd?.Invoke();
         
         
     }
@@ -59,7 +59,6 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
     {
         dialogBox.SetActive(false);
         IsShowing = false;
-        OnDialogEnd?.Invoke();
     }
     public IEnumerator ShowDialog(Dialog dialog)
     {
