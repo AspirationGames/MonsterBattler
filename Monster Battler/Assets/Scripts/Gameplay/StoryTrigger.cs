@@ -2,13 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SummonerFOV : MonoBehaviour, IPlayerTriggerable
+public class StoryTrigger : MonoBehaviour, IPlayerTriggerable
 {
+
+    [SerializeField] Dialog dialog;
+
     public bool TriggerRepeatedly => false;
 
     public void OnPlayerTriggered(PlayerController player)
     {
         player.Character.CharacterAnimator.IsMoving = false;
-        GameController.Instance.OnEnterSummonerFOV(GetComponentInParent<SummonerController>());
+        StartCoroutine(DialogManager.Instance.ShowDialog(dialog));
     }
 }

@@ -15,6 +15,8 @@ public class Portal : MonoBehaviour, IPlayerTriggerable
 
     Fader fader;
     
+    public bool TriggerRepeatedly => false;
+    
     private void Start() 
     {
         fader = FindObjectOfType<Fader>(); //this has to be in start because the Fader is instantiated in Awake

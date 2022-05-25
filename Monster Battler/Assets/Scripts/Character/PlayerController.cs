@@ -122,19 +122,34 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions, IS
 
     }
 
+    IPlayerTriggerable currentlyInTrigger;
     void RunAfterMove()
     {
-      var triggerableColliders = Physics2D.OverlapCircleAll(transform.position - new Vector3(0,character.OffSetY), 0.2f, GameLayers.i.TriggerableLayers); //offset y is used in this case to prefent detecting collision above palyer incorrectly
+        var triggerableColliders = Physics2D.OverlapCircleAll(transform.position - new Vector3(0,character.OffSetY), 0.2f, GameLayers.i.TriggerableLayers); //offset y is used in this case to prefent detecting collision above palyer incorrectly
 
+        IPlayerTriggerable triggerable = null;
+    
       foreach (var collider in triggerableColliders)
       {
-        var triggerable = collider.GetComponent<IPlayerTriggerable>();
+        triggerable = collider.GetComponent<IPlayerTriggerable>();
         if(triggerable != null)
         {
+            if(triggerable == currentlyInTrigger && !triggerable.TriggerRepeatedly)
+            {
+                break;
+            }
+
             triggerable.OnPlayerTriggered(this);
+            currentlyInTrigger = triggerable;
             break;
         }
       }
+
+        if(triggerableColliders.Count() == 0 || triggerable != currentlyInTrigger) //once the player exits the triggereable colliders
+        {
+
+        }
+
     }
 
     public object CaptureState()
