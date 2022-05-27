@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 2560
     height: 1357
   m_ShowMode: 4
-  m_Title: Scene
+  m_Title: Project
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -120,7 +120,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 108
+  controlID: 75
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -171,7 +171,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 200}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 109
+  controlID: 76
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -322,23 +322,23 @@ MonoBehaviour:
     m_DrawArea:
       serializedVersion: 2
       x: 0
-      y: 21
+      y: 0
       width: 1537
-      height: 749
-    m_Scale: {x: 0.6935186, y: 0.6935185}
-    m_Translation: {x: 768.5, y: 374.5}
+      height: 770
+    m_Scale: {x: 0.712963, y: 0.712963}
+    m_Translation: {x: 768.5, y: 385}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -1108.1174
+      x: -1077.8961
       y: -540
-      width: 2216.2349
+      width: 2155.7922
       height: 1080
     m_MinimalGUI: 1
-  m_defaultScale: 0.6935185
+  m_defaultScale: 0.712963
   m_LastWindowPixelSize: {x: 1537, y: 770}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
@@ -376,9 +376,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 1e810000
+      m_SelectedIDs: b8250000
       m_LastClickedID: 0
-      m_ExpandedIDs: 1093ffffd2a2fffff8faffff
+      m_ExpandedIDs: f8faffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -651,7 +651,7 @@ MonoBehaviour:
   m_Position:
     m_Target: {x: -46.852993, y: 18.279037, z: -0.20074354}
     speed: 2
-    m_Value: {x: -46.761017, y: 18.280676, z: -0.20277412}
+    m_Value: {x: -46.852993, y: 18.279037, z: -0.20074354}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -704,7 +704,7 @@ MonoBehaviour:
   m_Size:
     m_Target: 4.309316
     speed: 2
-    m_Value: 4.512373
+    m_Value: 4.309316
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -770,22 +770,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scenes
+    - Assets/Scripts/Battle
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 48
   m_LastFolders:
-  - Assets/Scenes
+  - Assets/Scripts/Battle
   m_LastFoldersGridSize: 48
   m_LastProjectPath: C:\Users\apdia\Documents\GitHub\MonsterBattler\Monster Battler
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: fc800000
-    m_LastClickedID: 33020
-    m_ExpandedIDs: 000000008e8000009080000092800000948000009680000000ca9a3b
+    scrollPos: {x: 0, y: 89}
+    m_SelectedIDs: 6e800000
+    m_LastClickedID: 32878
+    m_ExpandedIDs: 00000000488000004a8000004c8000004e8000005080000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -813,7 +813,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000008e80000090800000928000009480000096800000
+    m_ExpandedIDs: 00000000488000004a8000004c8000004e80000050800000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

@@ -90,6 +90,10 @@ public class Inventory : MonoBehaviour, ISavable
 
     public void DecreaseQuantity(ItemBase item)
     {
+        
+        int category = (int)GetItemCategory(item);
+        SetCurrentItemSlots(category);
+
         var itemSlot = currentItemSlots.First(slot => slot.Item == item);
 
         itemSlot.Quantity--;
@@ -109,6 +113,15 @@ public class Inventory : MonoBehaviour, ISavable
         itemSlot.Quantity += addedQuantity;
 
         InventoryUpdated?.Invoke();
+    }
+
+    public bool HasItem(ItemBase item)
+    {
+        int category = (int)GetItemCategory(item);
+        SetCurrentItemSlots(category);
+
+       return currentItemSlots.Exists(slot => slot.Item == item);
+
     }
 
     public ItemCategory GetItemCategory(ItemBase item)

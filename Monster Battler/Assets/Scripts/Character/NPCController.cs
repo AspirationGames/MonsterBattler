@@ -8,10 +8,12 @@ public class NPCController : MonoBehaviour, Interactable
     [SerializeField] Dialog dialog;
     [SerializeField] List<Vector2> movementPattern;
     [SerializeField] float timeBetweenPattern;
+    [SerializeField] QuestBase questToStart;
     Character character;
     ItemGiver itemGiver;
     Healer healer;
     NPCState npcState;
+    Quest activeQuest;
     float idleTime = 0f;
     int currentPattern = 0;
 
@@ -31,9 +33,29 @@ public class NPCController : MonoBehaviour, Interactable
             npcState = NPCState.Dialog;
             character.LookTowards(initiator.position);
 
+            
             if(itemGiver != null && itemGiver.CanGiveItem())
             {
                 yield return itemGiver.GiveItem(initiator.GetComponent<PlayerController>());
+            }
+            else if(questToStart != null)
+            {
+                activeQuest = new Quest(questToStart); //creates instance of quest because we plug in the questBase
+                yield return activeQuest.StartQuest();
+                questToStart = null;
+            }
+            else if(activeQuest != null)
+            {
+                Debug.Log("active quest");
+                if(activeQuest.CanBeCompleted())
+                {
+                    yield return activeQuest.CompleteQuest(initiator);
+                    activeQuest = null; //clears active quest variable
+                }
+                else
+                {
+                    yield return DialogManager.Instance.ShowDialog(activeQuest.QBase.InProgressDialog); 
+                }
             }
             else if(healer != null) //npc is a healer.. this is place holder code
             {
