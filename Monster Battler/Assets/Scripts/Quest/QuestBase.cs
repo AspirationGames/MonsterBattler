@@ -15,7 +15,7 @@ public class QuestBase : ScriptableObject
     [SerializeField] ItemBase questItem;
     [SerializeField] ItemBase rewardItem;
 
-    public string Name => name;
+    public string QuestName => questName;
     public string Description => description;
     public Dialog StartDialog => startDialog;
 

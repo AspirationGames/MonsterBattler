@@ -236,6 +236,14 @@ PrefabInstance:
       propertyPath: movementPattern.Array.size
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992026, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 0.53125
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992026, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 0.78125
+      objectReference: {fileID: 0}
     - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -360,6 +368,136 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1681344bd36e2a343a45b5e1eaa64eae, type: 3}
+--- !u!1001 &1772481007
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2320578141089992004, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1398214434, guid: 2aef0c80e99e00a4f9a0ae5f25ea1770, type: 3}
+    - target: {fileID: 2320578141089992005, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_Name
+      value: MonsterGiver
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992024, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: questToComplete
+      value: 
+      objectReference: {fileID: 11400000, guid: c9488015526862f4591864576fcaf10c, type: 2}
+    - target: {fileID: 2320578141089992024, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: dialog.lines.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992024, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: dialog.lines.Array.data[0]
+      value: Hi your monsters look like they could use some healing. Let me heal
+        them for you.
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992024, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: dialog.lines.Array.data[1]
+      value: Take care and good luck!
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992024, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: movementPattern.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992026, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 0.53125
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992026, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 0.78125
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -43.72
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 21.27599
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992027, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320578141089992031, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+      propertyPath: walkDownFrames.Array.data[0]
+      value: 
+      objectReference: {fileID: -1398214434, guid: 2aef0c80e99e00a4f9a0ae5f25ea1770, type: 3}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+--- !u!1 &1772481008 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2320578141089992005, guid: 92a1636cfe47f364fbf8c4e3a346f099, type: 3}
+  m_PrefabInstance: {fileID: 1772481007}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1772481009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772481008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84334d2006ca76c44aaa01d469f03ef1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  giveMonster:
+    _base: {fileID: 11400000, guid: bef769a9803e8f0419e420542bb41d4f, type: 2}
+    level: 5
+    personality: 20
+    naturalSkillMaxHP: 27
+    naturalSkillAttack: 16
+    naturalSkillDefense: 9
+    naturalSkillSpAttack: 15
+    naturalSkillSpDefense: 7
+    naturalSkillSpeed: 20
+    developedSkillMaxHP: 107
+    developedSkillAttack: 52
+    developedSkillDefense: 50
+    developedSkillSpAttack: 49
+    developedSkillSpDefense: 63
+    developedSkillSpeed: 64
+  dialog:
+    lines:
+    - Here take this spooky fox
 --- !u!1001 &6097158585229193225
 PrefabInstance:
   m_ObjectHideFlags: 0

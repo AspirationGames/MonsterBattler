@@ -5,15 +5,24 @@ using UnityEngine;
 public class NPCController : MonoBehaviour, Interactable
 {
     
+    [Header("Dialog")]    
     [SerializeField] Dialog dialog;
+
+    [Header("Movement")]
     [SerializeField] List<Vector2> movementPattern;
     [SerializeField] float timeBetweenPattern;
+    
+    [Header("Quest")]
     [SerializeField] QuestBase questToStart;
+    [SerializeField] QuestBase questToComplete; //used when NPCs should complete quest like starter mosnter giver
+    
+    Quest activeQuest;
     Character character;
     ItemGiver itemGiver;
+    MonsterGiver monsterGiver;
     Healer healer;
     NPCState npcState;
-    Quest activeQuest;
+    
     float idleTime = 0f;
     int currentPattern = 0;
 
@@ -22,6 +31,7 @@ public class NPCController : MonoBehaviour, Interactable
     {
         character = GetComponent<Character>();
         itemGiver = GetComponent<ItemGiver>();
+        monsterGiver = GetComponent<MonsterGiver>();
         healer = GetComponent<Healer>();    
     }
     public IEnumerator Interact(Transform initiator)
@@ -33,20 +43,36 @@ public class NPCController : MonoBehaviour, Interactable
             npcState = NPCState.Dialog;
             character.LookTowards(initiator.position);
 
-            
+            if(questToComplete != null)
+            {
+                var quest = new Quest(questToComplete);
+                quest.CompleteQuest(initiator);
+                questToComplete = null;
+
+                Debug.Log($"{quest.QBase.QuestName} was completed");
+            }
             if(itemGiver != null && itemGiver.CanGiveItem())
             {
                 yield return itemGiver.GiveItem(initiator.GetComponent<PlayerController>());
+            }
+            if(monsterGiver != null && monsterGiver.CanGiveMonster())
+            {
+                yield return monsterGiver.GiveMonster(initiator.GetComponent<PlayerController>());
             }
             else if(questToStart != null)
             {
                 activeQuest = new Quest(questToStart); //creates instance of quest because we plug in the questBase
                 yield return activeQuest.StartQuest();
                 questToStart = null;
+                if(activeQuest.CanBeCompleted())
+                {
+                    yield return activeQuest.CompleteQuest(initiator);
+                    activeQuest = null; //clears active quest variable
+                }
             }
             else if(activeQuest != null)
             {
-                Debug.Log("active quest");
+                
                 if(activeQuest.CanBeCompleted())
                 {
                     yield return activeQuest.CompleteQuest(initiator);

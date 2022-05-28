@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PokemonStartSelection : MonoBehaviour, ISavable
+public class StarterMonsterSelection : MonoBehaviour, ISavable
 {
     [SerializeField] List<Monster> starterMonsters;
     [SerializeField] string introText;
