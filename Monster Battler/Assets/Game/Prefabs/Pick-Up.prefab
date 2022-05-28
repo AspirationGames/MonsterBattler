@@ -125,7 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 510c0e7b469f78345b36a9de13b717b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pickUpItem: {fileID: 11400000, guid: a32d391b5b60ed14884de7d9d19f5df5, type: 2}
+  pickUpItem: {fileID: 11400000, guid: e5289a492fd345045990059e40b8657a, type: 2}
 --- !u!114 &2969196425159677767
 MonoBehaviour:
   m_ObjectHideFlags: 0

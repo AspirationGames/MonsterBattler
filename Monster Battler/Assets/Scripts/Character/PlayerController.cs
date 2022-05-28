@@ -147,7 +147,7 @@ public class PlayerController : MonoBehaviour, PlayerControls.IPlayerActions, IS
 
         if(triggerableColliders.Count() == 0 || triggerable != currentlyInTrigger) //once the player exits the triggereable colliders
         {
-
+            currentlyInTrigger = null;
         }
 
     }

@@ -6,7 +6,7 @@ public class Quest
 {
     public QuestBase QBase {get; private set; }
 
-    public QuestState QState {get; private set;}
+    public QuestStatus QStatus {get; private set;}
 
     
     public Quest(QuestBase _base)
@@ -16,14 +16,17 @@ public class Quest
 
     public IEnumerator StartQuest()
     {
-        QState = QuestState.InProgress;
+        QStatus = QuestStatus.InProgress;
 
         yield return DialogManager.Instance.ShowDialog(QBase.StartDialog);
+
+        var questList = QuestTracker.GetQuestTracker();
+        questList.AddActiveQuest(this);
     }
 
     public IEnumerator CompleteQuest(Transform player)
     {
-        QState = QuestState.Completed;
+        QStatus = QuestStatus.Completed;
 
         yield return DialogManager.Instance.ShowDialog(QBase.CompleteDialog);
 
@@ -40,6 +43,9 @@ public class Quest
             var playerName = player.GetComponent<PlayerController>().Name;
             yield return DialogManager.Instance.ShowDialogText($"{playerName} recieved {QBase.RewardItem.ItemName}");
         }
+
+        var questList = QuestTracker.GetQuestTracker();
+        questList.MarkQuestComplete(this);
     }
 
     public bool CanBeCompleted()
@@ -55,7 +61,7 @@ public class Quest
     }
 }
 
-public enum QuestState
+public enum QuestStatus
 {
     none,
     InProgress,
