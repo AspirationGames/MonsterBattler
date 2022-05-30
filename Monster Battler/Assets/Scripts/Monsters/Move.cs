@@ -16,7 +16,7 @@ public class Move
 
     public Move(MoveSaveData saveData)
     {
-        Base = MoveDB.GetMoveByName(saveData.sMoveName);
+        Base = MoveDB.GetObjectByName(saveData.name);
         AP = saveData.sAP;
 
     }
@@ -24,7 +24,7 @@ public class Move
     {
         var saveData = new MoveSaveData()
         {
-            sMoveName = Base.MoveName,
+            name = Base.name,
             sAP = AP
         };
 
@@ -41,7 +41,7 @@ public class Move
 [System.Serializable]
 public class MoveSaveData
 {
-    public string sMoveName;
+    public string name;
     public int sAP;
 }
 

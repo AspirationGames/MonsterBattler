@@ -183,7 +183,7 @@ public class ItemSlot
     }
     public ItemSlot(ItemSaveData saveData) //initializer to reload item data
     {
-        item = ItemDB.GetItemByName(saveData.sItemName);
+        item = ItemDB.GetObjectByName(saveData.name);
         quantity = saveData.sQuantity;
     }
 
@@ -198,7 +198,7 @@ public class ItemSlot
     {
         var saveData = new ItemSaveData()
         {
-            sItemName = item.ItemName,
+            name = item.name,
             sQuantity = quantity
         };
 
@@ -211,7 +211,7 @@ public class ItemSlot
 [Serializable]
 public class ItemSaveData
 {
-    public string sItemName;
+    public string name;
     public int sQuantity;
 }
 

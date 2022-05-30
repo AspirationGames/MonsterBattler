@@ -109,7 +109,7 @@ public class Monster
 
     public Monster(MonsterSaveData saveData) //Loads the save data
     {
-        _base = MonsterDB.GetMonsterByName(saveData.sMonsterName);
+        _base = MonsterDB.GetObjectByName(saveData.name);
         HP = saveData.sHp;
         level = saveData.sLevel;
         Exp = saveData.sExp;
@@ -158,7 +158,7 @@ public class Monster
     {
         var saveData = new MonsterSaveData()
         {
-            sMonsterName = Base.MonsterName,
+            name = Base.name, //this is the scriptable object name
             sHp = HP,
             sLevel = Level,
             sExp = Exp,
@@ -632,7 +632,7 @@ public class DamageDetails
 [System.Serializable]
 public class MonsterSaveData //only includes the savable data
 {
-    public string sMonsterName; //the pokemon name will also be used to get all necessary base data
+    public string name; //the pokemon name will also be used to get all necessary base data
     public int sHp;
     public int sLevel;
     public int sExp;
