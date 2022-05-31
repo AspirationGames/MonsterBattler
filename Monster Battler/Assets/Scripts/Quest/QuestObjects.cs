@@ -25,15 +25,21 @@ public class QuestObjects : MonoBehaviour
     
     public void UpdateObjectStatus()
     {
-        Debug.Log($"{questToCheck.QuestName}" + questTracker.WasQuestCompeted(questToCheck.QuestName));
+        Debug.Log($"{questToCheck.QuestName}" + questTracker.IsCompleted(questToCheck.QuestName));
 
-        if(onQuestStart != ObjectAction.DoNothing && questTracker.WasQuestStarted(questToCheck.QuestName))
+        if(onQuestStart != ObjectAction.DoNothing && questTracker.IsStarted(questToCheck.QuestName))
         {
             foreach(Transform child in transform) //loops through all object that are children of this quest object
             {
                 if(onQuestStart == ObjectAction.Enable)
                 {
                     child.gameObject.SetActive(true);
+
+                    var savableEntity = child.GetComponent<SavableEntity>();
+                    if(savableEntity != null)
+                    {
+                        SavingSystem.i.RestoreEntity(savableEntity);
+                    }
                 }
                 else if(onQuestStart == ObjectAction.Disable)
                 {
@@ -41,13 +47,20 @@ public class QuestObjects : MonoBehaviour
                 }
             }
         }
-        if(onQuestComplete != ObjectAction.DoNothing && questTracker.WasQuestCompeted(questToCheck.QuestName))
+        if(onQuestComplete != ObjectAction.DoNothing && questTracker.IsCompleted(questToCheck.QuestName))
         {
             foreach(Transform child in transform) //loops through all object that are children of this quest object
             {
                 if(onQuestComplete == ObjectAction.Enable)
                 {
                     child.gameObject.SetActive(true);
+
+                    var savableEntity = child.GetComponent<SavableEntity>();
+                    if(savableEntity != null)
+                    {
+                        SavingSystem.i.RestoreEntity(savableEntity);
+                    }
+                    
                 }
                 else if(onQuestComplete == ObjectAction.Disable)
                 {

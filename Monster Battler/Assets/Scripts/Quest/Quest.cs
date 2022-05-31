@@ -21,7 +21,7 @@ public class Quest
         yield return DialogManager.Instance.ShowDialog(QBase.StartDialog);
 
         var questList = QuestTracker.GetQuestTracker();
-        questList.AddActiveQuest(this);
+        questList.AddQuest(this);
     }
 
     public IEnumerator CompleteQuest(Transform player)
@@ -45,7 +45,7 @@ public class Quest
         }
 
         var questList = QuestTracker.GetQuestTracker();
-        questList.MarkQuestComplete(this);
+        questList.AddQuest(this);
     }
 
     public bool CanBeCompleted()
@@ -59,6 +59,33 @@ public class Quest
 
         return true; //defualt
     }
+
+    public QuestSaveData GetQuestSaveData()
+    {
+        var saveData = new QuestSaveData
+        {
+            name = QBase.name,
+            sQStatus = QStatus
+
+        };
+
+        return saveData;
+    }
+
+    public Quest(QuestSaveData saveData)
+    {
+        QBase = QuestDB.GetObjectByName(saveData.name);
+        QStatus = saveData.sQStatus;
+
+    }
+}
+
+
+[System.Serializable]
+public class QuestSaveData
+{
+    public string name;
+    public QuestStatus sQStatus;
 }
 
 public enum QuestStatus

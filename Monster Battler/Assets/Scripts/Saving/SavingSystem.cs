@@ -71,6 +71,14 @@ public class SavingSystem : MonoBehaviour
         }
     }
 
+    public void RestoreEntity(SavableEntity entity)
+    {
+        if(gameState.ContainsKey(entity.UniqueId)) //we added this to restore the state of things like quest objects
+        {
+            entity.RestoreState(gameState[entity.UniqueId]);
+        }
+        
+    }
     void SaveFile(string saveFile, Dictionary<string, object> state)
     {
         string path = GetPath(saveFile);

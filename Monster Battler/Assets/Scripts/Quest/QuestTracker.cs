@@ -6,68 +6,52 @@ using UnityEngine;
 
 
 [System.Serializable] //using this to be able to show quest tracker in inspector
-public class QuestTracker : MonoBehaviour
+public class QuestTracker : MonoBehaviour, ISavable
 {
-    List<Quest> activeQuest = new List<Quest>();
-    List<Quest> completedQuests = new List<Quest>();
+    List<Quest> questList = new List<Quest>();
 
     public event Action OnUpdated;
 
-    public void AddActiveQuest(Quest quest)
+    public void AddQuest(Quest quest)
     {
-        if(!activeQuest.Contains(quest))
+        if(!questList.Contains(quest))
         {
-            activeQuest.Add(quest);
+            questList.Add(quest);
         }
 
         OnUpdated?.Invoke();
         
     }
 
-    public bool WasQuestStarted(string questName)
+    public bool IsStarted(string questName)
     {
-      var questStarted = activeQuest.FirstOrDefault(q => q.QBase.QuestName == questName)?.QStatus;
-
-      if(questStarted != null)
-      {
-          return true;
-      }
-      
-      return false;
+      var questStatus = questList.FirstOrDefault(q => q.QBase.QuestName == questName)?.QStatus;
+      return questStatus == QuestStatus.InProgress || questStatus == QuestStatus.Completed;
     }
 
-    public bool WasQuestCompeted(string questName)
+    public bool IsCompleted(string questName)
     {
-        var questCompleted = completedQuests.FirstOrDefault(q => q.QBase.QuestName == questName)?.QStatus;
-        
-        
-
-      if(questCompleted != null)
-      {
-          return true;
-      }
-      
-      return false;
+        var questStatus = questList.FirstOrDefault(q => q.QBase.QuestName == questName)?.QStatus;
+        return questStatus == QuestStatus.Completed;
     }
-
-    public void MarkQuestComplete(Quest quest)
-    {
-        if(activeQuest.Contains(quest))
-        {
-            activeQuest.Remove(quest);
-           
-        }
-        if(!completedQuests.Contains(quest))
-        {
-            completedQuests.Add(quest);
-           
-        }
-
-        OnUpdated?.Invoke();
-    }
-
     public static QuestTracker GetQuestTracker()
     {
         return FindObjectOfType<PlayerController>().GetComponent<QuestTracker>();
+    }
+
+    public object CaptureState()
+    {
+        return questList.Select(q => q.GetQuestSaveData()).ToList();
+    }
+
+    public void RestoreState(object state)
+    {
+        var saveData = state as List<QuestSaveData>;
+
+        if(saveData != null)
+        {
+            questList = saveData.Select(q => new Quest(q)).ToList();
+            OnUpdated?.Invoke();
+        }
     }
 }

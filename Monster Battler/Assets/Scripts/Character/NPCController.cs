@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NPCController : MonoBehaviour, Interactable
+public class NPCController : MonoBehaviour, Interactable, ISavable
 {
     
     [Header("Dialog")]    
@@ -132,7 +132,44 @@ public class NPCController : MonoBehaviour, Interactable
 
         npcState = NPCState.Idle;
     }
-    
+
+    public object CaptureState()
+    {
+        var saveData = new NPCQuestSaveData();
+        
+        saveData.sActiveQuest = activeQuest?.GetQuestSaveData();
+
+        if(questToStart != null)
+        {
+            saveData.sQuesttoStart = new Quest(questToStart).GetQuestSaveData();
+        }
+
+        if(questToComplete != null)
+        {
+            saveData.sQuestToComplete = new Quest(questToComplete).GetQuestSaveData();
+        }
+
+        return saveData;
+    }
+
+    public void RestoreState(object state)
+    {
+        var saveData = state as NPCQuestSaveData;
+
+        if(saveData != null)
+        {
+            activeQuest = (saveData.sActiveQuest != null)? new Quest(saveData.sActiveQuest) : null;
+            questToStart = (saveData.sQuesttoStart != null)? new Quest(saveData.sQuesttoStart).QBase : null;
+            questToComplete = (saveData.sQuestToComplete != null)? new Quest(saveData.sQuestToComplete).QBase : null;
+        }
+    }
 }
 
+[System.Serializable]
+public class NPCQuestSaveData
+{
+    public QuestSaveData sActiveQuest;
+    public QuestSaveData sQuesttoStart;
+    public QuestSaveData sQuestToComplete;
+}
 public enum NPCState {Idle, Walking, Dialog}
