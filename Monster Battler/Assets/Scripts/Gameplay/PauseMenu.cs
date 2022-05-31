@@ -31,7 +31,7 @@ public class PauseMenu : MonoBehaviour, PlayerControls.IMenuActions
 
     public void OnMonsterParty()
     {
-        GameController.Instance.ShowPartyScreen();
+        GameController.Instance.PartyManagement();
         
     }
 

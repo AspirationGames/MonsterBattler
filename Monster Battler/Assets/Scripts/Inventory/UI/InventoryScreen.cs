@@ -175,7 +175,7 @@ public class InventoryScreen : MonoBehaviour
 
     public void PartyMemberSelected(Monster selectedMonster)
     {
-        
+
         if(inventoryScreenState != InventoryScreenState.PartyScreen)
         {
             return;
@@ -369,10 +369,10 @@ public class InventoryScreen : MonoBehaviour
         inventoryScreenState = InventoryScreenState.Inventory;
     }
 
-    public void OnBack()
+    public void BackToPauseMenu()
     {
-        GameController.Instance.CloseInventoryScreen();
-
+        GameController.Instance.BackToPauseMenu();
+        gameObject.SetActive(false);
     }
 
 }

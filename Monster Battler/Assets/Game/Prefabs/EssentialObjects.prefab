@@ -3765,7 +3765,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.3333334, y: 1}
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -9278,6 +9278,10 @@ PrefabInstance:
       propertyPath: m_Value
       value: 1.0000037
       objectReference: {fileID: 0}
+    - target: {fileID: 8351247926146086174, guid: 61ad77ab76a71d3459df2b66fc53fa9a, type: 3}
+      propertyPath: m_Name
+      value: BattleBackButtonInventory
+      objectReference: {fileID: 0}
     - target: {fileID: 8989313395568409338, guid: 61ad77ab76a71d3459df2b66fc53fa9a, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -9776,6 +9780,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -50
       objectReference: {fileID: 0}
+    - target: {fileID: 5620320265637654746, guid: 61ad77ab76a71d3459df2b66fc53fa9a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: BackToPauseMenu
+      objectReference: {fileID: 0}
     - target: {fileID: 5690052229295478181, guid: 61ad77ab76a71d3459df2b66fc53fa9a, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -9979,6 +9987,10 @@ PrefabInstance:
     - target: {fileID: 7581953853711067190, guid: 61ad77ab76a71d3459df2b66fc53fa9a, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8351247926146086174, guid: 61ad77ab76a71d3459df2b66fc53fa9a, type: 3}
+      propertyPath: m_Name
+      value: BackButtonInventory
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61ad77ab76a71d3459df2b66fc53fa9a, type: 3}

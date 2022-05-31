@@ -74,15 +74,20 @@ public class PartyScreen : MonoBehaviour
 
     public void ClosePartyScreen()
     {
-        screenClosed?.Invoke();
+        screenClosed?.Invoke(); 
 
         if(GameController.Instance.GameState == GameState.Battle)
         {
             return;
         }
-        else
+        if(GameController.Instance.GameState == GameState.Inventory)
         {
-            GameController.Instance.ClosePartyScreen();
+            gameObject.SetActive(false);
+        }
+        if(GameController.Instance.GameState == GameState.PartyManagement)
+        {
+            GameController.Instance.BackToPauseMenu();
+            gameObject.SetActive(false);
         }
 
         ClearUIMessages();

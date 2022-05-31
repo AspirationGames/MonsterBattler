@@ -34,6 +34,7 @@ public class GameController : MonoBehaviour
         MoveDB.Init();
         ConditionsDB.Init();
         ItemDB.Init();
+        QuestDB.Init();
 
     }
 
@@ -76,7 +77,6 @@ public class GameController : MonoBehaviour
 
     public void PauseGame(bool pause)
     {
-
         if(pause)
         {
             stateBeforePause = gameState;
@@ -89,42 +89,21 @@ public class GameController : MonoBehaviour
 
     }
 
-    public void ShowPartyScreen()
+    public void PartyManagement() //called when managing party from pause menu
     {
-        if(gameState == GameState.Inventory) //if the party screen is call during the inventory state we will keep the game state in inventory.
-        {
-            partyScreen.gameObject.SetActive(true);
-            return;
-        }
-
-        previousState = gameState;
         gameState = GameState.PartyManagement;
         partyScreen.gameObject.SetActive(true);
     }
-    public void ClosePartyScreen()
-    {
-        if(gameState == GameState.Inventory) //need to keep inventory state as is when using items
-        {
-            partyScreen.gameObject.SetActive(false);
-            return;    
-        }
 
-        gameState = previousState;
-        partyScreen.gameObject.SetActive(false);
-        
-    }
-
-    public void ShowInventoryScreen()
+    public void ShowInventoryScreen() //called when opening inventory from pause menu
     {
-        previousState = gameState;
         gameState = GameState.Inventory;
         inventoryScreen.gameObject.SetActive(true);
         
     }
-    public void CloseInventoryScreen()
+    public void BackToPauseMenu() //called when closing out of pause menue option
     {
-        gameState = previousState;
-        inventoryScreen.gameObject.SetActive(false);
+        gameState = GameState.Paused;
         
     }
 
