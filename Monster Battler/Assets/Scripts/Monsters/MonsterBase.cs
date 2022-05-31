@@ -37,6 +37,7 @@ public class MonsterBase : ScriptableObject
     [Header("MovePool")]
     [SerializeField] List<LearnableMove> learnableMoves;
     [SerializeField] List<MoveBase> learnableMovesByItems;
+    [SerializeField] List<Evolution> evolutions;
 
     public static int MaxNumberOfMoves {get; set;} = 4;
 
@@ -183,6 +184,11 @@ public class MonsterBase : ScriptableObject
         get{return learnableMovesByItems;}
     }
 
+    public List<Evolution> Evolutions
+    {
+        get{return evolutions;}
+    }
+
 }    
 
 [System.Serializable]
@@ -200,6 +206,16 @@ public class LearnableMove
     {
         get{return moveLevel;}
     }
+}
+
+[System.Serializable]
+public class Evolution
+{
+    [SerializeField] MonsterBase monsterEvolution;
+    [SerializeField] int evolutionLevel;
+
+    public MonsterBase MonsterEvolution => monsterEvolution;
+    public int EvolutionLevel => evolutionLevel;
 }
 
 public enum MonsterType 

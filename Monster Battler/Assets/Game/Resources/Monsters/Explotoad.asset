@@ -44,3 +44,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 70b9ecb3bd4ed584a9ec8fd9348c54da, type: 2}
   - {fileID: 11400000, guid: 9c4c2642b2a62ef4a909064aeb51ba3a, type: 2}
   - {fileID: 11400000, guid: ba9b140fb9dc0f441867b5414518c466, type: 2}
+  evolutions:
+  - monsterEvolution: {fileID: 11400000, guid: d63bf37dc82034448bb8d1234f4d8a31, type: 2}
+    evolutionLevel: 13

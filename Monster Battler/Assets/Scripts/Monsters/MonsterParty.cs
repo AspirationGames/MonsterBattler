@@ -109,6 +109,24 @@ public class MonsterParty : MonoBehaviour
 
     }
 
+    public IEnumerator CheckForEvolution()
+    {
+        foreach(Monster monster in monsters)
+        {
+            var evolution = monster.CheckForEvolution();
+            if(evolution != null)
+            {
+                yield return DialogManager.Instance.ShowDialogText($"{monster.Base.MonsterName} evolved into {evolution.MonsterEvolution.MonsterName}!");
+                monster.Evolve(evolution);
+                OnUpdated?.Invoke();
+            }
+            else
+            {
+                continue;
+            }
+        }
+
+    }
     public void AddMonster(Monster monster)
     {
         if(monsters.Count < 4)

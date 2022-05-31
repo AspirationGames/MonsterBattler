@@ -508,6 +508,17 @@ public class Monster
 
     }
 
+    public Evolution CheckForEvolution()
+    {
+        return Base.Evolutions.FirstOrDefault(e => e.EvolutionLevel == level); //returns the form according to its level
+        
+    }
+
+    public void Evolve(Evolution evolution)
+    {
+        _base = evolution.MonsterEvolution;
+        CalculateStats();
+    }
     public LearnableMove GetLearnableMoveAtCurrLevel()
     {
         return Base.LearnableMoves.Where(x => x.MoveLevel == level).FirstOrDefault();

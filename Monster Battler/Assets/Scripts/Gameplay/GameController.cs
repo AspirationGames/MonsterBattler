@@ -167,6 +167,8 @@ public class GameController : MonoBehaviour
         gameState = GameState.OverWorld;
         battleSystem.gameObject.SetActive(false);
         
+        var playerParty = playerController.GetComponent<MonsterParty>();
+        StartCoroutine(playerParty.CheckForEvolution());
 
     }
 
