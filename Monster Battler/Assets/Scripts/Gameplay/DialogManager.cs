@@ -32,15 +32,16 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
     public IEnumerator ShowDialogText(string text, bool waitForInput = false, bool autoClose = true) //simple text messeage not dialogue if set to true the player will still need to give input to close dialogue
     {
         OnDialogStart?.Invoke();
+        dialogControls.Enable();
         IsShowing = true;
         dialogBox.SetActive(true);
+        
 
         yield return TypeDialog(text);
         
         if(waitForInput)
         {
-            //This currently defualts to false
-            //we can require confirmaiton input here, but need to figure out how to implement with new inptu ssytem instead will just wait an extra second before closing dialgoue for now
+            yield return new WaitUntil(() => isConfirmed);
         }
 
         yield return new WaitForSeconds(0.5f);
@@ -51,7 +52,7 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
             CloseDialog();
         }
         OnDialogEnd?.Invoke();
-        
+        dialogControls.Disable();
         
     }
 
