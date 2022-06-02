@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameState{ OverWorld, Battle, Dialog, CutScene, Paused, PartyManagement, Inventory}
+public enum GameState{ OverWorld, Battle, Dialog, CutScene, Paused, PartyManagement, Inventory, Evolution}
 public class GameController : MonoBehaviour
 {
     [SerializeField] PlayerController playerController;
@@ -53,6 +53,15 @@ public class GameController : MonoBehaviour
         {   
             if(gameState == GameState.Dialog) //we need this if statement for events we go from dialogue to battle
                 gameState = previousState;
+        };
+
+        EvolutionManager.i.OnEvolutionStart += () => 
+        {
+            gameState = GameState.Evolution;
+        };
+        EvolutionManager.i.OnEvolutionStart += () => 
+        {
+           gameState = GameState.OverWorld;
         };
     }
 
