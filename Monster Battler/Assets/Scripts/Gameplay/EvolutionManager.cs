@@ -22,7 +22,6 @@ public class EvolutionManager : MonoBehaviour
     public IEnumerator Evolve(Monster monster, Evolution evolution)
     {
         OnEvolutionStart?.Invoke();
-
         evolutionScreen.SetActive(true);
         monsterImage.sprite = monster.Base.FrontSprite;
 

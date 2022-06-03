@@ -116,8 +116,8 @@ public class MonsterParty : MonoBehaviour
             var evolution = monster.CheckForEvolution();
             if(evolution != null)
             {
-                yield return DialogManager.Instance.ShowDialogText($"{monster.Base.MonsterName} evolved into {evolution.MonsterEvolution.MonsterName}!");
-                monster.Evolve(evolution);
+                yield return DialogManager.Instance.ShowDialogText($"Huh!? Something is happening with {monster.Base.MonsterName}.");
+                yield return EvolutionManager.i.Evolve(monster, evolution);
                 OnUpdated?.Invoke();
             }
             else

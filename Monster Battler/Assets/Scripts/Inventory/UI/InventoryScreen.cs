@@ -164,6 +164,7 @@ public class InventoryScreen : MonoBehaviour
             return;
 
         }
+        
 
         OpenPartyScreen(); //Open party screen to select monster to use item on
         inventoryScreenState = InventoryScreenState.PartyScreen;
@@ -198,7 +199,6 @@ public class InventoryScreen : MonoBehaviour
         else if(GetCanUseItem(selectedMonster)) //you can use item
         {
             StartCoroutine(UseItem(selectedMonster));
-            
         }
         
     }
@@ -212,19 +212,27 @@ public class InventoryScreen : MonoBehaviour
     {
         inventoryScreenState = InventoryScreenState.Busy;
 
-
         var spellItem = GetSelectedItem() as SpellItem; //this will return null if item is not a spell item
+        var evolutionItem = GetSelectedItem() as EvolutionItem;
         
         if(spellItem != null) //Handles Spell Items
         {   
             yield return HandleSpellItems(selectedMonster, spellItem);
             yield break;
         }
+        if(evolutionItem != null)
+        {
+            yield return EvolutionManager.i.Evolve(selectedMonster, evolutionItem.Evolution);
+            DecreaseItemQuanity();
+            partyScreen.SetPartyData();
+            partyScreen.ClosePartyScreen(); //I want to automatically close party screen
+            yield break;
+        }
         
         //Use Recovery Items       
         var usedItem = inventory.UseItem(selectedItemSlot, selectedMonster); //this method uses the item but also returns the item used from inventory script
 
-        if(usedItem != null && GameController.Instance.GameState != GameState.Battle) //of mpt om batt;e ise Dialog manager and keep in party state
+        if(GameController.Instance.GameState != GameState.Battle) //of not in a Battle usse Dialog manager and keep in party state
         {
            yield return DialogManager.Instance.ShowDialogText($"You used a {usedItem.ItemName}.");
            inventoryScreenState = InventoryScreenState.PartyScreen; //I want the player to remain on party screen and can continue to use items if they would like.

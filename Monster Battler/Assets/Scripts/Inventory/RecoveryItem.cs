@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Items/New recovery item", order = 0)]
+[CreateAssetMenu(menuName = "Items/New recovery Item", order = 0)]
 public class RecoveryItem : ItemBase
 {
     [Header("Healing")]

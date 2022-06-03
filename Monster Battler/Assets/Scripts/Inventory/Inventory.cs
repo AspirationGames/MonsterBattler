@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum ItemCategory{RecoveryItems, BindingCrystals, Spells}
+public enum ItemCategory{RecoveryItems, BindingCrystals, Spells, Special}
 public class Inventory : MonoBehaviour, ISavable
 {
     [SerializeField] List<ItemSlot> recoveryItemSlots;
     [SerializeField] List<ItemSlot> crystalSlots;
     [SerializeField] List<ItemSlot> spellSlots; //TMs and HMs
+    [SerializeField] List<ItemSlot> specialSlots; //TMs and HMs
 
     List<List<ItemSlot>> itemSlots;
 
@@ -18,12 +19,12 @@ public class Inventory : MonoBehaviour, ISavable
 
     private void Awake() 
     {
-        itemSlots = new List<List<ItemSlot>>(){recoveryItemSlots, crystalSlots, spellSlots};    
+        itemSlots = new List<List<ItemSlot>>(){recoveryItemSlots, crystalSlots, spellSlots, specialSlots};    
     }
 
     public static List<string> ItemCategories {get; set;} = new List<string>()
     {
-        "RECOVERY ITEMS", "BINDING CRYSTALS", "SPELL BOOKS & SCROLLS"
+        "RECOVERY ITEMS", "BINDING CRYSTALS", "SPELL BOOKS & SCROLLS", "SPECIAL ITEMS"
     };
 
     public List<ItemSlot> SetCurrentItemSlots(int itemCategoryIndex)
@@ -138,6 +139,10 @@ public class Inventory : MonoBehaviour, ISavable
         {
             return ItemCategory.Spells;
         }
+        else if(item is EvolutionItem) //this should include all Special items (i.e. evolution items)
+        {
+            return ItemCategory.Special;
+        }
 
         Debug.Log("Item class is not accounted for in Get Item Category fucntion");
         return ItemCategory.RecoveryItems;
@@ -222,5 +227,6 @@ public class InventorySaveData //list of our item save data. We should have one 
     public List<ItemSaveData> sRecoveryItems;
     public List<ItemSaveData> sCrystals;
     public List<ItemSaveData> sSpells;
+    public List<ItemSaveData> sSpecial;
 
 }

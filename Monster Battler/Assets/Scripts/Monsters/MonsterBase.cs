@@ -213,9 +213,12 @@ public class Evolution
 {
     [SerializeField] MonsterBase monsterEvolution;
     [SerializeField] int evolutionLevel;
+    [SerializeField] EvolutionItem itemEvolution;
+
 
     public MonsterBase MonsterEvolution => monsterEvolution;
     public int EvolutionLevel => evolutionLevel;
+    public EvolutionItem ItemEvolution => itemEvolution;
 }
 
 public enum MonsterType 

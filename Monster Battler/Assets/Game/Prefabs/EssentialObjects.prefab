@@ -4457,7 +4457,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6221295680957829866}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -400.73743, y: -293.31174, z: -9.140033}
+  m_LocalPosition: {x: -400.23743, y: -292.51175, z: -9.140033}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8122,6 +8122,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6221295680788380489}
     m_Modifications:
+    - target: {fileID: -8609044825704097109, guid: 4c6b5f01a572f3242b11578cb591470e, type: 3}
+      propertyPath: specialSlots.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8609044825704097109, guid: 4c6b5f01a572f3242b11578cb591470e, type: 3}
+      propertyPath: specialSlots.Array.data[0].item
+      value: 
+      objectReference: {fileID: 11400000, guid: c3e7318f52520774789b73c89e0fd605, type: 2}
+    - target: {fileID: -8609044825704097109, guid: 4c6b5f01a572f3242b11578cb591470e, type: 3}
+      propertyPath: specialSlots.Array.data[0].quantity
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5086439852530818937, guid: 4c6b5f01a572f3242b11578cb591470e, type: 3}
       propertyPath: pauseMenu
       value: 

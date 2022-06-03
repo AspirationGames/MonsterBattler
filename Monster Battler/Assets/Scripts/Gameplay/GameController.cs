@@ -13,11 +13,11 @@ public class GameController : MonoBehaviour
 
     Animator cameraAnimator;
     GameState gameState;
-    GameState previousState;
+    GameState stateBeforeDialog;
     GameState stateBeforePause;
+    GameState stateBeforeEvolution;
 
     
-    public GameState PreviousState {get {return previousState;}}
     public SceneDetails CurrentScene {get; private set;}
 
     public SceneDetails PreviousScene {get; private set;}
@@ -46,22 +46,23 @@ public class GameController : MonoBehaviour
 
         DialogManager.Instance.OnDialogStart += () => 
         {
-            previousState = gameState;
+            stateBeforeDialog = gameState;
             gameState = GameState.Dialog;
         };
         DialogManager.Instance.OnDialogEnd += () => 
         {   
             if(gameState == GameState.Dialog) //we need this if statement for events we go from dialogue to battle
-                gameState = previousState;
+                gameState = stateBeforeDialog;
         };
 
         EvolutionManager.i.OnEvolutionStart += () => 
         {
+            stateBeforeEvolution = gameState;
             gameState = GameState.Evolution;
         };
         EvolutionManager.i.OnEvolutionStart += () => 
         {
-           gameState = GameState.OverWorld;
+           gameState = stateBeforeEvolution;
         };
     }
 

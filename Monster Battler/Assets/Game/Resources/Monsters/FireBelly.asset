@@ -17,7 +17,7 @@ MonoBehaviour:
   frontSprite: {fileID: 21300000, guid: 9fcc9f0761dabfd4f91df6382d298493, type: 3}
   backSprite: {fileID: 21300000, guid: 315bd6bf5e4b7134d85b5f8655e78f08, type: 3}
   type1: 3
-  type2: 11
+  type2: 0
   maxHP: 55
   attack: 55
   defense: 50
@@ -45,5 +45,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9c4c2642b2a62ef4a909064aeb51ba3a, type: 2}
   - {fileID: 11400000, guid: ba9b140fb9dc0f441867b5414518c466, type: 2}
   evolutions:
-  - monsterEvolution: {fileID: 11400000, guid: d63bf37dc82034448bb8d1234f4d8a31, type: 2}
-    evolutionLevel: 13
+  - monsterEvolution: {fileID: 11400000, guid: 9889016c7b993364383770efdf50db01, type: 2}
+    evolutionLevel: 12
+    itemEvolution: {fileID: 11400000, guid: c3e7318f52520774789b73c89e0fd605, type: 2}
