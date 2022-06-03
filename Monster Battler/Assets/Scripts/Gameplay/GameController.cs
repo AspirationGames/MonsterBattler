@@ -60,9 +60,10 @@ public class GameController : MonoBehaviour
             stateBeforeEvolution = gameState;
             gameState = GameState.Evolution;
         };
-        EvolutionManager.i.OnEvolutionStart += () => 
+        EvolutionManager.i.OnEvolutionEnd += () => 
         {
-           gameState = stateBeforeEvolution;
+            partyScreen.SetPartyData(); //this will make sure to update the party screen whenever an evolution is completed
+            gameState = stateBeforeEvolution;
         };
     }
 
@@ -174,6 +175,7 @@ public class GameController : MonoBehaviour
             StartCoroutine(ReloadLastSave());
         }
 
+        partyScreen.SetPartyData();
         gameState = GameState.OverWorld;
         battleSystem.gameObject.SetActive(false);
         

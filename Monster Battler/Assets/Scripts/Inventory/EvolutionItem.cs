@@ -16,7 +16,7 @@ public class EvolutionItem : ItemBase
 
         if (evolution != null)
         {
-            if(evolution.EvolutionLevel == monster.Level)
+            if(evolution.EvolutionLevel <= monster.Level)
             {
                 return true;
             }

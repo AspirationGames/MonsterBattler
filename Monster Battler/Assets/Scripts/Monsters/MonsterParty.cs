@@ -118,7 +118,6 @@ public class MonsterParty : MonoBehaviour
             {
                 yield return DialogManager.Instance.ShowDialogText($"Huh!? Something is happening with {monster.Base.MonsterName}.");
                 yield return EvolutionManager.i.Evolve(monster, evolution);
-                OnUpdated?.Invoke();
             }
             else
             {

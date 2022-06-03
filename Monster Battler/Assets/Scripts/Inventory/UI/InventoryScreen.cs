@@ -224,7 +224,6 @@ public class InventoryScreen : MonoBehaviour
         {
             yield return EvolutionManager.i.Evolve(selectedMonster, evolutionItem.Evolution);
             DecreaseItemQuanity();
-            partyScreen.SetPartyData();
             partyScreen.ClosePartyScreen(); //I want to automatically close party screen
             yield break;
         }

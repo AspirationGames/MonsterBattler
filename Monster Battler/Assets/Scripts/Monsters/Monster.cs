@@ -500,6 +500,7 @@ public class Monster
         if (Exp > Base.GetExpForLevel(level + 1))
         {
             ++level;
+            CalculateStats();
             OnLevelChanged?.Invoke();
             return true;
         }
@@ -510,14 +511,17 @@ public class Monster
 
     public Evolution CheckForEvolution()
     {
-        return Base.Evolutions.FirstOrDefault(e => e.EvolutionLevel == level); //returns the form according to its level
+        return Base.Evolutions.FirstOrDefault(e => e.EvolutionLevel <= level); //returns the form according to its level
         
     }
 
     public void Evolve(Evolution evolution)
     {
+        int hpIncrease = evolution.MonsterEvolution.MaxHP - MaxHP; //the difference between the evolution max HP and current HP to account for HP shift
         _base = evolution.MonsterEvolution;
         CalculateStats();
+        HP += hpIncrease;
+        
     }
     public LearnableMove GetLearnableMoveAtCurrLevel()
     {
