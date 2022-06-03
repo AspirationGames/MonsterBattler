@@ -275,12 +275,18 @@ public class Monster
     void CalculateStats()
     {
         Stats = new Dictionary<Stat, int>();
+        int OldMaxHP = MaxHP; //to keep track of max HP changes for things like evolution
 
         //HP has unique formula and is not effected by personality
         MaxHP = Mathf.FloorToInt
             (
                 ( ( (2*Base.MaxHP + naturalSkillMaxHP + developedSkillMaxHP/4)* Level / 100  ) + Level + 10 ) 
             ); 
+
+            if(OldMaxHP != 0)
+            {
+                HP += MaxHP - OldMaxHP;
+            }
 
         //OtherStats
 
@@ -517,10 +523,9 @@ public class Monster
 
     public void Evolve(Evolution evolution)
     {
-        int hpIncrease = evolution.MonsterEvolution.MaxHP - MaxHP; //the difference between the evolution max HP and current HP to account for HP shift
+        
         _base = evolution.MonsterEvolution;
         CalculateStats();
-        HP += hpIncrease;
         
     }
     public LearnableMove GetLearnableMoveAtCurrLevel()
