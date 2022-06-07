@@ -8,9 +8,12 @@ using UnityEngine.InputSystem;
 public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
 {
     [SerializeField] GameObject dialogBox;
+    [SerializeField] ChoiceBox choiceBox;
     [SerializeField] TextMeshProUGUI dialogText;
 
     [SerializeField] int lettersPerSecond;
+
+    
 
     public static DialogManager Instance {get; private set;}
     public bool IsShowing {get; private set;}
@@ -62,7 +65,7 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
         dialogBox.SetActive(false);
         IsShowing = false;
     }
-    public IEnumerator ShowDialog(Dialog dialog)
+    public IEnumerator ShowDialog(Dialog dialog, List<string> choices=null, Action<int> onChoiceSelectedAction=null)
     {
         yield return new WaitForEndOfFrame();
         
@@ -77,6 +80,11 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
             yield return TypeDialog(line);
             yield return new WaitUntil(() => isConfirmed);
 
+        }
+
+        if(choices != null && choices.Count >= 1)
+        {
+            yield return choiceBox.ShowChoices(choices, onChoiceSelectedAction);
         }
         
         dialogBox.SetActive(false);
