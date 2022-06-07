@@ -23,6 +23,7 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
 
     private void Awake() 
     {
+        //Test to make sure GitHub is still working
         Instance = this;
 
         dialogControls = new PlayerControls();
