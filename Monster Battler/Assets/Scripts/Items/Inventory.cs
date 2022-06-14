@@ -62,6 +62,24 @@ public class Inventory : MonoBehaviour, ISavable
 
     }
 
+    public int GetItemCount(ItemBase item)
+    {
+        int itemCategoryIndex = (int)GetItemCategory(item);
+        SetCurrentItemSlots(itemCategoryIndex);
+        var itemSlot = currentItemSlots.FirstOrDefault(slot => slot.Item == item); //checks if an item slot alrady exist for the item being added
+
+        if(itemSlot != null)
+        {
+            return itemSlot.Quantity;
+        }
+        else
+        {
+            Debug.Log("error item slot doese not exist");
+            return 0;
+        }
+        
+    }
+
     public void AddItem(ItemBase item, int addedQuantity=1)
     {
         int itemCategoryIndex = (int)GetItemCategory(item);
@@ -89,7 +107,7 @@ public class Inventory : MonoBehaviour, ISavable
 
     }
 
-    public void DecreaseQuantity(ItemBase item)
+    public void DecreaseQuantity(ItemBase item, int qtyDecrease=1)
     {
         
         int category = (int)GetItemCategory(item);
@@ -97,7 +115,7 @@ public class Inventory : MonoBehaviour, ISavable
 
         var itemSlot = currentItemSlots.First(slot => slot.Item == item);
 
-        itemSlot.Quantity--;
+        itemSlot.Quantity -= qtyDecrease;
 
         if(itemSlot.Quantity == 0)
         {

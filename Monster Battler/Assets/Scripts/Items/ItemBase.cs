@@ -9,12 +9,20 @@ public class ItemBase : ScriptableObject
 
     [SerializeField] Sprite icon;
 
+    [SerializeField] int buyPrice;
+    [SerializeField] int sellPrice;
+    [SerializeField] bool isSellable;
+
     
     public virtual string ItemName => itemName;
 
     public string Description => description;
 
     public Sprite Icon => icon;
+
+    public int BuyPrice => buyPrice;
+    public int SellPrice => sellPrice;
+    public bool IsSellable => isSellable;
 
     public virtual bool CanUse(Monster monster)
     {

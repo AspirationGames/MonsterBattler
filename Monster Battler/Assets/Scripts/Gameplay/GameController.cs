@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameState{ OverWorld, Battle, Dialog, CutScene, Paused, PartyManagement, Inventory, Evolution}
+public enum GameState{ OverWorld, Battle, Dialog, CutScene, Paused, PartyManagement, Inventory, Evolution, Shopping}
 public class GameController : MonoBehaviour
 {
     [SerializeField] PlayerController playerController;
@@ -64,6 +64,14 @@ public class GameController : MonoBehaviour
         {
             partyScreen.SetPartyData(); //this will make sure to update the party screen whenever an evolution is completed
             gameState = stateBeforeEvolution;
+        };
+        ShopController.i.onStartShopping += () =>
+        {
+            gameState = GameState.Shopping;
+        };
+        ShopController.i.onEndShopping += () =>
+        {
+            gameState = GameState.OverWorld;
         };
     }
 

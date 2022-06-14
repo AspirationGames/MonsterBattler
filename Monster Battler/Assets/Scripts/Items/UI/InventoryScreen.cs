@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Linq;
 
-public enum InventoryScreenState{Inventory, PartyScreen, BindingTargetSelection, ForgettingMove, Busy}
+public enum InventoryScreenState{Inventory, PartyScreen, BindingTargetSelection, ForgettingMove, SellingItems, Busy}
 public class InventoryScreen : MonoBehaviour
 {
 
@@ -34,6 +34,7 @@ public class InventoryScreen : MonoBehaviour
     int selectedCategoryIndex = 0;
     List<ItemSlot> currentItemSlots;
     public event Action bindingSelected;
+    public event Action<ItemBase> onItemSold;
     MoveBase moveToLearn; //new Move monster is trying to learn
     Monster monsterLearning; //The monster trying to learn a new move
 
@@ -140,6 +141,12 @@ public class InventoryScreen : MonoBehaviour
         int selectedItemIndex = selectedItemSlotUI.transform.GetSiblingIndex(); //sets the selected item for use.
         selectedItemSlot = currentItemSlots[selectedItemIndex];
 
+        if(GameController.Instance.GameState == GameState.Shopping)
+        {
+            onItemSold?.Invoke(selectedItemSlot.Item);
+            inventoryScreenState = InventoryScreenState.Inventory;
+            return;
+        }
 
         if(!selectedItemSlot.Item.CanUsedOutsideBattle && GameController.Instance.GameState != GameState.Battle) //if item can't be used outside of battle
         {
@@ -376,10 +383,15 @@ public class InventoryScreen : MonoBehaviour
         inventoryScreenState = InventoryScreenState.Inventory;
     }
 
-    public void BackToPauseMenu()
+    public void Back()
     {
-        GameController.Instance.BackToPauseMenu();
+        
         gameObject.SetActive(false);
+        if(GameController.Instance.GameState == GameState.Shopping)
+        {
+            return; //we do not need to reset game state to pause;
+        }
+        GameController.Instance.BackToPauseMenu();
     }
 
 }

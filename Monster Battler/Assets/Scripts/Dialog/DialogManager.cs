@@ -52,10 +52,7 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
             yield return choiceBox.ShowChoices(choices, onChoiceSelectedAction);
         }
 
-        yield return new WaitForSeconds(0.5f);
-
-
-        if(autoClose == true)
+        if(autoClose)
         {
             CloseDialog();
         }

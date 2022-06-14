@@ -14,7 +14,6 @@ public class ChoiceButton : MonoBehaviour
     public void Awake() 
     {
         textUI = GetComponentInChildren<TextMeshProUGUI>();
-        Debug.Log(textUI.text);
     }
 
     public void OnChoiceSelected()

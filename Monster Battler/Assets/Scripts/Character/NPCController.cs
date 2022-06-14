@@ -21,6 +21,7 @@ public class NPCController : MonoBehaviour, Interactable, ISavable
     ItemGiver itemGiver;
     MonsterGiver monsterGiver;
     Healer healer;
+    ShopKeeper shopKeeper;
     NPCState npcState;
     
     float idleTime = 0f;
@@ -33,6 +34,7 @@ public class NPCController : MonoBehaviour, Interactable, ISavable
         itemGiver = GetComponent<ItemGiver>();
         monsterGiver = GetComponent<MonsterGiver>();
         healer = GetComponent<Healer>();    
+        shopKeeper = GetComponent<ShopKeeper>();
     }
     public IEnumerator Interact(Transform initiator)
     {   
@@ -84,6 +86,10 @@ public class NPCController : MonoBehaviour, Interactable, ISavable
             else if(healer != null) //npc is a healer.. this is place holder code
             {
                 yield return healer.Heal(initiator, dialog);
+            }
+            else if(shopKeeper != null)
+            {
+                yield return shopKeeper.Trade();
             }
             else
             {
