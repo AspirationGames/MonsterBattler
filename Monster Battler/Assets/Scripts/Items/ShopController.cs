@@ -8,17 +8,17 @@ public enum ShopState {Menu, Buying, Selling, Busy}
 public class ShopController : MonoBehaviour
 {
     [SerializeField] InventoryScreen inventoryScreen;
-
+    [SerializeField] ShopScreen shopScreen;
     [SerializeField] MoneyUI moneyUI;
-
-    [SerializeField] ShopQtyUI shopCountUI;
+    [SerializeField] ShopQtyUI shopQtyUI;
+    
     public static ShopController i {get; private set;}
-
     public event Action onStartShopping;
     public event Action onEndShopping;
     ShopState shopState;
-
     Inventory inventory;
+
+    ShopKeeper shopKeeper;
     private void Awake() 
     {
         i = this;
@@ -33,6 +33,7 @@ public class ShopController : MonoBehaviour
     }
     public IEnumerator StartTrading(ShopKeeper shopKeeper)
     {
+        this.shopKeeper = shopKeeper;
         onStartShopping?.Invoke();
         yield return ShowShopMenu();
 
@@ -50,7 +51,9 @@ public class ShopController : MonoBehaviour
         if(selectedChoice == 0) //Buy
         {
             shopState = ShopState.Buying;
-            
+            shopScreen.ShowShopUI(shopKeeper.AvailableItems);
+            moneyUI.ShowMoneyBox();
+            yield return DialogManager.Instance.ShowDialogText("What would you like to purchase?", false, false);
         }
         else if(selectedChoice == 1) //Sell
         {
@@ -95,7 +98,7 @@ public class ShopController : MonoBehaviour
         {
 
             yield return DialogManager.Instance.ShowDialogText("How many would you like to sell?", false, false);
-            yield return shopCountUI.ShowQuantity(itemQty, item.SellPrice, (qtyConfirmed) => sellQty = qtyConfirmed);
+            yield return shopQtyUI.ShowQuantity(itemQty, item.SellPrice, (qtyConfirmed) => sellQty = qtyConfirmed);
             DialogManager.Instance.CloseDialog(); //closes the dialog sicne we did not auto close
             
         }

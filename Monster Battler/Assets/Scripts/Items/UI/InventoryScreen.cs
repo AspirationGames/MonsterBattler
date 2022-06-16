@@ -50,11 +50,25 @@ public class InventoryScreen : MonoBehaviour
         UpdateItemList();
         
 
+        
+    }
+
+    private void OnEnable() 
+    {
         ItemSlotUI.itemUIHover += ItemHover;
         ItemSlotUI.itemUISelected += ItemSelected;
         inventory.InventoryUpdated += UpdateItemList;
         partyScreen.monsterSelected += PartyMemberSelected; //monster selected from party screen
         partyScreen.screenClosed += ResetInventoryState;
+    }
+
+    private void OnDisable()
+    {
+        ItemSlotUI.itemUIHover -= ItemHover;
+        ItemSlotUI.itemUISelected -= ItemSelected;
+        inventory.InventoryUpdated -= UpdateItemList;
+        partyScreen.monsterSelected -= PartyMemberSelected; //monster selected from party screen
+        partyScreen.screenClosed -= ResetInventoryState;
     }
 
     void UpdateItemList()

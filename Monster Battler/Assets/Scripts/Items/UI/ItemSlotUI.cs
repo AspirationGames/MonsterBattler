@@ -20,15 +20,20 @@ public class ItemSlotUI : MonoBehaviour
         itemQuantityText.text = $"x {itemSlot.Quantity}";
     }
 
+    public void SetNameAndPrice(ItemBase item) //used for Shop UI
+    {
+        itemNameText.text = item.ItemName;
+        itemQuantityText.text = $"$ {item.BuyPrice}";
+    }
+
     public void OnHover()
     {
-        itemUIHover(this);
-
+        itemUIHover?.Invoke(this);
     }
 
     public void OnSelect()
     {
-        itemUISelected(this);
+        itemUISelected?.Invoke(this);
 
     }
 
