@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,8 @@ public class ShopScreen : MonoBehaviour
     [SerializeField] Image itemIcon;
     [SerializeField] TextMeshProUGUI itemDesciption;
     List<ItemBase> availableItems;
+
+    public event Action<ItemBase> onItemBought;
 
     public void ShowShopUI(List<ItemBase> availableItems)
     {
@@ -81,11 +84,13 @@ public class ShopScreen : MonoBehaviour
 
     public void ItemSelected(ItemSlotUI selectedItemSlotUI)
     {   
-
+        int selectedItemIndex = selectedItemSlotUI.transform.GetSiblingIndex();
+        ItemBase selectedItem = availableItems[selectedItemIndex];
+        onItemBought.Invoke(selectedItem);
     }
 
-    public void OnBack()
+    public void CloseShopUI()
     {
-
+        gameObject.SetActive(false);
     }
 }

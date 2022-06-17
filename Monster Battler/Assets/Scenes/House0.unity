@@ -375,6 +375,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f62786a606546034fbdd4da88c9335c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  availableItems:
+  - {fileID: 11400000, guid: e5289a492fd345045990059e40b8657a, type: 2}
+  - {fileID: 11400000, guid: cb3fd8a94a90516449606c33099da8bc, type: 2}
+  - {fileID: 11400000, guid: d2072a3b894fb1a44805d466b6a77530, type: 2}
+  - {fileID: 11400000, guid: e5289a492fd345045990059e40b8657a, type: 2}
+  - {fileID: 11400000, guid: 29d85fb6665e22d49ade81f025a7ab9d, type: 2}
+  - {fileID: 11400000, guid: 6f76de78280485848ba6f8ab7e889b3a, type: 2}
+  - {fileID: 11400000, guid: c8d72ee760c7286419102bf38ada5f6a, type: 2}
 --- !u!1001 &1772481007
 PrefabInstance:
   m_ObjectHideFlags: 0

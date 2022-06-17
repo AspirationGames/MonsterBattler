@@ -399,12 +399,8 @@ public class InventoryScreen : MonoBehaviour
 
     public void Back()
     {
-        
-        gameObject.SetActive(false);
-        if(GameController.Instance.GameState == GameState.Shopping)
-        {
-            return; //we do not need to reset game state to pause;
-        }
+        if(GameController.Instance.GameState == GameState.Shopping) return; //we do not need to reset game state to pause;
+        //Exiting inventory from shop state is handeled in Shop controller script
         GameController.Instance.BackToPauseMenu();
     }
 
