@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMoney : MonoBehaviour
+public class PlayerMoney : MonoBehaviour, ISavable
 {
     [SerializeField] int money;
 
@@ -26,7 +26,15 @@ public class PlayerMoney : MonoBehaviour
     {
         money -= amount;
         OnMoneyChanged?.Invoke();
-    } 
+    }
 
-    
+    public object CaptureState()
+    {
+        return money;
+    }
+
+    public void RestoreState(object state)
+    {
+       money = (int)state;
+    }
 }

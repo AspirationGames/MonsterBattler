@@ -401,6 +401,7 @@ public class InventoryScreen : MonoBehaviour
     {
         if(GameController.Instance.GameState == GameState.Shopping) return; //we do not need to reset game state to pause;
         //Exiting inventory from shop state is handeled in Shop controller script
+        gameObject.SetActive(false);
         GameController.Instance.BackToPauseMenu();
     }
 
