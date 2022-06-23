@@ -34,6 +34,7 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] GameObject summoningCircle;
 
     [SerializeField] MoveDetailsUI moveDetailsUI;
+    [SerializeField] AudioClip victoryMusic;
 
     BattleState battleState;
 
@@ -59,25 +60,29 @@ public class BattleSystem : MonoBehaviour
     int escapeAttempts;
 
     
-    public void StartWildMonsterBattle(MonsterParty playerParty, MonsterParty wildMonsters)
+    public void StartWildMonsterBattle(MonsterParty playerParty, MonsterParty wildMonsters, AudioClip battlemusic)
     {
         this.playerParty = playerParty;
         this.enemyParty = wildMonsters;
         
         player = playerParty.GetComponent<PlayerController>();
         
+        AudioManager.i.PlayMusic(battlemusic);
+        
         isSummonerBattle = false;
         enemyImage.gameObject.SetActive(false); //removes summoner sprite image from battle
         StartCoroutine(SetupBattle());
     }
 
-    public void StartSummonerBattle(MonsterParty playerParty, MonsterParty summonerParty)
+    public void StartSummonerBattle(MonsterParty playerParty, MonsterParty summonerParty, AudioClip battlemusic)
     {
         this.playerParty = playerParty;
         enemyParty = summonerParty;
 
         player = playerParty.GetComponent<PlayerController>();
         summoner = summonerParty.GetComponent<SummonerController>();
+
+        AudioManager.i.PlayMusic(battlemusic);
 
         isSummonerBattle = true;
         StartCoroutine(SetupBattle());
@@ -1262,6 +1267,12 @@ public class BattleSystem : MonoBehaviour
         
         if(!faintedUnit.IsPlayerMonster) //should only gain exp if player. 
         {
+            //Check for victory to play victory music
+            if(!enemyParty.HasHealthyMonster()) //enemy has no healthy monsters
+            {
+                AudioManager.i.PlayMusic(victoryMusic);
+            }
+
             //EXP gain calculation
             int b = faintedUnit.Monster.Base.ExpYield;
             int lvl = faintedUnit.Monster.Level;

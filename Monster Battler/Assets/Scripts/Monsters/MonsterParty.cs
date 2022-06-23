@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class MonsterParty : MonoBehaviour
 {
@@ -109,7 +110,11 @@ public class MonsterParty : MonoBehaviour
 
     }
 
-    public IEnumerator CheckForEvolution()
+    public bool CheckForEvolutions()
+    {
+        return monsters.Any(m => m.CheckForEvolution() != null); //returns if any monster qualify for evolution
+    }
+    public IEnumerator RunEvolutions()
     {
         foreach(Monster monster in monsters)
         {

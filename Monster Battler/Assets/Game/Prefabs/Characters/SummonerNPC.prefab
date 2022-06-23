@@ -298,6 +298,8 @@ MonoBehaviour:
     - Students like us don't need to pay to use the bullet train to get to the academy.
   exclamation: {fileID: 6197021835203438350}
   fov: {fileID: 6197021836664056380}
+  summonerAppearsMusic: {fileID: 8300000, guid: 019f12cb8e65eaa4690e2054d202f0ae, type: 3}
+  summonerBattleMusic: {fileID: 8300000, guid: a1c26af3f46a3eb479afd3f55e506e45, type: 3}
 --- !u!114 &6197021835260261602
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -63,6 +63,7 @@ public class GameController : MonoBehaviour
         EvolutionManager.i.OnEvolutionEnd += () => 
         {
             partyScreen.SetPartyData(); //this will make sure to update the party screen whenever an evolution is completed
+            AudioManager.i.PlayMusic(CurrentScene.SceneMusic, fade: true); //resets music from evolution music to scene music
             gameState = stateBeforeEvolution;
         };
         ShopController.i.onStartShopping += () =>
@@ -144,7 +145,7 @@ public class GameController : MonoBehaviour
             wildMonsters.Monsters.Add(wildMonsterCopy);
         }
         
-        battleSystem.StartWildMonsterBattle(playerParty, wildMonsters); 
+        battleSystem.StartWildMonsterBattle(playerParty, wildMonsters, CurrentScene.WildBattleMusic); 
     }
 
     SummonerController summoner;
@@ -160,7 +161,7 @@ public class GameController : MonoBehaviour
         var playerParty = playerController.GetComponent<MonsterParty>();
         var summonerParty = summonerController.GetComponent<MonsterParty>();
 
-        battleSystem.StartSummonerBattle(playerParty, summonerParty);
+        battleSystem.StartSummonerBattle(playerParty, summonerParty, summonerController.SummonerBattleMusic);
     }
 
     public void OnEnterSummonerFOV(SummonerController summoner)
@@ -188,7 +189,16 @@ public class GameController : MonoBehaviour
         battleSystem.gameObject.SetActive(false);
         
         var playerParty = playerController.GetComponent<MonsterParty>();
-        StartCoroutine(playerParty.CheckForEvolution());
+        bool hasEvolutions = playerParty.CheckForEvolutions();
+
+        if(hasEvolutions)
+        {
+            StartCoroutine(playerParty.RunEvolutions());
+        }
+        else
+        {
+            AudioManager.i.PlayMusic(CurrentScene.SceneMusic, fade: true);
+        }
 
     }
 

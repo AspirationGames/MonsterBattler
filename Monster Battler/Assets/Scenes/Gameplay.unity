@@ -206,6 +206,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7702003041761851710, guid: bfb193b448fcb64468ea1166b24b1f3a, type: 3}
+      propertyPath: sceneMusic
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7702003041761851710, guid: bfb193b448fcb64468ea1166b24b1f3a, type: 3}
       propertyPath: connectedScenes.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -290,6 +294,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7702003041761851710, guid: bfb193b448fcb64468ea1166b24b1f3a, type: 3}
+      propertyPath: sceneMusic
+      value: 
+      objectReference: {fileID: 8300000, guid: 78a04b9c4db49ed41bb3b72b4caa3c8a, type: 3}
+    - target: {fileID: 7702003041761851710, guid: bfb193b448fcb64468ea1166b24b1f3a, type: 3}
+      propertyPath: wildBattleMusic
+      value: 
+      objectReference: {fileID: 8300000, guid: 228d210890a542c49b8cfe8a8d537e23, type: 3}
     - target: {fileID: 7702003041761851710, guid: bfb193b448fcb64468ea1166b24b1f3a, type: 3}
       propertyPath: connectedScenes.Array.size
       value: 2
@@ -1364,6 +1376,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7702003041761851710, guid: bfb193b448fcb64468ea1166b24b1f3a, type: 3}
+      propertyPath: sceneMusic
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7702003041761851710, guid: bfb193b448fcb64468ea1166b24b1f3a, type: 3}
       propertyPath: connectedScenes.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -1584,6 +1600,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7702003041761851710, guid: bfb193b448fcb64468ea1166b24b1f3a, type: 3}
+      propertyPath: sceneMusic
+      value: 
+      objectReference: {fileID: 8300000, guid: f27754a3f29ea11449c68d4e5d41e00d, type: 3}
+    - target: {fileID: 7702003041761851710, guid: bfb193b448fcb64468ea1166b24b1f3a, type: 3}
+      propertyPath: wildBattleMusic
+      value: 
+      objectReference: {fileID: 8300000, guid: 228d210890a542c49b8cfe8a8d537e23, type: 3}
     - target: {fileID: 7702003041761851710, guid: bfb193b448fcb64468ea1166b24b1f3a, type: 3}
       propertyPath: connectedScenes.Array.size
       value: 2

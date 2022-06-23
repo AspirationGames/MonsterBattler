@@ -7,6 +7,12 @@ using System.Linq;
 public class SceneDetails : MonoBehaviour
 {
     [SerializeField] List<SceneDetails> connectedScenes;
+    [SerializeField] AudioClip sceneMusic;
+
+    [SerializeField] AudioClip wildBattleMusic;
+
+    public AudioClip SceneMusic => sceneMusic;
+    public AudioClip WildBattleMusic => wildBattleMusic;
     public bool IsLoaded {get; private set;}
 
     List<SavableEntity> savableEntities;
@@ -17,7 +23,7 @@ public class SceneDetails : MonoBehaviour
             
             LoadScene();
             GameController.Instance.SetCurrentScene(this);
-            
+            if(sceneMusic != null) AudioManager.i.PlayMusic(sceneMusic, fade:true); //plays scene music
             
             //Load all connected scenes
             foreach (var scene in connectedScenes)

@@ -13,6 +13,13 @@ public class SummonerController : MonoBehaviour, Interactable, ISavable
 
     [SerializeField] GameObject fov;
 
+    [Header("Audio")]
+    [SerializeField] AudioClip summonerAppearsMusic;
+    [SerializeField] AudioClip summonerBattleMusic;
+    
+
+    public AudioClip SummonerBattleMusic => summonerBattleMusic;
+
     Character character;
 
     //State
@@ -39,6 +46,7 @@ public class SummonerController : MonoBehaviour, Interactable, ISavable
 
         if(!battleLost)
         {
+            AudioManager.i.PlayMusic(summonerAppearsMusic);
             yield return DialogManager.Instance.ShowDialog(dialog);
             GameController.Instance.StartSummonerBattle(this);
         }
@@ -52,6 +60,7 @@ public class SummonerController : MonoBehaviour, Interactable, ISavable
 
     public IEnumerator TriggerSummonerBattle(PlayerController player)
     {
+        AudioManager.i.PlayMusic(summonerAppearsMusic);
         //Exclamation Mark
         exclamation.SetActive(true);
         yield return new WaitForSeconds(0.5f);

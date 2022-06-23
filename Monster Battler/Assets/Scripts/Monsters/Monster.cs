@@ -187,7 +187,7 @@ public class Monster
 
 
     float PersonalityValue(Stat stat)
-    {   //TO DO ADD FULL LIST OF PERSONALITY VALUES
+    {   
         switch(stat)
         {
             case Stat.Attack:

@@ -8,6 +8,7 @@ public class EvolutionManager : MonoBehaviour
 {
     [SerializeField] GameObject evolutionScreen;
     [SerializeField] Image monsterImage;
+    [SerializeField] AudioClip evolutionMusic;
 
     public static EvolutionManager i;
 
@@ -23,6 +24,9 @@ public class EvolutionManager : MonoBehaviour
     {
         OnEvolutionStart?.Invoke();
         evolutionScreen.SetActive(true);
+
+        AudioManager.i.PlayMusic(evolutionMusic);
+
         monsterImage.sprite = monster.Base.FrontSprite;
 
         
