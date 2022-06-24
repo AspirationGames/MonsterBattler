@@ -1137,9 +1137,11 @@ public class BattleSystem : MonoBehaviour
                 ($"{attackingMonster.Base.MonsterName} used {attackingMove.Base.MoveName}.");
                 
                 attackingUnit.PlayAttackAnimation();
+                AudioManager.i.PlaySFX(attackingMove.Base.MoveSFX);
                 yield return new WaitForSeconds(1f);
 
-                if(targetMonster.IsProtected)
+
+                if(targetMonster.IsProtected) // if target monster is protected
                 {
                     yield return battleDialogueBox.TypeDialog($"{targetMonster.Base.MonsterName} was protected from the attack by a {targetMonster.ProtectedStatus.Name}.");
                     continue;
@@ -1152,11 +1154,12 @@ public class BattleSystem : MonoBehaviour
                         yield return PerformEffects(attackingMove.Base.Effects, attackingMonster, targetMonster, attackingMove.Base.Target);
                         continue;
                     }
-                    // if target monster is protected
+                    
 
                     else
                     {
                         targetUnit.PlayHitAnimation();
+                        AudioManager.i.PlaySFX(AudioID.Hit);
                         var damageDetails = targetMonster.TakeDamage(attackingMove, attackingMonster, battleFieldEffects.Weather);
                         yield return targetUnit.Hud.WaitForHPUpdate();
                         yield return ShowDamageDetails(damageDetails);

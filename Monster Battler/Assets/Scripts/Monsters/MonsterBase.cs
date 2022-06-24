@@ -189,6 +189,8 @@ public class MonsterBase : ScriptableObject
         get{return evolutions;}
     }
 
+    
+
 }    
 
 [System.Serializable]

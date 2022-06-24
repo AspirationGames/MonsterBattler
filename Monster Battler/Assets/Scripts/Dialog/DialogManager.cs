@@ -35,6 +35,7 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
 
     public IEnumerator ShowDialogText(string text, bool waitForInput = false, bool autoClose = true, List<string> choices=null, Action<int> onChoiceSelectedAction=null, float closeDelay = 0) //simple text messeage not dialogue if set to true the player will still need to give input to close dialogue
     {
+        
         OnDialogStart?.Invoke();
         dialogControls.Enable();
         IsShowing = true;
@@ -43,6 +44,7 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
 
         yield return TypeDialog(text);
         
+        AudioManager.i.PlaySFX(AudioID.UISelect);
         if(waitForInput)
         {
             yield return new WaitUntil(() => isConfirmed);
@@ -79,6 +81,7 @@ public class DialogManager : MonoBehaviour, PlayerControls.IDialogActions
         
         foreach(var line in dialog.Lines)
         {
+            AudioManager.i.PlaySFX(AudioID.UISelect);
             yield return TypeDialog(line);
             yield return new WaitUntil(() => isConfirmed);
 

@@ -48,6 +48,7 @@ public class GameController : MonoBehaviour
         {
             stateBeforeDialog = gameState;
             gameState = GameState.Dialog;
+            
         };
         DialogManager.Instance.OnDialogEnd += () => 
         {   

@@ -26,6 +26,8 @@ public class MoveBase : ScriptableObject
     [SerializeField] MoveEffects effects;
     [SerializeField] List<SecondaryEffects> secondaryEffects; //moves can have multiple secondary effects
     
+    [Header("Audio")]
+    [SerializeField] AudioClip moveSFX;
 
     
 
@@ -122,6 +124,8 @@ public class MoveBase : ScriptableObject
     {
         get {return target;}
     }
+
+    public AudioClip MoveSFX => moveSFX;
 
 }
 

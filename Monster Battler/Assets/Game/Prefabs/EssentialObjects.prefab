@@ -6096,6 +6096,11 @@ MonoBehaviour:
   musicPlayer: {fileID: 1159903391515400960}
   sfxPlayer: {fileID: 717395297398941405}
   fadeTime: 2
+  sfxList:
+  - id: 0
+    clip: {fileID: 8300000, guid: eb9e0c6669b9efa47989e8e4758435b0, type: 3}
+  - id: 1
+    clip: {fileID: 8300000, guid: eb9e0c6669b9efa47989e8e4758435b0, type: 3}
 --- !u!1 &8925658501780145004
 GameObject:
   m_ObjectHideFlags: 0
@@ -9459,6 +9464,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: ShopQtyUI
       objectReference: {fileID: 0}
+    - target: {fileID: 5266411357357825264, guid: 65515c06dd612f34b91d5fdc690d42f4, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -307
+      objectReference: {fileID: 0}
+    - target: {fileID: 5694497946603196651, guid: 65515c06dd612f34b91d5fdc690d42f4, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -422.99988
+      objectReference: {fileID: 0}
     - target: {fileID: 5749941637702192232, guid: 65515c06dd612f34b91d5fdc690d42f4, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -9526,6 +9539,10 @@ PrefabInstance:
     - target: {fileID: 6453211699497734860, guid: 65515c06dd612f34b91d5fdc690d42f4, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 6811694551546346860, guid: 65515c06dd612f34b91d5fdc690d42f4, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -191
       objectReference: {fileID: 0}
     - target: {fileID: 7343825846305389815, guid: 65515c06dd612f34b91d5fdc690d42f4, type: 3}
       propertyPath: m_SizeDelta.y

@@ -14,8 +14,18 @@ public class MoneyUI : MonoBehaviour
 
     private void Start() 
     {
-        PlayerMoney.i.OnMoneyChanged += SetMoneyText;  
+         
         SetMoneyText();  
+    }
+
+    private void OnEnable() 
+    {
+        PlayerMoney.i.OnMoneyChanged += SetMoneyText; 
+    }
+
+    private void OnDisable()
+    {
+        PlayerMoney.i.OnMoneyChanged -= SetMoneyText; 
     }
 
     public void ShowMoneyBox()
