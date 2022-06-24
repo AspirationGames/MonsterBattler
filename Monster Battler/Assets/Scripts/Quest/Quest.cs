@@ -41,6 +41,7 @@ public class Quest
         {
             inventory.AddItem(QBase.RewardItem);
             var playerName = player.GetComponent<PlayerController>().Name;
+            AudioManager.i.PlaySFX(AudioID.ItemObtained, true);
             yield return DialogManager.Instance.ShowDialogText($"{playerName} recieved {QBase.RewardItem.ItemName}");
         }
 

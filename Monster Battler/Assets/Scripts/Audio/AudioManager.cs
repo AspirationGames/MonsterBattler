@@ -12,6 +12,7 @@ public class AudioManager : MonoBehaviour
 
     [SerializeField] List<AudioData> sfxList;
     float musicVolume;
+    AudioClip currentMusic;
 
     Dictionary<AudioID, AudioData> sfxDictionary;
 
@@ -30,7 +31,10 @@ public class AudioManager : MonoBehaviour
 
     public void PlayMusic(AudioClip musicClip, bool isLooping=true, bool fade=false)
     {
-        if(musicClip == null) return;
+        if(musicClip == null || currentMusic == musicClip) return;
+
+        currentMusic = musicClip;
+
         StartCoroutine(PlayMusicAsync(musicClip, isLooping, fade));
     }
 
@@ -46,26 +50,43 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    public void PlaySFX(AudioClip musicClip)
+    public void PlaySFX(AudioClip sfxClip, bool pauseMusic=false)
     {
-        if(musicClip == null) return;
-        sfxPlayer.PlayOneShot(musicClip); //play one shot won't cancle any other clip being played.
+        if(sfxClip == null) return;
+        
+        
+        if(pauseMusic)
+        {
+            musicPlayer.Pause();
+            StartCoroutine(UnpauseMusic(sfxClip.length));
+        }
+
+        sfxPlayer.PlayOneShot(sfxClip); //play one shot won't cancle any other clip being played.
+
     }
 
-    public void PlaySFX(AudioID audioID)
+    public void PlaySFX(AudioID audioID, bool pauseMusic=false)
     {
         if(!sfxDictionary.ContainsKey(audioID)) return;
 
+
         AudioData audioData = sfxDictionary[audioID];   
-        PlaySFX(audioData.clip);
+        PlaySFX(audioData.clip, pauseMusic);
     }
 
+    IEnumerator UnpauseMusic(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        musicPlayer.volume = 0;
+        musicPlayer.UnPause();
+        musicPlayer.DOFade(musicVolume, fadeTime);
+    }
     
 }
 
 public enum AudioID 
 {
-    UISelect, Hit, Faint, ExpGain
+    UISelect, Hit, Faint, ExpGain, ItemObtained, MonsterObtained
 }
 
 [System.Serializable]

@@ -24,6 +24,7 @@ public class ItemGiver : MonoBehaviour, ISavable
             dialogText = $"{player.Name} recieved {giveItemQuantity} {giveItem.ItemName}.";
         }
 
+        AudioManager.i.PlaySFX(AudioID.ItemObtained, true);
         yield return DialogManager.Instance.ShowDialogText(dialogText);    
 
     }

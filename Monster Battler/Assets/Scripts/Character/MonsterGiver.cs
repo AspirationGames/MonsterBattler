@@ -17,6 +17,7 @@ public class MonsterGiver : MonoBehaviour, ISavable
         player.GetComponent<MonsterParty>().AddMonster(giveMonster);
         monsterGiven = true;
 
+        AudioManager.i.PlaySFX(AudioID.MonsterObtained, true);
         string dialogText = $"{player.Name} recieved a {giveMonster.Base.MonsterName}.";
         yield return DialogManager.Instance.ShowDialogText(dialogText);    
 

@@ -22,6 +22,7 @@ public class PickUp : MonoBehaviour, Interactable, ISavable
 
             string playerName = initiator.GetComponent<PlayerController>().Name;
 
+            AudioManager.i.PlaySFX(AudioID.ItemObtained, true);
             yield return DialogManager.Instance.ShowDialogText($"{playerName} Found a {pickUpItem.ItemName}");
         }
         
