@@ -15,11 +15,19 @@ MonoBehaviour:
   moveName: Tackle
   description: 
   type: 1
+  target: 0
   power: 40
   accuracy: 100
+  alwaysHits: 0
   ap: 30
+  priority: 0
   category: 0
   effects:
     stageChange: []
     statusEffect: 0
-  target: 0
+    volatileStatusEffect: 0
+    weather: 0
+    timeWarp: 0
+    protect: 0
+  secondaryEffects: []
+  moveSFX: {fileID: 8300000, guid: 159947e5537e2de498f0d840311267eb, type: 3}

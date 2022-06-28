@@ -39,3 +39,4 @@ MonoBehaviour:
     protect: 0
     chance: 10
     target: 0
+  moveSFX: {fileID: 8300000, guid: 159947e5537e2de498f0d840311267eb, type: 3}

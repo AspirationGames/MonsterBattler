@@ -15,6 +15,7 @@ MonoBehaviour:
   moveName: Time Warp
   description: 
   type: 5
+  target: 1
   power: 0
   accuracy: 0
   alwaysHits: 1
@@ -27,5 +28,6 @@ MonoBehaviour:
     volatileStatusEffect: 0
     weather: 0
     timeWarp: 10
+    protect: 0
   secondaryEffects: []
-  target: 1
+  moveSFX: {fileID: 8300000, guid: 159947e5537e2de498f0d840311267eb, type: 3}

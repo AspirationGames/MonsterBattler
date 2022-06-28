@@ -30,3 +30,4 @@ MonoBehaviour:
     timeWarp: 0
     protect: 11
   secondaryEffects: []
+  moveSFX: {fileID: 8300000, guid: 159947e5537e2de498f0d840311267eb, type: 3}
