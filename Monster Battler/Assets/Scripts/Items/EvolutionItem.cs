@@ -7,7 +7,6 @@ using UnityEngine;
 public class EvolutionItem : ItemBase
 {
     [SerializeField] List<MonsterBase> evolvableMonsters;
-
     Evolution evolution;
     public Evolution Evolution => evolution;
     public override bool CanUse(Monster monster)

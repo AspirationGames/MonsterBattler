@@ -10,7 +10,7 @@ public class Inventory : MonoBehaviour, ISavable
     [SerializeField] List<ItemSlot> recoveryItemSlots;
     [SerializeField] List<ItemSlot> crystalSlots;
     [SerializeField] List<ItemSlot> spellSlots; //TMs and HMs
-    [SerializeField] List<ItemSlot> specialSlots; //TMs and HMs
+    [SerializeField] List<ItemSlot> specialSlots;
 
     List<List<ItemSlot>> itemSlots;
 

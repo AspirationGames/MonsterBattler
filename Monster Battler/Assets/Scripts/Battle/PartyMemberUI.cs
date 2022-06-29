@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -19,6 +20,9 @@ public class PartyMemberUI : MonoBehaviour
 
     [SerializeField] Image statusImage;
     [SerializeField] List<Sprite> statusSprites;
+
+    public static event Action<PartyMemberUI> UIHover;
+    public static event Action<PartyMemberUI> UISelected;
     public void Init(Monster mon)
     {
         monster = mon;
@@ -29,8 +33,6 @@ public class PartyMemberUI : MonoBehaviour
         monster.OnHPChanged += UpdateData;
         monster.OnLevelChanged += UpdateData;
         monster.OnStatusChanged += SetStatusImage;
-        
-
     }
 
     void UpdateData()
@@ -85,6 +87,17 @@ public class PartyMemberUI : MonoBehaviour
     public void SetMessageText(string message)
     {
         messageText.text = message;
+    }
+
+    public void OnHover()
+    {
+        UIHover?.Invoke(this);
+    }
+
+    public void OnSelect()
+    {
+        UISelected?.Invoke(this);
+
     }
     
 }

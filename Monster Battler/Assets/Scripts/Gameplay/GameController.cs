@@ -11,8 +11,8 @@ public class GameController : MonoBehaviour
     [SerializeField] PartyScreen partyScreen;
     [SerializeField] InventoryScreen inventoryScreen;
 
+    [SerializeField] GameState gameState;
     Animator cameraAnimator;
-    GameState gameState;
     GameState stateBeforeDialog;
     GameState stateBeforePause;
     GameState stateBeforeEvolution;

@@ -59,7 +59,15 @@ public class BattleSystem : MonoBehaviour
 
     int escapeAttempts;
 
-    
+    private void OnEnable() 
+    {
+        partyScreen.monsterSelected += PartyMemberSelected;
+    }
+
+    private void OnDisable()
+    {
+        partyScreen.monsterSelected -= PartyMemberSelected;
+    }
     public void StartWildMonsterBattle(MonsterParty playerParty, MonsterParty wildMonsters, AudioClip battlemusic)
     {
         this.playerParty = playerParty;
@@ -623,12 +631,8 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    
-    
-
-    public void OnPartyMemberSelected(int selectedMonsterIndex)
+    public void PartyMemberSelected(Monster selectedMonster)
     {
-        var selectedMonster = playerParty.Monsters[selectedMonsterIndex];
 
         if( battleState == BattleState.PlayerSwitch1 || 
             battleState == BattleState.PlayerSwitch2 || 

@@ -6,11 +6,10 @@ using UnityEngine.UI;
 
 public class PartyScreen : MonoBehaviour
 {
+    [SerializeField] Image monsterImage;
     PartyMemberUI[] memberSlots;
     List<Monster> monsters;
-
     MonsterParty playerParty;
-
     public event Action<Monster> monsterSelected;
     public event Action screenClosed;
 
@@ -19,8 +18,19 @@ public class PartyScreen : MonoBehaviour
         memberSlots = GetComponentsInChildren<PartyMemberUI>(true);
         playerParty = MonsterParty.GetPlayerParty();
         SetPartyData();
-
         playerParty.OnUpdated += SetPartyData;
+    }
+
+    private void OnEnable() 
+    {
+        PartyMemberUI.UIHover += PartyMemberHover;
+        PartyMemberUI.UISelected += PartyMemberSelected;
+    }
+
+    private void OnDisable() 
+    {
+        PartyMemberUI.UIHover -= PartyMemberHover;
+        PartyMemberUI.UISelected -= PartyMemberSelected;
     }
 
     public void SetPartyData()
@@ -39,15 +49,39 @@ public class PartyScreen : MonoBehaviour
                 memberSlots[i].gameObject.SetActive(false); //disables party slots that are not in use. Might be useful in order to re-use asset for pre battle party selection? 
             }
         }
+
+        SetMonsterImage(playerParty.Monsters[0]);
     }
 
-    public void OnSelect(int monsterIndex)
+    public void SetMonsterImage(Monster monster)
     {
-        Monster selectedMonster = playerParty.Monsters[monsterIndex];
+        monsterImage.sprite = monster.Base.FrontSprite;
+    }
+
+    public void PartyMemberHover(PartyMemberUI partyMemberUI)
+    {
+        int partyMemberIndex = partyMemberUI.transform.GetSiblingIndex();
+        Monster selectedMonster = playerParty.Monsters[partyMemberIndex];
+        
+        SetMonsterImage(selectedMonster);
+    }
+
+    public void PartyMemberSelected(PartyMemberUI partyMemberUI)
+    {
+        int selectedMonsterIndex = partyMemberUI.transform.GetSiblingIndex();
+        Monster selectedMonster = playerParty.Monsters[selectedMonsterIndex];
+        
+        if(GameController.Instance.GameState == GameState.PartyManagement)
+        {
+            //Show Monster Selected UI
+            
+
+        }
+        
+        print("monster selected");
         monsterSelected?.Invoke(selectedMonster); //event to notify other scripts that require party member selection i.e. inventory
 
     }
-
     public void ShowIfSpellisUsable(SpellItem spellItem)
     {
         for (int i = 0; i < monsters.Count; i++)
