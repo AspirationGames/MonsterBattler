@@ -29,8 +29,16 @@ public class ShopController : MonoBehaviour
     private void Start() 
     {
         //Need to figure out way to subscrive sell item selectio to couroutine calling method right now
-        inventoryScreen.onItemSold += (ItemBase item) => StartCoroutine(SellItem(item));
-        shopScreen.onItemBought += (ItemBase item) => StartCoroutine(BuyItem(item));
+        inventoryScreen.onItemSold += (ItemBase item) => 
+        {
+            if(shopState == ShopState.Busy) return; 
+            StartCoroutine(SellItem(item));
+        };
+        shopScreen.onItemBought += (ItemBase item) => 
+        { 
+            if(shopState == ShopState.Busy) return; 
+            StartCoroutine(BuyItem(item));
+        };
     }
     public IEnumerator StartTrading(ShopKeeper shopKeeper)
     {
@@ -60,6 +68,7 @@ public class ShopController : MonoBehaviour
         {
             shopState = ShopState.Selling;
             inventoryScreen.gameObject.SetActive(true);
+            inventoryScreen.SetInventoryState(InventoryScreenState.SellingItems); //sets inventory screen state to allow for proper UI contol
             moneyUI.ShowMoneyBox();
             yield return DialogManager.Instance.ShowDialogText("Select an Item to sell.", false, false);
 
@@ -90,6 +99,7 @@ public class ShopController : MonoBehaviour
         {
             yield return DialogManager.Instance.ShowDialogText("You can't afford to buy that.",closeDelay: 1f);
             yield return DialogManager.Instance.ShowDialogText("Select an Item to buy.", false, false);
+            shopState = ShopState.Buying;
             yield break; //BREAK and player must select new item to buy or stop shopping
         }
 
@@ -117,8 +127,8 @@ public class ShopController : MonoBehaviour
         if(!item.IsSellable)
         {
             yield return DialogManager.Instance.ShowDialogText("You can't sell that item");
-            shopState = ShopState.Selling; //return to sell item selection
             yield return DialogManager.Instance.ShowDialogText("Select an Item to sell.", false, false);
+            shopState = ShopState.Selling; //return to sell item selection
             yield break;
         }
 
@@ -158,6 +168,7 @@ public class ShopController : MonoBehaviour
 
     public void CloseShopScreen()
     {
+        if(shopState == ShopState.Busy) return;
         shopScreen.CloseShopUI();
         moneyUI.CloseMoneyBox();
         shopQtyUI.gameObject.SetActive(false);
@@ -170,6 +181,7 @@ public class ShopController : MonoBehaviour
             return;
         }
         
+        inventoryScreen.ResetInventoryState();
         inventoryScreen.gameObject.SetActive(false);
         moneyUI.CloseMoneyBox();
         shopQtyUI.gameObject.SetActive(false);

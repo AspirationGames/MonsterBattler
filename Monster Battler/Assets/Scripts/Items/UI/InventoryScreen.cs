@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Linq;
 
-public enum InventoryScreenState{Inventory, PartyScreen, BindingTargetSelection, ForgettingMove, SellingItems, Busy}
+public enum InventoryScreenState{Inventory, PartyScreen, BindingTargetSelection, ForgettingMove, Busy, SellingItems}
 public class InventoryScreen : MonoBehaviour
 {
 
@@ -145,6 +145,14 @@ public class InventoryScreen : MonoBehaviour
 
     public void ItemSelected(ItemSlotUI selectedItemSlotUI)
     {
+        int selectedItemIndex = selectedItemSlotUI.transform.GetSiblingIndex(); //sets the selected item for use.
+        selectedItemSlot = currentItemSlots[selectedItemIndex];
+
+        if(inventoryScreenState == InventoryScreenState.SellingItems) //Shopping
+        {
+            onItemSold?.Invoke(selectedItemSlot.Item);
+            return;
+        }
 
         if(inventoryScreenState != InventoryScreenState.Inventory)
         {
@@ -152,15 +160,6 @@ public class InventoryScreen : MonoBehaviour
         }
 
         inventoryScreenState = InventoryScreenState.Busy;
-        int selectedItemIndex = selectedItemSlotUI.transform.GetSiblingIndex(); //sets the selected item for use.
-        selectedItemSlot = currentItemSlots[selectedItemIndex];
-
-        if(GameController.Instance.GameState == GameState.Shopping)
-        {
-            onItemSold?.Invoke(selectedItemSlot.Item);
-            inventoryScreenState = InventoryScreenState.Inventory;
-            return;
-        }
 
         if(!selectedItemSlot.Item.CanUsedOutsideBattle && GameController.Instance.GameState != GameState.Battle) //if item can't be used outside of battle
         {
@@ -392,6 +391,11 @@ public class InventoryScreen : MonoBehaviour
         //We also don't want to use this because when we Open the party screen during battle we don't want to change the game state. 
 
     }
+
+    public void SetInventoryState(InventoryScreenState state)
+    {
+        inventoryScreenState = state;
+    }   
     public void ResetInventoryState()
     {
         inventoryScreenState = InventoryScreenState.Inventory;
@@ -399,8 +403,9 @@ public class InventoryScreen : MonoBehaviour
 
     public void Back()
     {
-        if(GameController.Instance.GameState == GameState.Shopping) return; //we do not need to reset game state to pause;
+        //we do not need to reset game state to pause;
         //Exiting inventory from shop state is handeled in Shop controller script
+        if(GameController.Instance.GameState != GameState.Inventory) return;
         gameObject.SetActive(false);
         GameController.Instance.BackToPauseMenu();
     }
