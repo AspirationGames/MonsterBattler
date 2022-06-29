@@ -45,7 +45,6 @@ public class ChoiceBox : MonoBehaviour
     public void OnChoiceSelected(ChoiceButton choice)
     {
         selectedChoiceIndex = choice.transform.GetSiblingIndex();
-        Debug.Log(selectedChoiceIndex);
         isChoiceSelected = true;
     }
 }

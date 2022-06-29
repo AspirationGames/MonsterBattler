@@ -72,16 +72,74 @@ public class PartyScreen : MonoBehaviour
         Monster selectedMonster = playerParty.Monsters[selectedMonsterIndex];
         
         if(GameController.Instance.GameState == GameState.PartyManagement)
-        {
-            //Show Monster Selected UI
-            
-
+        {   
+            StartCoroutine(ManagePartyMember(selectedMonster));
+            return;
         }
         
-        print("monster selected");
         monsterSelected?.Invoke(selectedMonster); //event to notify other scripts that require party member selection i.e. inventory
 
     }
+
+    IEnumerator ManagePartyMember(Monster monster)
+    {
+        int selectedChoice = 0;
+        yield return DialogManager.Instance.ShowDialogText($"What would you like to do with {monster.Base.MonsterName}?", 
+        choices: new List<String> {"Monster Summary", "Swap Position", "Use Item", "Give Item to Hold", "Back"}, 
+        onChoiceSelectedAction: (int selectionIndex) => selectedChoice = selectionIndex);
+
+        switch(selectedChoice)
+        {
+            case 0:
+                yield return ShowMonsterSummary(monster);
+                break;
+            case 1:
+                yield return SwapMonsterPosition(monster);
+                break;
+            case 2:
+                yield return UseItem(monster);
+                break;
+            case 3:
+                yield return UseItem(monster);
+                break;
+            case 4:
+                yield break;
+            default:
+                Debug.LogError("No choice selected");
+                break;
+        }
+    }
+
+    IEnumerator ShowMonsterSummary(Monster monster)
+    {
+        Debug.Log("Showing Monster Summary");
+        //WIP I created a monster summary UI object as a child under the Party Screen Prefab. It will cover the party screen and show details about the monster
+
+        yield return null;
+    }
+    IEnumerator SwapMonsterPosition(Monster monster)
+    {
+        Debug.Log("Swapping monster position");
+        //WIP
+        yield return null;
+    }
+
+    IEnumerator UseItem(Monster monster)
+    {
+        Debug.Log("Using Item on Monster");
+        //WIP
+        yield return null;
+    }
+
+    IEnumerator GiveMonsterItem(Monster monster)
+    {
+        Debug.Log("Giving Monster Item to hold");
+        //WIP
+        yield return null;
+    }
+
+
+
     public void ShowIfSpellisUsable(SpellItem spellItem)
     {
         for (int i = 0; i < monsters.Count; i++)
