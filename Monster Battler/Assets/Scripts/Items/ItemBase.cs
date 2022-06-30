@@ -25,6 +25,7 @@ public class ItemBase : ScriptableObject
     public int BuyPrice => buyPrice;
     public int SellPrice => sellPrice;
     public bool IsSellable => isSellable;
+    public bool IsEffectiveWhenHeld => isEffectiveWhenHeld;
 
     public virtual bool CanUse(Monster monster)
     {

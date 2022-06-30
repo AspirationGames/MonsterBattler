@@ -535,6 +535,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Items_20
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ece29f66d3420e4996516a78df8b026
+      internalID: 129836323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Items_21
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4066952fdc3ecb941b7a8c7c19ea43f6
+      internalID: 1622935829
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -554,9 +596,11 @@ TextureImporter:
       Items_11: -2088566917
       Items_16: -153442787
       Items_7: 1342634649
+      Items_21: 1622935829
       Items_0: -141081572
       Items_19: 82193723
       Items_10: 1033044518
+      Items_20: 129836323
       Items_6: -1138693890
       Items_13: 1419950411
       Items_8: -1465440840

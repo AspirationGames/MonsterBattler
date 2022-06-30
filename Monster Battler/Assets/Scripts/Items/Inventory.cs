@@ -157,7 +157,7 @@ public class Inventory : MonoBehaviour, ISavable
         {
             return ItemCategory.Spells;
         }
-        else if(item is EvolutionItem) //this should include all Special items (i.e. evolution items)
+        else if(item is EvolutionItem || item is TypeEnhancingItem) //this should include all Special items (i.e. evolution items)
         {
             return ItemCategory.Special;
         }

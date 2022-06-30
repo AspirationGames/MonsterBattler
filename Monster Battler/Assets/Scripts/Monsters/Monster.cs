@@ -8,7 +8,6 @@ public class Monster
 {
     [SerializeField] MonsterBase _base;
     [SerializeField] int level;
-
     [SerializeField] Personality personality;
 
     const float personalityStatIncrease = 1.10f;
@@ -53,8 +52,8 @@ public class Monster
     } //set to property so we can refrence the base from the Pokemon Class directily in other classes (i.e. battlehud script);
 
     public int HP {get; set;} //our monsters current HP, we are using a property
-
     public int Exp { get; set;}
+    public ItemBase HeldItem {get; set;}
     public List<Move> Moves{ get; set;} //we are using a property for the moves
     public Dictionary<Stat, int> Stats {get; private set;} //we can get stats publically but only set stats in the monster class
     public Dictionary<Stat, int> StatStages {get; private set;} //integer values in this dictionary are between minus 6 and plus 6
@@ -75,6 +74,7 @@ public class Monster
     public event System.Action OnStatusChanged; 
     public event System.Action OnHPChanged; 
     public event System.Action OnLevelChanged;
+    
 
 
     public void Init() //this method creates our pokemon
@@ -593,7 +593,11 @@ public class Monster
         if(this.Base.Type1 == move.Base.Type || this.Base.Type2 == move.Base.Type) stab = 1.5f;
 
         //Weather modifier
-        float weathrModifier = weather?.OnDamageModify?.Invoke(this, attacker, move) ?? 1f; //note that if weather is null we return null
+        float weatherModifier = weather?.OnDamageModify?.Invoke(this, attacker, move) ?? 1f; //note that if weather is null we return null
+
+        //Item modifier
+        float itemModifier = attacker.GetItemModifier(move);
+        Debug.Log(itemModifier);
 
         var damageDetails = new DamageDetails()
         {
@@ -605,7 +609,7 @@ public class Monster
         float attack = (move.Base.Category == MoveCategory.Special) ? attacker.SpAttack : attacker.Attack; //checks to see if move is special to determine attack type. This is a shorthand if statement
         float defense = (move.Base.Category == MoveCategory.Special)? SpDefense : Defense;
 
-        float modifiers = Random.Range(0.85f, 1f) * typeEffectiveness * critical * stab * weathrModifier;
+        float modifiers = Random.Range(0.85f, 1f) * typeEffectiveness * critical * stab * weatherModifier * itemModifier;
         float a = (2*attacker.Level + 10)/ 250f;
         float d = a * move.Base.Power * ((float)attack / defense) + 2;
         int damage = Mathf.FloorToInt(d*modifiers);
@@ -619,6 +623,24 @@ public class Monster
         return damageDetails;
 
         
+    }
+
+    public float GetItemModifier(Move move)
+    {
+        if(HeldItem == null || HeldItem.IsEffectiveWhenHeld == false)
+        {
+            return 1;
+        }
+        else if(HeldItem is TypeEnhancingItem)
+        {
+            TypeEnhancingItem item = (TypeEnhancingItem)HeldItem;
+            return item.GetTypeBoostModifier(move);
+        }
+
+
+        Debug.LogError("Logic missing for Held Item");
+        return 1;
+
     }
 
     public void RestoreHP(int amount)

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Linq;
 
-public enum InventoryScreenState{Inventory, PartyScreen, BindingTargetSelection, ForgettingMove, Busy, SellingItems}
+public enum InventoryScreenState{Inventory, UsingItem, GivingItem, BindingTargetSelection, ForgettingMove, Busy, SellingItems}
 public class InventoryScreen : MonoBehaviour
 {
 
@@ -177,7 +177,6 @@ public class InventoryScreen : MonoBehaviour
         
         if(selectedCategoryIndex == (int)ItemCategory.BindingCrystals) //Binding crystals use a battle system event
         {
-            Debug.Log("binding crystal selected");
             bindingSelected(); //event notification for battle system
             inventoryScreenState = InventoryScreenState.BindingTargetSelection;
             gameObject.SetActive(false); //closes the inventory screen
@@ -185,42 +184,86 @@ public class InventoryScreen : MonoBehaviour
 
         }
         
+        StartCoroutine(ChooseItemAction());
+        
+    }
 
-        OpenPartyScreen(); //Open party screen to select monster to use item on
-        inventoryScreenState = InventoryScreenState.PartyScreen;
-        
+    IEnumerator ChooseItemAction()
+    {
+        int selectedChoice = 0;
+        yield return DialogManager.Instance.ShowDialogText($"What would you like to do with {selectedItemSlot.Item.ItemName}?", 
+        choices: new List<String> {"Use", "Give", "Trash", "Cancel"}, 
+        onChoiceSelectedAction: (int selectionIndex) => selectedChoice = selectionIndex);
 
-        
-        
+        switch(selectedChoice)
+        {
+            case 0: //Use
+                OpenPartyScreen(); //Open party screen to select monster to use item on
+                inventoryScreenState = InventoryScreenState.UsingItem;
+                break;
+            case 1: //Give
+                OpenPartyScreen(); //Open party screen to select monster to use item on
+                inventoryScreenState = InventoryScreenState.GivingItem;
+                break;
+            case 2: //Trash NOTE SURE IF I WANT TO KEEP OPTION
+                DecreaseItemQuanity();
+                break;
+            case 3:
+                yield break;
+            default:
+                Debug.LogError("No choice selected");
+                break;
+        }
     }
 
     public void PartyMemberSelected(Monster selectedMonster)
     {
-
-        if(inventoryScreenState != InventoryScreenState.PartyScreen)
+        if (inventoryScreenState == InventoryScreenState.UsingItem)
         {
-            return;
+            AttemptToUseItem(selectedMonster);
+        }
+        else if(inventoryScreenState == InventoryScreenState.GivingItem)
+        {
+            Debug.Log("giving monster item to hold");
+            StartCoroutine(GiveMonsterItem(selectedMonster));
+        }
+        else
+        {
+            Debug.LogError("inventory state not set correctly");
+        }
+            
+
+    }
+
+    IEnumerator GiveMonsterItem(Monster selectedMonster)
+    {
+        if(selectedMonster.HeldItem != null) //monster is currently holding item TO DO
+        {
+            Debug.Log("Monster is currently holding item. Need to implement method to choose to replace currently held item");
         }
         
+        selectedMonster.HeldItem = selectedItemSlot.Item;
+        DecreaseItemQuanity();
+        yield return DialogManager.Instance.ShowDialogText($"{selectedMonster.Base.MonsterName} is now holding {selectedItemSlot.Item.ItemName}.");
+        partyScreen.ClosePartyScreen();
+    }
+    private void AttemptToUseItem(Monster selectedMonster)
+    {
         inventoryScreenState = InventoryScreenState.Busy;
-
-        //might want to consider turning this into a couroutine to help with button spamming to make sure dialogue printd
-
-        if(selectedItemSlot.Quantity == 0) //you are out of item
+        if (selectedItemSlot.Quantity == 0) //you are out of item
         {
             StartCoroutine(DialogManager.Instance.ShowDialogText($"You are out of {selectedItemSlot.Item.ItemName}."));
-            inventoryScreenState = InventoryScreenState.PartyScreen;
+            inventoryScreenState = InventoryScreenState.UsingItem;
         }
-        else if(!GetCanUseItem(selectedMonster)) //can't be used on monster
+        else if (!GetCanUseItem(selectedMonster)) //can't be used on monster
         {
             StartCoroutine(DialogManager.Instance.ShowDialogText($"{selectedItemSlot.Item.ItemName} won't have any effect on {selectedMonster.Base.MonsterName}."));
-            inventoryScreenState = InventoryScreenState.PartyScreen;
+            inventoryScreenState = InventoryScreenState.UsingItem;
         }
-        else if(GetCanUseItem(selectedMonster)) //you can use item
+        else if (GetCanUseItem(selectedMonster)) //you can use item
         {
             StartCoroutine(UseItem(selectedMonster));
         }
-        
     }
 
     public bool GetCanUseItem(Monster selectedMonster)
@@ -254,7 +297,7 @@ public class InventoryScreen : MonoBehaviour
         if(GameController.Instance.GameState != GameState.Battle) //of not in a Battle usse Dialog manager and keep in party state
         {
            yield return DialogManager.Instance.ShowDialogText($"You used a {usedItem.ItemName}.");
-           inventoryScreenState = InventoryScreenState.PartyScreen; //I want the player to remain on party screen and can continue to use items if they would like.
+           inventoryScreenState = InventoryScreenState.UsingItem; //I want the player to remain on party screen and can continue to use items if they would like.
         }
         else if(usedItem == null)
         {
@@ -273,14 +316,14 @@ public class InventoryScreen : MonoBehaviour
         if(!spellItem.CanLearnMove(selectedMonster)) //monster can't learn move
         {
             yield return DialogManager.Instance.ShowDialogText($"{selectedMonster.Base.MonsterName} cannot learn {spellItem.MoveToLearn.MoveName}.");
-            inventoryScreenState = InventoryScreenState.PartyScreen;
+            inventoryScreenState = InventoryScreenState.UsingItem;
             yield break;
         }
 
         if(selectedMonster.HasMove(newMove)) // monster already knows move
         {
             yield return DialogManager.Instance.ShowDialogText($"{selectedMonster.Base.MonsterName} already knows {spellItem.MoveToLearn.MoveName}.");
-            inventoryScreenState = InventoryScreenState.PartyScreen;
+            inventoryScreenState = InventoryScreenState.UsingItem;
             yield break;
         }
 
@@ -304,7 +347,7 @@ public class InventoryScreen : MonoBehaviour
 
         }
 
-        inventoryScreenState = InventoryScreenState.PartyScreen;
+        inventoryScreenState = InventoryScreenState.UsingItem;
 
     }
 

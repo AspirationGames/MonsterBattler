@@ -391,7 +391,7 @@ public class BattleSystem : MonoBehaviour
                 SelectAction();
                 break;
             case BattleState.PlayerItem1:
-                if(inventoryScreen.InventoryScreenState == InventoryScreenState.PartyScreen) //prevents switching battle state back to far if in inventory section
+                if(inventoryScreen.InventoryScreenState == InventoryScreenState.UsingItem) //prevents switching battle state back to far if in inventory section
                 {
                     inventoryScreen.ResetInventoryState(); //resets inventory screen state to Inventory
                     partyScreen.gameObject.SetActive(false);
@@ -453,7 +453,7 @@ public class BattleSystem : MonoBehaviour
                 SelectAction();
                 break;
             case BattleState.PlayerItem2:
-                if(inventoryScreen.InventoryScreenState == InventoryScreenState.PartyScreen) //prevents switching battle state back to far if in inventory section
+                if(inventoryScreen.InventoryScreenState == InventoryScreenState.UsingItem) //prevents switching battle state back to far if in inventory section
                 {
                     inventoryScreen.ResetInventoryState(); //resets inventory screen state to Inventory
                     partyScreen.gameObject.SetActive(false);

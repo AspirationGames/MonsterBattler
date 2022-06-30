@@ -1031,6 +1031,10 @@ PrefabInstance:
       propertyPath: monsters.Array.data[3].naturalSkillSpDefense
       value: 31
       objectReference: {fileID: 0}
+    - target: {fileID: 6221295680767128881, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_Lens.m_SensorSize.x
+      value: 1.7777778
+      objectReference: {fileID: 0}
     - target: {fileID: 6221295680788380489, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: m_RootOrder
       value: 4

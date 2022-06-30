@@ -60,6 +60,8 @@ public class PartyScreen : MonoBehaviour
 
     public void PartyMemberHover(PartyMemberUI partyMemberUI)
     {
+        if(GameController.Instance.GameState == GameState.Dialog) return; //prevents switching monster images when dialog is showing
+
         int partyMemberIndex = partyMemberUI.transform.GetSiblingIndex();
         Monster selectedMonster = playerParty.Monsters[partyMemberIndex];
         
