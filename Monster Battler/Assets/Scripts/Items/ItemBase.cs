@@ -13,6 +13,8 @@ public class ItemBase : ScriptableObject
     [SerializeField] int sellPrice;
     [SerializeField] bool isSellable;
 
+    [SerializeField] bool isEffectiveWhenHeld = false;
+
     
     public virtual string ItemName => itemName;
 
