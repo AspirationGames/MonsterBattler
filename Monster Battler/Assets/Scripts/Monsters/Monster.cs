@@ -364,7 +364,7 @@ public class Monster
         
        int statStage = StatStages[stat];
        var stageModifiers = new float[] {1f, 1.5f, 2f, 2.5f, 3f, 3.5f, 4f}; //note that decreases are divided and boost are multiplies)
-       var itemModifiers = HeldItemStatModifier(stat); //returns modifiers based on held item
+       var itemModifier = HeldItemStatModifier(stat); //returns modifiers based on held item
        
        //Stat Stage Changes
        if(statStage >= 0)
@@ -377,14 +377,17 @@ public class Monster
        }
 
         //Held Item modifiers
-        statValue = Mathf.FloorToInt(statValue * itemModifiers);
-
-        Debug.Log($"{this.Base.MonsterName}, {stat} stat value {statValue}");
+        statValue = Mathf.FloorToInt(statValue * itemModifier);
+        
+        Debug.Log($"{this.Base.MonsterName} {stat} was boosted by {this.HeldItem} by a value of {itemModifier}");
+        //Debug.Log($"{this.Base.MonsterName}, {stat} stat value {statValue}");
        return statValue; 
     }
 
     float HeldItemStatModifier(Stat stat)
     {
+        
+        
         if(HeldItem == null || HeldItem.IsEffectiveWhenHeld == false)
         {
             return 1;
@@ -392,9 +395,21 @@ public class Monster
         else if(HeldItem is StatEnhancingItem)
         {
             StatEnhancingItem item = (StatEnhancingItem)HeldItem;
+
+            if(item.PreventsStatusMoves) //items like assualt vest
+            {
+                foreach(Move move in Moves)
+                {
+                    if(move.Base.Category == MoveCategory.Status)
+                    {
+                        move.DisableMove(true);
+                    }
+                    else continue;
+                }
+            }
             return item.GetStatBoostModifier(stat);
         }
-        Debug.LogError("Logic missing for Held Item");
+
         return 1;
         
     }
@@ -630,7 +645,7 @@ public class Monster
 
         //Item modifier
         float itemModifier = attackingMonster.HeldItemAttackModifier(attackerMove, attackingMonster);
-        Debug.Log(itemModifier);
+        Debug.Log($"{attackingMonster} move power was boosted by {attackingMonster.HeldItem} by a value of {itemModifier}");
 
         var damageDetails = new DamageDetails()
         {
@@ -694,7 +709,7 @@ public class Monster
             }
 
         }
-        Debug.LogError("Logic missing for Held Item");
+
         return 1;
 
     }

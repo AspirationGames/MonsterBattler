@@ -121,7 +121,7 @@ public class InventoryScreen : MonoBehaviour
             selectedCategoryIndex = Inventory.ItemCategories.Count - 1;
         }
         
-        
+
         //Update current item slots based on category
         currentItemSlots = inventory.SetCurrentItemSlots(selectedCategoryIndex);
 
@@ -223,7 +223,6 @@ public class InventoryScreen : MonoBehaviour
         }
         else if(inventoryScreenState == InventoryScreenState.GivingItem)
         {
-            Debug.Log("giving monster item to hold");
             StartCoroutine(GiveMonsterItem(selectedMonster));
         }
         else

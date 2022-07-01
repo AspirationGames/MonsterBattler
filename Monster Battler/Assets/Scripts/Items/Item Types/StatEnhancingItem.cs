@@ -8,7 +8,9 @@ public class StatEnhancingItem : ItemBase
     [SerializeField] Stat statBoost;
     [SerializeField] float boostAmount = 1.2f;
     [SerializeField] bool locksMoves = false;
+    [SerializeField] bool preventsStatusMoves = false;
     public bool LocksMoves => locksMoves;
+    public bool PreventsStatusMoves => preventsStatusMoves;
     public override bool CanUse(Monster monster)
     {
         //these items can't be used and are intended to be held by a monster

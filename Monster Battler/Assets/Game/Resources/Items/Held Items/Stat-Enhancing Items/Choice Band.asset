@@ -21,3 +21,5 @@ MonoBehaviour:
   isEffectiveWhenHeld: 1
   statBoost: 0
   boostAmount: 1.5
+  locksMoves: 1
+  preventsStatusMoves: 0

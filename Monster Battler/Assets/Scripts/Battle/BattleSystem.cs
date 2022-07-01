@@ -187,7 +187,6 @@ public class BattleSystem : MonoBehaviour
 
     void NewTurn()
     {
-
         turnOrder.Sort(SpeedComparison);
         battleState = BattleState.PlayerAction1; //changing the battle state
         SelectAction();
@@ -475,8 +474,6 @@ public class BattleSystem : MonoBehaviour
 
 
         }
-
-        Debug.Log(battleState);
 
     }
 
