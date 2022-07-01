@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Items/New type-enhancing item", order = 4)]
+[CreateAssetMenu(menuName = "Items/Held Items/New type-enhancing item", order = 4)]
 public class TypeEnhancingItem : ItemBase
 {
     [SerializeField] MonsterType typeBoost;
@@ -17,7 +17,7 @@ public class TypeEnhancingItem : ItemBase
     }
     public override void Use(Monster monster)
     {
-        Debug.Log("use logic is handled within the Inventory screen script. This method should not be called.");
+        Debug.LogError("use logic is handled within the Inventory screen script. This method should not be called.");
     }
 
     public float GetTypeBoostModifier(Move move)
