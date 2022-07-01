@@ -7,6 +7,8 @@ public class Move
     public MoveBase Base { get; set;}
     public int AP {get; set;}
 
+    public bool IsDisabled {get; private set;}
+
     public Move(MoveBase mBase)
     {
         Base = mBase;
@@ -30,6 +32,11 @@ public class Move
 
         return saveData;
 
+    }
+
+    public void DisableMove(bool disable)
+    {
+        IsDisabled = disable;
     }
 
     public void RestoreAP(int amount)

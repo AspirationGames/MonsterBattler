@@ -66,10 +66,8 @@ public class Monster
     public int VolatileStatusTime{get; set;}
 
     public Condition ProtectedStatus {get; set;} //protected
-
     public float ProtectSucessChance {get; set;}
     public bool IsProtected{get; set;}
-
     public bool InBattle {get; set;} //flag for if monster is actively in battle
     public event System.Action OnStatusChanged; 
     public event System.Action OnHPChanged; 
@@ -100,6 +98,7 @@ public class Monster
 
         StatusChangeMessages = new Queue<string>();
         ResetStatStages();
+        ResetMoveLocks();
         Status = null;
         VolatileStatus = null;
         ProtectedStatus = null;
@@ -347,13 +346,27 @@ public class Monster
         };
     }
 
+    public void ResetMoveLocks() //Reneables all moves
+    {
+        foreach(Move move in Moves)
+        {
+            if(move.IsDisabled)
+            {
+                move.DisableMove(false);
+            }
+        }
+    }
+
     int GetStat(Stat stat)
     {
        int statValue = Stats[stat];
 
+        
        int statStage = StatStages[stat];
        var stageModifiers = new float[] {1f, 1.5f, 2f, 2.5f, 3f, 3.5f, 4f}; //note that decreases are divided and boost are multiplies)
-
+       var itemModifiers = HeldItemStatModifier(stat); //returns modifiers based on held item
+       
+       //Stat Stage Changes
        if(statStage >= 0)
        {
             statValue = Mathf.FloorToInt(statValue * stageModifiers[statStage]);    
@@ -363,7 +376,27 @@ public class Monster
            statValue = Mathf.FloorToInt(statValue / stageModifiers[-statStage]);//stat stage is negative so we negate in order to have valid index
        }
 
+        //Held Item modifiers
+        statValue = Mathf.FloorToInt(statValue * itemModifiers);
+
+        Debug.Log($"{this.Base.MonsterName}, {stat} stat value {statValue}");
        return statValue; 
+    }
+
+    float HeldItemStatModifier(Stat stat)
+    {
+        if(HeldItem == null || HeldItem.IsEffectiveWhenHeld == false)
+        {
+            return 1;
+        }
+        else if(HeldItem is StatEnhancingItem)
+        {
+            StatEnhancingItem item = (StatEnhancingItem)HeldItem;
+            return item.GetStatBoostModifier(stat);
+        }
+        Debug.LogError("Logic missing for Held Item");
+        return 1;
+        
     }
 
     public void ApplyStageChange(List<StatStageChange> stageChanges)
@@ -579,24 +612,24 @@ public class Monster
         get { return GetStat(Stat.Speed); }
     }
     
-    public DamageDetails TakeDamage(Move move, Monster attacker, Condition weather)
+    public DamageDetails TakeDamage(Move attackerMove, Monster attackingMonster, Condition weather)
     {
         //critical hits
         float critical = 1f;
         if(Random.value * 100f <= 6.25f) critical = 2f;
 
         //type effectiveness
-        float typeEffectiveness = TypeChart.GetEffectiveness(move.Base.Type, this.Base.Type1) * TypeChart.GetEffectiveness(move.Base.Type, this.Base.Type2);
+        float typeEffectiveness = TypeChart.GetEffectiveness(attackerMove.Base.Type, this.Base.Type1) * TypeChart.GetEffectiveness(attackerMove.Base.Type, this.Base.Type2);
 
         //STAB bonus
         float stab = 1f;
-        if(this.Base.Type1 == move.Base.Type || this.Base.Type2 == move.Base.Type) stab = 1.5f;
+        if(this.Base.Type1 == attackerMove.Base.Type || this.Base.Type2 == attackerMove.Base.Type) stab = 1.5f;
 
         //Weather modifier
-        float weatherModifier = weather?.OnDamageModify?.Invoke(this, attacker, move) ?? 1f; //note that if weather is null we return null
+        float weatherModifier = weather?.OnDamageModify?.Invoke(this, attackingMonster, attackerMove) ?? 1f; //note that if weather is null we return null
 
         //Item modifier
-        float itemModifier = attacker.GetItemModifier(move);
+        float itemModifier = attackingMonster.HeldItemAttackModifier(attackerMove, attackingMonster);
         Debug.Log(itemModifier);
 
         var damageDetails = new DamageDetails()
@@ -606,12 +639,12 @@ public class Monster
             
         };
 
-        float attack = (move.Base.Category == MoveCategory.Special) ? attacker.SpAttack : attacker.Attack; //checks to see if move is special to determine attack type. This is a shorthand if statement
-        float defense = (move.Base.Category == MoveCategory.Special)? SpDefense : Defense;
+        float attack = (attackerMove.Base.Category == MoveCategory.Special) ? attackingMonster.SpAttack : attackingMonster.Attack; //checks to see if move is special to determine attack type. This is a shorthand if statement
+        float defense = (attackerMove.Base.Category == MoveCategory.Special)? SpDefense : Defense;
 
         float modifiers = Random.Range(0.85f, 1f) * typeEffectiveness * critical * stab * weatherModifier * itemModifier;
-        float a = (2*attacker.Level + 10)/ 250f;
-        float d = a * move.Base.Power * ((float)attack / defense) + 2;
+        float a = (2*attackingMonster.Level + 10)/ 250f;
+        float d = a * attackerMove.Base.Power * ((float)attack / defense) + 2;
         int damage = Mathf.FloorToInt(d*modifiers);
 
         
@@ -625,19 +658,42 @@ public class Monster
         
     }
 
-    public float GetItemModifier(Move move)
+    public float HeldItemAttackModifier(Move attackerMove, Monster attackingMonster)
     {
-        if(HeldItem == null || HeldItem.IsEffectiveWhenHeld == false)
+        
+        if(attackingMonster.HeldItem == null || attackingMonster.HeldItem.IsEffectiveWhenHeld == false)
         {
             return 1;
         }
-        else if(HeldItem is TypeEnhancingItem)
+        else if(attackingMonster.HeldItem is TypeEnhancingItem)
         {
             TypeEnhancingItem item = (TypeEnhancingItem)HeldItem;
-            return item.GetTypeBoostModifier(move);
+            return item.GetTypeBoostModifier(attackerMove);
         }
+        else if(attackingMonster.HeldItem is StatEnhancingItem)
+        {
+            StatEnhancingItem item = (StatEnhancingItem)HeldItem;
 
+            if(item.LocksMoves)
+            {
+                foreach(Move move in attackingMonster.Moves)
+                {
+                    if(move == attackerMove)
+                    {
+                        continue;
+                    }
+                    else if(move.IsDisabled)
+                    {
+                        continue;
+                    }
+                    else //disables all other moves
+                    {
+                        move.DisableMove(true);
+                    }
+                }
+            }
 
+        }
         Debug.LogError("Logic missing for Held Item");
         return 1;
 

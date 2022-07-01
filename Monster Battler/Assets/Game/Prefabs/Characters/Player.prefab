@@ -323,7 +323,19 @@ MonoBehaviour:
     quantity: 1
   - item: {fileID: 11400000, guid: 69766a718d0128c4a8f8f54f665f21fe, type: 2}
     quantity: 5
-  specialSlots: []
+  specialSlots:
+  - item: {fileID: 0}
+    quantity: 0
+  - item: {fileID: 0}
+    quantity: 0
+  - item: {fileID: 0}
+    quantity: 0
+  - item: {fileID: 11400000, guid: 8666dcf366513f044b2cb1448c51d184, type: 2}
+    quantity: 1
+  - item: {fileID: 11400000, guid: 1cfd548d6fdb9ae4897f22a356090a75, type: 2}
+    quantity: 1
+  - item: {fileID: 11400000, guid: afc4fcc8c4173bb4a94b0f92d4b94b59, type: 2}
+    quantity: 1
 --- !u!114 &-2174004648458531576
 MonoBehaviour:
   m_ObjectHideFlags: 0

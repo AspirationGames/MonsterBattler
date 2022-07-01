@@ -174,18 +174,6 @@ public class BattleSystem : MonoBehaviour
             
         }
 
-        // if(!isSummonerBattle)
-        // {
-        //     yield return battleDialogueBox.TypeDialog($"{player.Name} summoned {battleUnits[0].Monster.Base.MonsterName} and {battleUnits[1].Monster.Base.MonsterName}.");
-        //     yield return battleDialogueBox.TypeDialog($"A {battleUnits[2].Monster.Base.MonsterName} {battleUnits[3].Monster.Base.MonsterName} appeared infront of you!");
-        // }
-        // else if(isSummonerBattle)
-        // {
-        //     yield return battleDialogueBox.TypeDialog($"{player.Name} summoned {battleUnits[0].Monster.Base.MonsterName} {battleUnits[1]?.Monster.Base.MonsterName}.");
-        //     yield return battleDialogueBox.TypeDialog($"{summoner.Name} summoned {battleUnits[2].Monster.Base.MonsterName} {battleUnits[3].Monster.Base.MonsterName}.");
-        // }
-        
-
         escapeAttempts = 0;
         partyScreen.Init();
         battleFieldEffects = new BattleFieldEffects();
@@ -499,6 +487,14 @@ public class BattleSystem : MonoBehaviour
         if(battleState == BattleState.PlayerMove1)
         {
             Move selectedMove = battleUnits[0].Monster.Moves[moveIndex];
+
+            //check for moves being diabled
+            if(selectedMove.IsDisabled)
+            {
+                StartCoroutine(battleDialogueBox.TypeDialog($"{selectedMove} can't be used."));
+                return;
+            }
+
             if(selectedMove.AP < 1)
             {
                 StartCoroutine(battleDialogueBox.TypeDialog($"{selectedMove} is out of AP."));
@@ -527,6 +523,12 @@ public class BattleSystem : MonoBehaviour
         else if(battleState == BattleState.PlayerMove2)
         { 
             Move selectedMove = battleUnits[1].Monster.Moves[moveIndex];
+            //check for moves being diabled
+            if(selectedMove.IsDisabled)
+            {
+                StartCoroutine(battleDialogueBox.TypeDialog($"{selectedMove} can't be used."));
+                return;
+            }
             if(selectedMove.AP < 1)
             {
                 StartCoroutine(battleDialogueBox.TypeDialog($"{selectedMove} is out of AP."));
@@ -1003,8 +1005,6 @@ public class BattleSystem : MonoBehaviour
         {
             BattleUnit currentUnit = turnOrder[i];
             Monster currentMonster = currentUnit.Monster;
-
-
             
             if(selectedSwitch[battleUnits.IndexOf(currentUnit)] == null)//if no switch was initiated for this turn just continue onto the next turn
             {
@@ -1016,7 +1016,9 @@ public class BattleSystem : MonoBehaviour
                 {
                     Monster incomingMonster = selectedSwitch[battleUnits.IndexOf(turnOrder[i])];
 
+                    //switch out current unit
                     currentUnit.Monster.InBattle = false;
+                    currentUnit.Monster.ResetMoveLocks(); //Resets disabled moves for unit switching out
                     yield return battleDialogueBox.TypeDialog
                     ($"{currentMonster.Base.MonsterName} switched out.");
 

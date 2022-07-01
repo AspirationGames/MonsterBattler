@@ -19,7 +19,7 @@ public class Inventory : MonoBehaviour, ISavable
 
     private void Awake() 
     {
-        itemSlots = new List<List<ItemSlot>>(){recoveryItemSlots, crystalSlots, spellSlots, specialSlots};    
+        itemSlots = new List<List<ItemSlot>>(){recoveryItemSlots, crystalSlots, spellSlots, specialSlots};   
     }
 
     public static List<string> ItemCategories {get; set;} = new List<string>()
@@ -157,12 +157,11 @@ public class Inventory : MonoBehaviour, ISavable
         {
             return ItemCategory.Spells;
         }
-        else if(item is EvolutionItem || item is TypeEnhancingItem) //this should include all Special items (i.e. evolution items)
+        else if(item is EvolutionItem || item is TypeEnhancingItem || item is StatEnhancingItem) //this should include all Special items (i.e. evolution items)
         {
             return ItemCategory.Special;
         }
 
-        Debug.Log("Item class is not accounted for in Get Item Category fucntion");
         return ItemCategory.RecoveryItems;
 
     }
@@ -187,7 +186,7 @@ public class Inventory : MonoBehaviour, ISavable
         crystalSlots = saveData.sCrystals.Select(i => new ItemSlot(i)).ToList();
         spellSlots = saveData.sSpells.Select(i => new ItemSlot(i)).ToList();
 
-        itemSlots = new List<List<ItemSlot>>(){recoveryItemSlots, crystalSlots, spellSlots};
+        itemSlots = new List<List<ItemSlot>>(){recoveryItemSlots, crystalSlots, spellSlots, specialSlots};
 
         InventoryUpdated?.Invoke();
     }

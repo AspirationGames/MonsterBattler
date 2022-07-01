@@ -6568,10 +6568,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 6221295680788380489}
     m_Modifications:
     - target: {fileID: -8609044825704097109, guid: 4c6b5f01a572f3242b11578cb591470e, type: 3}
-      propertyPath: specialSlots.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: -8609044825704097109, guid: 4c6b5f01a572f3242b11578cb591470e, type: 3}
       propertyPath: specialSlots.Array.data[0].item
       value: 
       objectReference: {fileID: 11400000, guid: c3e7318f52520774789b73c89e0fd605, type: 2}

@@ -25,7 +25,7 @@ public class QuestObjects : MonoBehaviour
     
     public void UpdateObjectStatus()
     {
-        Debug.Log($"{questToCheck.QuestName}" + questTracker.IsCompleted(questToCheck.QuestName));
+        //Debug.Log($"{questToCheck.QuestName}" + questTracker.IsCompleted(questToCheck.QuestName));
 
         if(onQuestStart != ObjectAction.DoNothing && questTracker.IsStarted(questToCheck.QuestName))
         {

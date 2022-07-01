@@ -121,8 +121,7 @@ public class InventoryScreen : MonoBehaviour
             selectedCategoryIndex = Inventory.ItemCategories.Count - 1;
         }
         
-
-
+        
         //Update current item slots based on category
         currentItemSlots = inventory.SetCurrentItemSlots(selectedCategoryIndex);
 
