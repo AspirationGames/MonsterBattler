@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum ItemCategory{RecoveryItems, BindingCrystals, Spells, Special}
+public enum ItemCategory{RecoveryItems, BindingCrystals, Spells, Special, Treats}
 public class Inventory : MonoBehaviour, ISavable
 {
     [SerializeField] List<ItemSlot> recoveryItemSlots;
     [SerializeField] List<ItemSlot> crystalSlots;
     [SerializeField] List<ItemSlot> spellSlots; //TMs and HMs
     [SerializeField] List<ItemSlot> specialSlots;
+    [SerializeField] List<ItemSlot> treatSlots;
 
     List<List<ItemSlot>> itemSlots;
 
@@ -19,12 +20,12 @@ public class Inventory : MonoBehaviour, ISavable
 
     private void Awake() 
     {
-        itemSlots = new List<List<ItemSlot>>(){recoveryItemSlots, crystalSlots, spellSlots, specialSlots};   
+        itemSlots = new List<List<ItemSlot>>(){recoveryItemSlots, crystalSlots, spellSlots, specialSlots, treatSlots};   
     }
 
     public static List<string> ItemCategories {get; set;} = new List<string>()
     {
-        "RECOVERY ITEMS", "BINDING CRYSTALS", "SPELL BOOKS & SCROLLS", "SPECIAL ITEMS"
+        "RECOVERY ITEMS", "BINDING CRYSTALS", "SPELL BOOKS & SCROLLS", "SPECIAL ITEMS", "TREATS"
     };
 
     public List<ItemSlot> SetCurrentItemSlots(int itemCategoryIndex)
@@ -161,6 +162,10 @@ public class Inventory : MonoBehaviour, ISavable
         {
             return ItemCategory.Special;
         }
+        else if(item is Treat)
+        {
+            return ItemCategory.Treats;
+        }
 
         return ItemCategory.RecoveryItems;
 
@@ -173,6 +178,8 @@ public class Inventory : MonoBehaviour, ISavable
             sRecoveryItems = recoveryItemSlots.Select(i => i.GetSaveData()).ToList(),
             sCrystals = crystalSlots.Select(i => i.GetSaveData()).ToList(),
             sSpells = spellSlots.Select(i => i.GetSaveData()).ToList(),
+            sSpecial = specialSlots.Select(i => i.GetSaveData()).ToList(),
+            sTreat = treatSlots.Select(i => i.GetSaveData()).ToList(),
         };
 
         return saveData;
@@ -185,8 +192,10 @@ public class Inventory : MonoBehaviour, ISavable
         recoveryItemSlots = saveData.sRecoveryItems.Select(i => new ItemSlot(i)).ToList();
         crystalSlots = saveData.sCrystals.Select(i => new ItemSlot(i)).ToList();
         spellSlots = saveData.sSpells.Select(i => new ItemSlot(i)).ToList();
+        specialSlots = saveData.sSpecial.Select(i => new ItemSlot(i)).ToList();
+        treatSlots = saveData.sTreat.Select(i => new ItemSlot(i)).ToList();
 
-        itemSlots = new List<List<ItemSlot>>(){recoveryItemSlots, crystalSlots, spellSlots, specialSlots};
+        itemSlots = new List<List<ItemSlot>>(){recoveryItemSlots, crystalSlots, spellSlots, specialSlots, treatSlots};
 
         InventoryUpdated?.Invoke();
     }
@@ -245,5 +254,6 @@ public class InventorySaveData //list of our item save data. We should have one 
     public List<ItemSaveData> sCrystals;
     public List<ItemSaveData> sSpells;
     public List<ItemSaveData> sSpecial;
+    public List<ItemSaveData> sTreat;
 
 }

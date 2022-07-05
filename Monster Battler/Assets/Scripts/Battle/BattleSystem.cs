@@ -1155,15 +1155,14 @@ public class BattleSystem : MonoBehaviour
                     if(attackingMove.Base.Category == MoveCategory.Status) //If move is a status move
                     {
                         yield return PerformEffects(attackingMove.Base.Effects, attackingMonster, targetMonster, attackingMove.Base.Target);
-                        continue;
+                        //continue; 
                     }
-                    
-
                     else
                     {
                         targetUnit.PlayHitAnimation();
                         AudioManager.i.PlaySFX(AudioID.Hit);
                         var damageDetails = targetMonster.TakeDamage(attackingMove, attackingMonster, battleFieldEffects.Weather);
+                        yield return StatusChangeDialog(targetMonster); //plays status chagne dialog in the event the damage triggered something like a berry being eaten
                         yield return targetUnit.Hud.WaitForHPUpdate();
                         yield return ShowDamageDetails(damageDetails);
                     }
@@ -1193,8 +1192,25 @@ public class BattleSystem : MonoBehaviour
                     yield return battleDialogueBox.TypeDialog($"but it missed!");
 
                 }
+            }
+
+            //Target Held Item triggers for things like berries
+            if(targetMonster.HeldItem != null && targetMonster.HeldItem.IsEffectiveWhenHeld)
+            {
+                if(targetMonster.HeldItem is Treat)
+                {
+                    Treat treat = (Treat)targetMonster.HeldItem;
+                    if (treat.CanUse(targetMonster))
+                    {
+                        treat.Use(targetMonster);
+                        targetMonster.HeldItem = null; //remove held item
+                        yield return battleDialogueBox.TypeDialog($"{targetMonster.Base.MonsterName} used a {treat.ItemName}.");
+
+                    }
+                }
             }        
         }
+
         //attack phase over
         selectedMoves.Clear(); 
         selectedTargets.Clear(); 
@@ -1526,6 +1542,8 @@ public class BattleSystem : MonoBehaviour
                     }
 
                 }
+
+                
 
     }
 

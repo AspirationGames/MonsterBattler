@@ -379,8 +379,8 @@ public class Monster
         //Held Item modifiers
         statValue = Mathf.FloorToInt(statValue * itemModifier);
         
-        Debug.Log($"{this.Base.MonsterName} {stat} was boosted by {this.HeldItem} by a value of {itemModifier}");
-        //Debug.Log($"{this.Base.MonsterName}, {stat} stat value {statValue}");
+        //Debug.Log($"{this.Base.MonsterName} {stat} was boosted by {this.HeldItem} by a value of {itemModifier}");
+       
        return statValue; 
     }
 
@@ -446,6 +446,8 @@ public class Monster
             return;
         }
         
+
+
     }
 
     public void CureStatus()
@@ -546,8 +548,18 @@ public class Monster
         Status?.OnAfterTurn?.Invoke(this); //addomg a question mark after action will make sure that on after turn is not null
         VolatileStatus?.OnAfterTurn?.Invoke(this);
         ProtectedStatus?.OnAfterTurn?.Invoke(this);
+        UseHeldItemsAfterTurn(); //Recovery Items like Black Sludge and LeftOvers
         
     }
+
+    private void UseHeldItemsAfterTurn()
+    {
+        if (HeldItem == null || !HeldItem.IsEffectiveWhenHeld) return;
+
+
+    }
+
+
 
     public bool CheckForLevelUp()
     {
@@ -631,49 +643,51 @@ public class Monster
     {
         //critical hits
         float critical = 1f;
-        if(Random.value * 100f <= 6.25f) critical = 2f;
+        if (Random.value * 100f <= 6.25f) critical = 2f;
 
         //type effectiveness
         float typeEffectiveness = TypeChart.GetEffectiveness(attackerMove.Base.Type, this.Base.Type1) * TypeChart.GetEffectiveness(attackerMove.Base.Type, this.Base.Type2);
 
         //STAB bonus
         float stab = 1f;
-        if(this.Base.Type1 == attackerMove.Base.Type || this.Base.Type2 == attackerMove.Base.Type) stab = 1.5f;
+        if (this.Base.Type1 == attackerMove.Base.Type || this.Base.Type2 == attackerMove.Base.Type) stab = 1.5f;
 
         //Weather modifier
         float weatherModifier = weather?.OnDamageModify?.Invoke(this, attackingMonster, attackerMove) ?? 1f; //note that if weather is null we return null
 
         //Item modifier
-        float itemModifier = attackingMonster.HeldItemAttackModifier(attackerMove, attackingMonster);
-        Debug.Log($"{attackingMonster} move power was boosted by {attackingMonster.HeldItem} by a value of {itemModifier}");
+        float attackerItemModifier = attackingMonster.HeldItemDamageBoost(attackerMove, attackingMonster);
+        float targetDamageReduction = HeldItemDamageReduction(attackerMove);
 
         var damageDetails = new DamageDetails()
         {
             Critical = critical,
             TypeEffectiveness = typeEffectiveness
-            
         };
 
         float attack = (attackerMove.Base.Category == MoveCategory.Special) ? attackingMonster.SpAttack : attackingMonster.Attack; //checks to see if move is special to determine attack type. This is a shorthand if statement
-        float defense = (attackerMove.Base.Category == MoveCategory.Special)? SpDefense : Defense;
+        float defense = (attackerMove.Base.Category == MoveCategory.Special) ? SpDefense : Defense;
 
-        float modifiers = Random.Range(0.85f, 1f) * typeEffectiveness * critical * stab * weatherModifier * itemModifier;
-        float a = (2*attackingMonster.Level + 10)/ 250f;
+        float modifiers = Random.Range(0.85f, 1f) * typeEffectiveness * critical * stab * weatherModifier * attackerItemModifier * targetDamageReduction;
+        float a = (2 * attackingMonster.Level + 10) / 250f;
         float d = a * attackerMove.Base.Power * ((float)attack / defense) + 2;
-        int damage = Mathf.FloorToInt(d*modifiers);
+        int damage = Mathf.FloorToInt(d * modifiers);
 
-        
-        bool killingMove = ( (HP - damage) < 1 );
+
+        bool killingMove = ((HP - damage) < 1);
         killingMove = damageDetails.KO;
+        
 
         DecreaseHP(damage);
-        
+
         return damageDetails;
 
-        
+
     }
 
-    public float HeldItemAttackModifier(Move attackerMove, Monster attackingMonster)
+    
+
+    public float HeldItemDamageBoost(Move attackerMove, Monster attackingMonster)
     {
         
         if(attackingMonster.HeldItem == null || attackingMonster.HeldItem.IsEffectiveWhenHeld == false)
@@ -682,12 +696,12 @@ public class Monster
         }
         else if(attackingMonster.HeldItem is TypeEnhancingItem)
         {
-            TypeEnhancingItem item = (TypeEnhancingItem)HeldItem;
+            TypeEnhancingItem item = (TypeEnhancingItem)attackingMonster.HeldItem;
             return item.GetTypeBoostModifier(attackerMove);
         }
         else if(attackingMonster.HeldItem is StatEnhancingItem)
         {
-            StatEnhancingItem item = (StatEnhancingItem)HeldItem;
+            StatEnhancingItem item = (StatEnhancingItem)attackingMonster.HeldItem;
 
             if(item.LocksMoves)
             {
@@ -707,16 +721,44 @@ public class Monster
                     }
                 }
             }
-
         }
+        
 
         return 1;
 
     }
 
+    float HeldItemDamageReduction(Move attackerMove)
+    {
+        if(HeldItem == null || HeldItem.IsEffectiveWhenHeld == false)
+        {
+            return 1;
+        }
+        else if(HeldItem is Treat) //this monsters treat
+        {
+            Treat treat = (Treat)HeldItem;
+            float damageReduction = treat.GetDamageReductionModifier(attackerMove);
+            if(damageReduction < 1f) 
+            {
+                StatusChangeMessages.Enqueue($"{Base.MonsterName}'s ate a {treat.ItemName} to half the damage taken by {attackerMove.Base.MoveName}.");
+                HeldItem = null;
+            }
+            Debug.Log(damageReduction);
+            return damageReduction;
+        }
+
+        return 1;
+    }
+
     public void RestoreHP(int amount)
     {
         HP = Mathf.Clamp(HP + amount, 0, MaxHP);
+        OnHPChanged?.Invoke();
+    }
+
+    public void RestoreHP(float percentage)
+    {
+        HP = Mathf.Clamp(Mathf.FloorToInt(HP+MaxHP*percentage), 0, MaxHP);
         OnHPChanged?.Invoke();
     }
 

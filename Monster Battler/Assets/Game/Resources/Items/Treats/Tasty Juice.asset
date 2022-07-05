@@ -18,9 +18,9 @@ MonoBehaviour:
   buyPrice: 0
   sellPrice: 0
   isSellable: 0
-  isEffectiveWhenHeld: 0
+  isEffectiveWhenHeld: 1
   healPercent: 0
   hpTriggerThreshold: 0
   cureStatus: 0
   typeResist: 3
-  damageReduction: 0.5
+  damageReductionModifier: 0.5
