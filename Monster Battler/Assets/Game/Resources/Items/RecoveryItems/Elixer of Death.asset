@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Elixer of Death
   description: Restores a monster from death but at what cost.
-  icon: {fileID: -153442787, guid: 0f6d3601731942544a030ddf17e2e3df, type: 3}
+  icon: {fileID: -834150321, guid: 0f6d3601731942544a030ddf17e2e3df, type: 3}
   buyPrice: 200
   sellPrice: 100
   isSellable: 1
+  isEffectiveWhenHeld: 0
   healAmount: 0
   restoresMaxHP: 0
   apAmount: 0

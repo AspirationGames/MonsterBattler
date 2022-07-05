@@ -9,15 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c95fcac1b03cb524485d3ca486ce83bf, type: 3}
-  m_Name: Ignite Spell Scroll
+  m_Script: {fileID: 11500000, guid: 15b662d9da0f37043b6ae5de84d8f820, type: 3}
+  m_Name: Tasty Juice
   m_EditorClassIdentifier: 
-  itemName: Scroll of Knowledge
-  description: Teaches a monster teh move Ignite
-  icon: {fileID: 902238178, guid: 0f6d3601731942544a030ddf17e2e3df, type: 3}
+  itemName: Tasty Juice
+  description: 
+  icon: {fileID: -404188751, guid: 0f6d3601731942544a030ddf17e2e3df, type: 3}
   buyPrice: 0
   sellPrice: 0
   isSellable: 0
   isEffectiveWhenHeld: 0
-  moveToLearn: {fileID: 11400000, guid: 9c4c2642b2a62ef4a909064aeb51ba3a, type: 2}
-  isBook: 0
+  healPercent: 0
+  hpTriggerThreshold: 0
+  cureStatus: 0
+  typeResist: 3
+  damageReduction: 0.5

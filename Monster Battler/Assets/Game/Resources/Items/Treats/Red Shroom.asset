@@ -9,15 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b33c0d649b6ed84a8aa432c2ab6dcc1, type: 3}
-  m_Name: Flint
+  m_Script: {fileID: 11500000, guid: 15b662d9da0f37043b6ae5de84d8f820, type: 3}
+  m_Name: Red Shroom
   m_EditorClassIdentifier: 
-  itemName: Flint
+  itemName: Red Shroom
   description: 
-  icon: {fileID: -911213666, guid: 0f6d3601731942544a030ddf17e2e3df, type: 3}
+  icon: {fileID: 239671982, guid: 0f6d3601731942544a030ddf17e2e3df, type: 3}
   buyPrice: 100
   sellPrice: 100
-  isSellable: 1
+  isSellable: 0
   isEffectiveWhenHeld: 1
-  typeBoost: 3
-  boostAmount: 1.2
+  healPercent: 0
+  hpTriggerThreshold: 0
+  cureStatus: 2
+  typeResist: 0
+  damageReduction: 0.5

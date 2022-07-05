@@ -14,6 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Scroll of Knowledge
   description: Teaches a monster the move sleep spores
-  icon: {fileID: 1790551918, guid: 91e1b7d51919a4c4591770a0f9966296, type: 3}
+  icon: {fileID: 902238178, guid: 0f6d3601731942544a030ddf17e2e3df, type: 3}
+  buyPrice: 0
+  sellPrice: 0
+  isSellable: 0
+  isEffectiveWhenHeld: 0
   moveToLearn: {fileID: 11400000, guid: 95e002b9180b4264193eb8ce60a34447, type: 2}
   isBook: 0

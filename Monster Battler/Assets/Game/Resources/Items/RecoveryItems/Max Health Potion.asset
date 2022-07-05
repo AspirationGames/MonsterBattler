@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Max Health Potion
   description: Fully Restores Monster's HP
-  icon: {fileID: 309668053, guid: 0f6d3601731942544a030ddf17e2e3df, type: 3}
+  icon: {fileID: -1871438289, guid: 0f6d3601731942544a030ddf17e2e3df, type: 3}
   buyPrice: 200
   sellPrice: 100
   isSellable: 1
+  isEffectiveWhenHeld: 0
   healAmount: 50
   restoresMaxHP: 1
   apAmount: 0

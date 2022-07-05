@@ -15,6 +15,10 @@ MonoBehaviour:
   itemName: Book of Knowledge
   description: Teaches a monster the move Barrier. A move that can shield the user
     from attack
-  icon: {fileID: 136823484, guid: 0f6d3601731942544a030ddf17e2e3df, type: 3}
+  icon: {fileID: 902238178, guid: 0f6d3601731942544a030ddf17e2e3df, type: 3}
+  buyPrice: 0
+  sellPrice: 0
+  isSellable: 0
+  isEffectiveWhenHeld: 0
   moveToLearn: {fileID: 11400000, guid: 97715df7f6d643148a41af98aa9a19d9, type: 2}
   isBook: 1
