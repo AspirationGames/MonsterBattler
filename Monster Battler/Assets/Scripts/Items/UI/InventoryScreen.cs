@@ -144,6 +144,8 @@ public class InventoryScreen : MonoBehaviour
 
     public void ItemSelected(ItemSlotUI selectedItemSlotUI)
     {
+        
+
         int selectedItemIndex = selectedItemSlotUI.transform.GetSiblingIndex(); //sets the selected item for use.
         selectedItemSlot = currentItemSlots[selectedItemIndex];
 
@@ -182,8 +184,18 @@ public class InventoryScreen : MonoBehaviour
             return;
 
         }
-        
-        StartCoroutine(ChooseItemAction());
+
+        Debug.Log(GameController.Instance.GameState);
+
+        if(GameController.Instance.GameState == GameState.Battle) //if in battle
+        {
+            OpenPartyScreen(); //Open party screen to select monster to use item on
+            inventoryScreenState = InventoryScreenState.UsingItem;
+        }
+        else
+        {
+            StartCoroutine(ChooseItemAction());
+        }
         
     }
 
@@ -207,7 +219,8 @@ public class InventoryScreen : MonoBehaviour
             case 2: //Trash NOTE SURE IF I WANT TO KEEP OPTION
                 DecreaseItemQuanity();
                 break;
-            case 3:
+            case 3: //Cancle
+                inventoryScreenState = InventoryScreenState.Inventory;
                 yield break;
             default:
                 Debug.LogError("No choice selected");
@@ -217,6 +230,8 @@ public class InventoryScreen : MonoBehaviour
 
     public void PartyMemberSelected(Monster selectedMonster)
     {
+        if(GameController.Instance.GameState == GameState.Battle) return; //in battle, battle system handles item usage
+        
         if (inventoryScreenState == InventoryScreenState.UsingItem)
         {
             AttemptToUseItem(selectedMonster);
