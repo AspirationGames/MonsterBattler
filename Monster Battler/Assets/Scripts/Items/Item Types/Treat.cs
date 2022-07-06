@@ -14,7 +14,7 @@ public class Treat : ItemBase
 
     [Header("Type Resist")]
     [SerializeField] MonsterType typeResist;
-    [SerializeField] float damageReductionModifier = 0.5f;
+    [SerializeField] float damageReduction = 0.5f;
 
     
     public override bool CanUse(Monster monster)
@@ -58,13 +58,14 @@ public class Treat : ItemBase
         } 
     }
 
-    public float GetDamageReductionModifier(Move attackerMove)
+    public void OnDamageTaken(DamageDetails damageDetails, Move attackerMove, Monster monster)
     {
-        if(attackerMove.Base.Type == typeResist)
+        if(attackerMove.Base.Type == typeResist && damageDetails.TypeEffectiveness > 1)
         {
-            return damageReductionModifier;
+            monster.StatusChangeMessages.Enqueue($"{monster.Base.MonsterName}'s ate a {this.ItemName} to half the damage taken by {attackerMove.Base.MoveName}.");
+            damageDetails.DamageAmount = Mathf.FloorToInt(damageDetails.DamageAmount * damageReduction);
+            monster.HeldItem = null;
         }
-        return 1;
     }
 
     

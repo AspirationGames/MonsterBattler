@@ -658,32 +658,33 @@ public class Monster
 
         //Item modifier
         float attackerItemModifier = attackingMonster.HeldItemDamageBoost(attackerMove, attackingMonster);
-        float targetDamageReduction = HeldItemDamageReduction(attackerMove);
-
-        Debug.Log($"Attack Modifier from item: {attackerItemModifier}");
-        Debug.Log($"Target damage reduction from item: {targetDamageReduction}");
 
         var damageDetails = new DamageDetails()
         {
-            Critical = critical,
+            CriticalDamageBonus = critical,
             TypeEffectiveness = typeEffectiveness
         };
 
         float attack = (attackerMove.Base.Category == MoveCategory.Special) ? attackingMonster.SpAttack : attackingMonster.Attack; //checks to see if move is special to determine attack type. This is a shorthand if statement
         float defense = (attackerMove.Base.Category == MoveCategory.Special) ? SpDefense : Defense;
 
-        float modifiers = Random.Range(0.85f, 1f) * typeEffectiveness * critical * stab * weatherModifier * attackerItemModifier * targetDamageReduction;
+        float modifiers = Random.Range(0.85f, 1f) * typeEffectiveness * critical * stab * weatherModifier * attackerItemModifier;
         float a = (2 * attackingMonster.Level + 10) / 250f;
         float d = a * attackerMove.Base.Power * ((float)attack / defense) + 2;
         int damage = Mathf.FloorToInt(d * modifiers);
+        bool isKO = ((HP - damage) < 1);
 
-
-        bool killingMove = ((HP - damage) < 1);
-        killingMove = damageDetails.KO;
+        //Damage Details post calc
+        damageDetails.DamageAmount = damage;
+        damageDetails.KO = isKO;
         
+        //Damage Triggered items
+        if(HeldItem != null && HeldItem.IsEffectiveWhenHeld)
+        {
+          DamageTriggeredHeldItems(damageDetails, attackerMove);
+        } 
 
-        DecreaseHP(damage);
-
+        Debug.Log(damageDetails.DamageAmount);
         return damageDetails;
 
 
@@ -731,27 +732,23 @@ public class Monster
         return 1;
 
     }
-
-    float HeldItemDamageReduction(Move attackerMove)
+    void DamageTriggeredHeldItems(DamageDetails damageDetails, Move attackerMove)
     {
-        if(HeldItem == null || HeldItem.IsEffectiveWhenHeld == false)
-        {
-            return 1;
-        }
-        else if(HeldItem is Treat) //this monsters treat
+        if(HeldItem is Treat) //this monster has a treat
         {
             Treat treat = (Treat)HeldItem;
-            float damageReduction = treat.GetDamageReductionModifier(attackerMove);
-            if(damageReduction < 1f) 
-            {
-                StatusChangeMessages.Enqueue($"{Base.MonsterName}'s ate a {treat.ItemName} to half the damage taken by {attackerMove.Base.MoveName}.");
-                HeldItem = null;
-            }
-            Debug.Log(damageReduction);
-            return damageReduction;
+            treat.OnDamageTaken(damageDetails, attackerMove, this);
+            
+            
         }
+        else if(HeldItem is OnDamageTriggerItem)
+        {
+            OnDamageTriggerItem item = (OnDamageTriggerItem)HeldItem;
+            item.OnDamageTaken(damageDetails, attackerMove, this);
+            
+        }
+        
 
-        return 1;
     }
 
     public void RestoreHP(int amount)
@@ -784,8 +781,9 @@ public class Monster
 public class DamageDetails
 {
     public bool KO{get; set;}
-    public float Critical{get; set;}
+    public float CriticalDamageBonus{get; set;}
     public float TypeEffectiveness{get; set;}
+    public int DamageAmount{get; set;}
 }
 
 [System.Serializable]

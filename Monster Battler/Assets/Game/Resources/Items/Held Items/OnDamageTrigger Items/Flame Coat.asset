@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3a32922a3f566a438d3820977781190, type: 3}
+  m_Name: Flame Coat
+  m_EditorClassIdentifier: 
+  itemName: 
+  description: 
+  icon: {fileID: 0}
+  buyPrice: 0
+  sellPrice: 0
+  isSellable: 0
+  isEffectiveWhenHeld: 0
+  trigger: 0
+  damageTypeRequirment: 0

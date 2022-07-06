@@ -1162,9 +1162,12 @@ public class BattleSystem : MonoBehaviour
                         targetUnit.PlayHitAnimation();
                         AudioManager.i.PlaySFX(AudioID.Hit);
                         var damageDetails = targetMonster.TakeDamage(attackingMove, attackingMonster, battleFieldEffects.Weather);
-                        yield return StatusChangeDialog(targetMonster); //plays status chagne dialog in the event the damage triggered something like a berry being eaten
-                        yield return targetUnit.Hud.WaitForHPUpdate();
+                        targetMonster.DecreaseHP(damageDetails.DamageAmount);
                         yield return ShowDamageDetails(damageDetails);
+                        yield return targetUnit.Hud.WaitForHPUpdate();
+                        yield return StatusChangeDialog(targetMonster); //plays status chagne dialog in the event the damage triggered something like a berry being eaten
+                        
+                        
                     }
 
                     //Secondary Effects, Likely need to go back and review HP check in order to apply recoil ect in the event target faints
@@ -1194,7 +1197,7 @@ public class BattleSystem : MonoBehaviour
                 }
             }
 
-            //Target Held Item triggers for things like berries
+            //Target Held Item triggers for things like berries to cure status or damage taken
             if(targetMonster.HeldItem != null && targetMonster.HeldItem.IsEffectiveWhenHeld)
             {
                 if(targetMonster.HeldItem is Treat)
@@ -1208,6 +1211,7 @@ public class BattleSystem : MonoBehaviour
 
                     }
                 }
+                
             }        
         }
 
@@ -1704,7 +1708,7 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator ShowDamageDetails(DamageDetails damageDetails)
     {
-        if(damageDetails.Critical > 1f) 
+        if(damageDetails.CriticalDamageBonus > 1f) 
             yield return battleDialogueBox.TypeDialog("A Critical Hit!");
         if(damageDetails.TypeEffectiveness > 1f) 
             yield return battleDialogueBox.TypeDialog("It's super Effective!");
