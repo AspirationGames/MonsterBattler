@@ -454,6 +454,7 @@ public class Monster
     {
         Status = null;
         OnStatusChanged?.Invoke();
+
     }
 
     public void SetVolatileStatus(ConditionID conditionID)
@@ -658,6 +659,9 @@ public class Monster
         //Item modifier
         float attackerItemModifier = attackingMonster.HeldItemDamageBoost(attackerMove, attackingMonster);
         float targetDamageReduction = HeldItemDamageReduction(attackerMove);
+
+        Debug.Log($"Attack Modifier from item: {attackerItemModifier}");
+        Debug.Log($"Target damage reduction from item: {targetDamageReduction}");
 
         var damageDetails = new DamageDetails()
         {

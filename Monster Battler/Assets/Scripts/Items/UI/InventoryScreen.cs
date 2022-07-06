@@ -134,6 +134,7 @@ public class InventoryScreen : MonoBehaviour
 
     public void ItemHover(ItemSlotUI hoverItemSlotUI)
     {
+        if(inventoryScreenState != InventoryScreenState.Inventory) return;
 
         int hoverItemIndex = hoverItemSlotUI.transform.GetSiblingIndex(); //this returns the index of the item slot
         var item = currentItemSlots[hoverItemIndex].Item;
@@ -184,8 +185,6 @@ public class InventoryScreen : MonoBehaviour
             return;
 
         }
-
-        Debug.Log(GameController.Instance.GameState);
 
         if(GameController.Instance.GameState == GameState.Battle) //if in battle
         {

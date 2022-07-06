@@ -9,6 +9,7 @@ public class TypeEnhancingItem : ItemBase
     [SerializeField] float boostAmount = 1.2f;
 
     public MonsterType TypeBoost => typeBoost;
+    public override bool CanUsedInBattle => false;
 
     public override bool CanUse(Monster monster)
     {

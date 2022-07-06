@@ -702,8 +702,8 @@ public class BattleSystem : MonoBehaviour
 
         if(!inventoryScreen.GetCanUseItem(selectedMonster)) //if the slected monster can't use the selected item
         {
-            yield return battleDialogueBox.TypeDialog($"{selectedMonster} can't use that item.");
-            yield return battleDialogueBox.TypeDialog($"select a monster to use {inventoryScreen.GetSelectedItem().ItemName}.");
+            yield return battleDialogueBox.TypeDialog($"{selectedMonster.Base.MonsterName} can't use that item.");
+            yield return battleDialogueBox.TypeDialog($"Choose a monster to use {inventoryScreen.GetSelectedItem().ItemName}.");
             yield break;
         }
         

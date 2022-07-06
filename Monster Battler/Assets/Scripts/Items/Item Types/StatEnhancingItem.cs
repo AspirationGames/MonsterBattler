@@ -11,6 +11,7 @@ public class StatEnhancingItem : ItemBase
     [SerializeField] bool preventsStatusMoves = false;
     public bool LocksMoves => locksMoves;
     public bool PreventsStatusMoves => preventsStatusMoves;
+    public override bool CanUsedInBattle => false;
     public override bool CanUse(Monster monster)
     {
         //these items can't be used and are intended to be held by a monster

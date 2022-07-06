@@ -16,7 +16,7 @@ public class Treat : ItemBase
     [SerializeField] MonsterType typeResist;
     [SerializeField] float damageReductionModifier = 0.5f;
 
-
+    
     public override bool CanUse(Monster monster)
     {
         if(healPercent > 0) //healing berry
