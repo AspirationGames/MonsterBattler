@@ -12,12 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3a32922a3f566a438d3820977781190, type: 3}
   m_Name: Weakness Policy
   m_EditorClassIdentifier: 
-  itemName: 
-  description: 
-  icon: {fileID: 0}
-  buyPrice: 0
-  sellPrice: 0
-  isSellable: 0
-  isEffectiveWhenHeld: 0
-  trigger: 0
+  itemName: Weakness Policy
+  description: Doubles monster attack power when hit by a super effective move
+  icon: {fileID: -1121164730, guid: 0f6d3601731942544a030ddf17e2e3df, type: 3}
+  buyPrice: 100
+  sellPrice: 100
+  isSellable: 1
+  isEffectiveWhenHeld: 1
+  trigger: 1
   damageTypeRequirment: 0
+  statStageChanges:
+  - stat: 0
+    stage: 2
+  - stat: 2
+    stage: 2

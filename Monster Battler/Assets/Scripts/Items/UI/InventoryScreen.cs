@@ -253,7 +253,8 @@ public class InventoryScreen : MonoBehaviour
         {
             Debug.Log("Monster is currently holding item. Need to implement method to choose to replace currently held item");
         }
-        
+
+        selectedMonster.SetHeldItem(selectedItemSlot.Item);
         selectedMonster.HeldItem = selectedItemSlot.Item;
         DecreaseItemQuanity();
         yield return DialogManager.Instance.ShowDialogText($"{selectedMonster.Base.MonsterName} is now holding {selectedItemSlot.Item.ItemName}.");

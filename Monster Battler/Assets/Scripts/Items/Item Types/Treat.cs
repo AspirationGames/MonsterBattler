@@ -64,7 +64,7 @@ public class Treat : ItemBase
         {
             monster.StatusChangeMessages.Enqueue($"{monster.Base.MonsterName}'s ate a {this.ItemName} to half the damage taken by {attackerMove.Base.MoveName}.");
             damageDetails.DamageAmount = Mathf.FloorToInt(damageDetails.DamageAmount * damageReduction);
-            monster.HeldItem = null;
+            monster.SetHeldItem(null);
         }
     }
 

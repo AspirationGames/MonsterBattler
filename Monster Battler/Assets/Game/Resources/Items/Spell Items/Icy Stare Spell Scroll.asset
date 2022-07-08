@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Scroll of Knowledge
   description: Teaches a monster teh move Icy Glare
-  icon: {fileID: 902238178, guid: 0f6d3601731942544a030ddf17e2e3df, type: 3}
+  icon: {fileID: 593444022, guid: ac20e335ecd3a8842be7c581ce97e0f0, type: 3}
   buyPrice: 0
   sellPrice: 0
   isSellable: 0

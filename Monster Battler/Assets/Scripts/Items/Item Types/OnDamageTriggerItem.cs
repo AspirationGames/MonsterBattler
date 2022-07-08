@@ -28,19 +28,20 @@ public class OnDamageTriggerItem : ItemBase
         {
             monster.StatusChangeMessages.Enqueue($"{monster.Base.MonsterName}'s held on with a {this.ItemName} to half the damage taken by {attackerMove.Base.MoveName}.");
             damageDetails.DamageAmount -= 1;
-            monster.HeldItem = null;
+            monster.SetHeldItem(null);
+            
         }
-        else if(trigger == DamageTrigger.WeaknessTrigger && damageDetails.TypeEffectiveness > 1)
+        else if(trigger == DamageTrigger.WeaknessTrigger && damageDetails.TypeEffectiveness > 1) //weakness policy
         {
             monster.StatusChangeMessages.Enqueue($"{monster.Base.MonsterName}'s {this.ItemName} was triggered.");
             monster.ApplyStageChange(statStageChanges);
-            monster.HeldItem = null;
+            monster.SetHeldItem(null);
         }
         else if(trigger == DamageTrigger.AttackTypeTrigger && attackerMove.Base.Type == damageTypeRequirment)
         {
             monster.StatusChangeMessages.Enqueue($"{monster.Base.MonsterName}'s {this.ItemName} was triggered.");
             monster.ApplyStageChange(statStageChanges);
-            monster.HeldItem = null;
+            monster.SetHeldItem(null);
         }
     }
 }

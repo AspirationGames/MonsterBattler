@@ -19,6 +19,7 @@ public class PartyMemberUI : MonoBehaviour
     Monster monster;
 
     [SerializeField] Image statusImage;
+    [SerializeField] Image heldItemImage;
     [SerializeField] List<Sprite> statusSprites;
 
     public static event Action<PartyMemberUI> UIHover;
@@ -33,6 +34,7 @@ public class PartyMemberUI : MonoBehaviour
         monster.OnHPChanged += UpdateData;
         monster.OnLevelChanged += UpdateData;
         monster.OnStatusChanged += SetStatusImage;
+        monster.OnHeldItemChanged += SetHeldItemImage;
     }
 
     void UpdateData()
@@ -48,6 +50,19 @@ public class PartyMemberUI : MonoBehaviour
     {
        yield return hpBar.SetHPSmooth((float) monster.HP / monster.MaxHP);
        hpText.text = monster.HP.ToString() + "/" + monster.MaxHP.ToString();
+    }
+
+    public void SetHeldItemImage()
+    {
+        if(monster.HeldItem == null)
+        {
+            heldItemImage.enabled = false;
+        }
+        else
+        {
+            heldItemImage.enabled = true;
+            heldItemImage.sprite = monster.HeldItem.Icon;
+        }
     }
 
     public void SetStatusImage()

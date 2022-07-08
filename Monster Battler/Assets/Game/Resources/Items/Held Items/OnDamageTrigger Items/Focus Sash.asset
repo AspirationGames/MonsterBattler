@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3a32922a3f566a438d3820977781190, type: 3}
   m_Name: Focus Sash
   m_EditorClassIdentifier: 
-  itemName: 
-  description: 
-  icon: {fileID: 0}
-  buyPrice: 0
-  sellPrice: 0
-  isSellable: 0
-  isEffectiveWhenHeld: 0
+  itemName: Focus Sash
+  description: Allows monster to hold on with 1 HP
+  icon: {fileID: -1395954178, guid: 0f6d3601731942544a030ddf17e2e3df, type: 3}
+  buyPrice: 100
+  sellPrice: 100
+  isSellable: 1
+  isEffectiveWhenHeld: 1
   trigger: 0
   damageTypeRequirment: 0
+  statStageChanges: []

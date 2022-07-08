@@ -72,6 +72,7 @@ public class Monster
     public event System.Action OnStatusChanged; 
     public event System.Action OnHPChanged; 
     public event System.Action OnLevelChanged;
+    public event System.Action OnHeldItemChanged;
     
 
 
@@ -448,6 +449,12 @@ public class Monster
         
 
 
+    }
+
+    public void SetHeldItem(ItemBase item)
+    {
+        HeldItem = item;
+        OnHeldItemChanged?.Invoke();
     }
 
     public void CureStatus()
