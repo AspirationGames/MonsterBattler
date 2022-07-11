@@ -30,6 +30,7 @@ public class PartyMemberUI : MonoBehaviour
         UpdateData();
         SetStatusImage();
         SetMessageText("");
+        SetHeldItemImage();
 
         monster.OnHPChanged += UpdateData;
         monster.OnLevelChanged += UpdateData;

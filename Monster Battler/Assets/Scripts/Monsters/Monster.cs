@@ -128,7 +128,7 @@ public class Monster
         developedSkillSpDefense = saveData.sDevelopedSkillSpDefense;
         developedSkillSpeed = saveData.sDevelopedSkillSpeed;
 
-
+        //Status
         if(saveData.sStatusId != null)
         {
             Status = ConditionsDB.Conditions[saveData.sStatusId.Value]; //.Value is used here because sStatudId is nullable
@@ -136,6 +136,17 @@ public class Monster
         else
         {
             Status = null;
+        }
+
+        //Held Item
+        if(saveData.sHeldItemName != null)
+        {
+            HeldItem = ItemDB.GetObjectByName(saveData.sHeldItemName);
+            
+        }
+        else
+        {
+            HeldItem = null;
         }
 
 
@@ -162,6 +173,7 @@ public class Monster
             sHp = HP,
             sLevel = Level,
             sExp = Exp,
+            sHeldItemName = HeldItem?.name,
             sStatusId = Status?.Id,
             sPersonality = personality,
             sMoves = Moves.Select(m => m.GetMoveSaveData()).ToList(),
@@ -805,6 +817,7 @@ public class MonsterSaveData //only includes the savable data
     public int sHp;
     public int sLevel;
     public int sExp;
+    public string sHeldItemName; //We will use the name to restore the held item
     public ConditionID? sStatusId;
     public Personality sPersonality;
     public List<MoveSaveData> sMoves;
