@@ -251,14 +251,36 @@ public class InventoryScreen : MonoBehaviour
     {
         if(selectedMonster.HeldItem != null) //monster is currently holding item TO DO
         {
-            Debug.Log("Monster is currently holding item. Need to implement method to choose to replace currently held item");
-        }
+            int selectedChoice = 0;
+            yield return DialogManager.Instance.ShowDialogText($"{selectedMonster.Base.MonsterName} is already holding a {selectedMonster.HeldItem.ItemName} would you like to switch held item to {selectedItemSlot.Item.ItemName}?", 
+            choices: new List<String> {"Yes", "No",}, 
+            onChoiceSelectedAction: (int selectionIndex) => selectedChoice = selectionIndex);
 
-        selectedMonster.SetHeldItem(selectedItemSlot.Item);
-        selectedMonster.HeldItem = selectedItemSlot.Item;
-        DecreaseItemQuanity();
-        yield return DialogManager.Instance.ShowDialogText($"{selectedMonster.Base.MonsterName} is now holding {selectedItemSlot.Item.ItemName}.");
-        partyScreen.ClosePartyScreen();
+            switch(selectedChoice)
+            {
+                case 0: //Yes
+                    inventory.IncreaseQuantity(selectedMonster.HeldItem);
+                    selectedMonster.SetHeldItem(selectedItemSlot.Item);
+                    DecreaseItemQuanity();
+                    yield return DialogManager.Instance.ShowDialogText($"{selectedMonster.Base.MonsterName} is now holding {selectedItemSlot.Item.ItemName}.");
+                    partyScreen.ClosePartyScreen();
+                    break;
+                case 1: //No
+                    partyScreen.ClosePartyScreen();
+                    break;
+                default:
+                    Debug.LogError("No choice selected");
+                    break;
+            }
+        }
+        else
+        {
+            selectedMonster.SetHeldItem(selectedItemSlot.Item);
+            DecreaseItemQuanity();
+            yield return DialogManager.Instance.ShowDialogText($"{selectedMonster.Base.MonsterName} is now holding {selectedItemSlot.Item.ItemName}.");
+            partyScreen.ClosePartyScreen();
+        }
+        
     }
     private void AttemptToUseItem(Monster selectedMonster)
     {
