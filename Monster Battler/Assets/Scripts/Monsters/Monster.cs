@@ -563,6 +563,11 @@ public class Monster
     private void UseHeldItemsAfterTurn()
     {
         if (HeldItem == null || !HeldItem.IsEffectiveWhenHeld) return;
+        else if(HeldItem is OnAfterTurnItem)
+        {
+            OnAfterTurnItem item = (OnAfterTurnItem)HeldItem;
+            item.OnAfterTurn(this);
+        }
 
 
     }

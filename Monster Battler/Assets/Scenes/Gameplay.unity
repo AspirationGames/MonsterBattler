@@ -529,7 +529,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1749180314672643208, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: specialSlots.Array.size
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1749180314672643208, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: treatSlots.Array.data[0].item
@@ -556,6 +556,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 9f32a039747ff4541bd903ceb16c52ce, type: 2}
     - target: {fileID: 1749180314672643208, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: specialSlots.Array.data[9].item
+      value: 
+      objectReference: {fileID: 11400000, guid: 9924b91baaff44a4b8d5fb80c17aba2c, type: 2}
+    - target: {fileID: 1749180314672643208, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: treatSlots.Array.data[0].quantity
       value: 3
       objectReference: {fileID: 0}
@@ -578,6 +582,10 @@ PrefabInstance:
     - target: {fileID: 1749180314672643208, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: specialSlots.Array.data[8].quantity
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1749180314672643208, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: specialSlots.Array.data[9].quantity
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1787048855053681674, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: m_AnchorMax.y
