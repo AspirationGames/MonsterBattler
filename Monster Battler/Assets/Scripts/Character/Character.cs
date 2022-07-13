@@ -51,6 +51,16 @@ public class Character : MonoBehaviour
         targetPosition.x += horizontal;
         targetPosition.y += vertical;
 
+        var ledge = CheckForLedge(targetPosition);
+        if(ledge != null)
+        {
+            if(ledge.AttemptToJump(this, moveDirection)) //if the player can jump we don't need to do the below code
+            {
+                yield break;
+            }
+            
+        }
+
         if(!IsPathClear(targetPosition))
         {
             yield break;
@@ -79,6 +89,7 @@ public class Character : MonoBehaviour
         
     }
 
+   
     bool IsPathClear(Vector3 targetPosition)
     {
         
@@ -95,6 +106,12 @@ public class Character : MonoBehaviour
 
         return true;  
 
+    }
+
+     Ledge CheckForLedge(Vector3 targetPosition)
+    {
+        Collider2D ledgeCollider = Physics2D.OverlapCircle(targetPosition, 0.15f, GameLayers.i.LedgeLayer);
+        return ledgeCollider?.GetComponent<Ledge>();
     }
 
     bool IsWalkable(Vector3 targetPosition)

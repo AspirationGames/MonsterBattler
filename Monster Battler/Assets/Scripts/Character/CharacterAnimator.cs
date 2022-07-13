@@ -15,6 +15,7 @@ public class CharacterAnimator : MonoBehaviour
    public float MoveX {get; set;}
    public float MoveY {get; set;}
    public bool IsMoving {get; set;}
+   public bool IsJumping{get; set;}
 
    //States
 
@@ -71,8 +72,11 @@ public class CharacterAnimator : MonoBehaviour
             currentAnim.Start();
         }
 
-        //play animations when moving
-        if(IsMoving)
+        if(IsJumping)
+        {
+            spriteRenderer.sprite = currentAnim.Frames[currentAnim.Frames.Count-1]; //When jumping we set the sprite to the last frame of the current animation
+        }
+        else if(IsMoving) //play animations when moving
         {
             currentAnim.HandleUpdate();
             

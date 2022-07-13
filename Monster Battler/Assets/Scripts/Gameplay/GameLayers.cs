@@ -16,6 +16,7 @@ public class GameLayers : MonoBehaviour
     [SerializeField] LayerMask portalLayer;
 
     [SerializeField] LayerMask triggersLayer;
+    [SerializeField] LayerMask ledgeLayer;
 
     void Awake()
     {
@@ -55,6 +56,11 @@ public class GameLayers : MonoBehaviour
     public LayerMask TriggerableLayers
     {
         get => monsterEncountersLayer | fovLayer | portalLayer | triggersLayer;
+    }
+
+    public LayerMask LedgeLayer
+    {
+        get => ledgeLayer;
     }
 
 
