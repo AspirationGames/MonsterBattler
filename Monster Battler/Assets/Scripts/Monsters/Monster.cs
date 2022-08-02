@@ -283,7 +283,7 @@ public class Monster
 
         return 1f;  //for some stupid reason we need this here even though the switch should always return a value
     }
-
+    
     void CalculateStats()
     {
         Stats = new Dictionary<Stat, int>();

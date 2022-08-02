@@ -6,7 +6,6 @@ public class Move
 {
     public MoveBase Base { get; set;}
     public int AP {get; set;}
-
     public bool IsDisabled {get; private set;}
 
     public Move(MoveBase mBase)

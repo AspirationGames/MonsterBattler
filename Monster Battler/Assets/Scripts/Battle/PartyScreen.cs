@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class PartyScreen : MonoBehaviour
 {
     [SerializeField] Image monsterImage;
+    [SerializeField] MonsterSummaryScreen monsterSummaryScreen;
     PartyMemberUI[] memberSlots;
     List<Monster> monsters;
     MonsterParty playerParty;
@@ -114,9 +115,8 @@ public class PartyScreen : MonoBehaviour
 
     IEnumerator ShowMonsterSummary(Monster monster)
     {
-        Debug.Log("Showing Monster Summary");
-        //WIP I created a monster summary UI object as a child under the Party Screen Prefab. It will cover the party screen and show details about the monster
-
+        monsterSummaryScreen.gameObject.SetActive(true);
+        monsterSummaryScreen.SetMonsterData(monster);
         yield return null;
     }
     IEnumerator SwapMonsterPosition(Monster monster)
