@@ -57,6 +57,8 @@ public class Monster
     public List<Move> Moves{ get; set;} //we are using a property for the moves
     public Dictionary<Stat, int> Stats {get; private set;} //we can get stats publically but only set stats in the monster class
     public Dictionary<Stat, int> StatStages {get; private set;} //integer values in this dictionary are between minus 6 and plus 6
+    public Dictionary<Stat, int> NaturalAffinities {get; private set;}
+    public Dictionary<Stat, int> DevelopmentValues {get; private set;}
     public Queue<string> StatusChangeMessages {get; private set;}
     
     public Condition Status{get; private set;}
@@ -95,6 +97,7 @@ public class Monster
         Exp = Base.GetExpForLevel(level);
 
         CalculateStats();
+        CreateValueDictionaries();
         HP = MaxHP;
 
         StatusChangeMessages = new Queue<string>();
@@ -157,6 +160,7 @@ public class Monster
         //Reinitialize monster
 
         CalculateStats();
+        CreateValueDictionaries();
         StatusChangeMessages = new Queue<string>();
         ResetStatStages();
         VolatileStatus = null;
@@ -284,6 +288,28 @@ public class Monster
         return 1f;  //for some stupid reason we need this here even though the switch should always return a value
     }
     
+    void CreateValueDictionaries()
+    {
+        NaturalAffinities = new Dictionary<Stat, int>()
+        {
+            {Stat.HP, naturalSkillMaxHP},
+            {Stat.Attack,naturalSkillAttack},
+            {Stat.Defense,naturalSkillDefense},
+            {Stat.SpAttack,naturalSkillSpAttack},
+            {Stat.SpDefense,naturalSkillSpDefense},
+            {Stat.Speed, naturalSkillSpeed},
+        };
+
+        DevelopmentValues = new Dictionary<Stat, int>()
+        {
+            {Stat.HP, developedSkillMaxHP},
+            {Stat.Attack,developedSkillAttack},
+            {Stat.Defense,developedSkillDefense},
+            {Stat.SpAttack,developedSkillSpAttack},
+            {Stat.SpDefense,developedSkillSpDefense},
+            {Stat.Speed, developedSkillSpeed},
+        };
+    }
     void CalculateStats()
     {
         Stats = new Dictionary<Stat, int>();
@@ -300,6 +326,8 @@ public class Monster
                 HP += MaxHP - OldMaxHP;
             }
 
+        Stats.Add(Stat.HP, MaxHP); //Add HP to dictionary
+        
         //OtherStats
 
         Stats.Add

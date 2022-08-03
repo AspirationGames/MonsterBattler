@@ -7,31 +7,24 @@ using TMPro;
 public class MonsterSummaryScreen : MonoBehaviour
 {
     [SerializeField] Image monsterImage;
-
-    [SerializeField] Transform StatTotals;
-    [SerializeField] Transform naturalSkillAffinities;
-    [SerializeField] Transform developmentalSkillPoints;
-    [SerializeField] Transform developmentalSkillSliders;
+    [SerializeField] TextMeshProUGUI[] naturalValues;
+    [SerializeField] TMP_InputField[] developmentalValues;
+    [SerializeField] TextMeshProUGUI[] statTotals;
+    [SerializeField] Slider[] developmentalValueSliders;
 
     public void SetMonsterData(Monster monster)
     {
         monsterImage.sprite = monster.Base.FrontSprite;
 
-        foreach(Transform statTotal in StatTotals)
+        for(int i = 0; i < 6; i++)
         {
-            TextMeshProUGUI naturalSkillTMP = statTotal.gameObject.GetComponent<TextMeshProUGUI>();
-            
-            if(statTotal.GetSiblingIndex() == 0)
-            {
-                naturalSkillTMP.text = monster.MaxHP.ToString(); 
-            }
-            else
-            {
-                int index = statTotal.GetSiblingIndex() - 1; // note that our stat dictionary doesn't include HP so at index 0 the first stat is attack
-                Stat stat =  (Stat)index; 
-                naturalSkillTMP.text = monster.Stats[stat].ToString();
-            }
-
+            print(i);
+            Stat stat =  (Stat)i;
+            naturalValues[i].text = monster.NaturalAffinities[stat].ToString();
+            developmentalValues[i].text = monster.DevelopmentValues[stat].ToString();
+            statTotals[i].text = monster.Stats[stat].ToString();
         }
+
     }
+    
 }

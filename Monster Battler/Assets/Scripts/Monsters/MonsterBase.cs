@@ -253,6 +253,7 @@ public enum GrowthRate
 
 public enum Stat
 {
+    HP,
     Attack,
     Defense,
     SpAttack,
