@@ -29,6 +29,8 @@ public class Monster
     [SerializeField][Range(0, 252)] int developedSkillSpDefense; //EVs
     [SerializeField][Range(0, 252)] int developedSkillSpeed; //EVs
 
+    [SerializeField] int DevPointMaximum = 127;
+
     public Monster(MonsterBase mBase, int mLevel)
     {
         _base = mBase;
@@ -53,6 +55,8 @@ public class Monster
 
     public int HP {get; set;} //our monsters current HP, we are using a property
     public int Exp { get; set;}
+    public int DevExp { get; set;}
+    public int BondPoints {get; set;}
     public ItemBase HeldItem {get; set;}
     public List<Move> Moves{ get; set;} //we are using a property for the moves
     public Dictionary<Stat, int> Stats {get; private set;} //we can get stats publically but only set stats in the monster class
@@ -98,6 +102,9 @@ public class Monster
 
         Exp = Base.GetExpForLevel(level);
 
+        DevExp = 0; //initially set Dev Exp at 0;
+        
+
         CreateInitialValueDictionaries();
         CalculateStats();
         HP = MaxHP;
@@ -118,6 +125,7 @@ public class Monster
         HP = saveData.sHp;
         level = saveData.sLevel;
         Exp = saveData.sExp;
+        DevExp = saveData.sDevExp;
         personality = saveData.sPersonality;
 
         //Stat Dictinories
@@ -170,6 +178,7 @@ public class Monster
             sHp = HP,
             sLevel = Level,
             sExp = Exp,
+            sDevExp = DevExp,
             sHeldItemName = HeldItem?.name,
             sStatusId = Status?.Id,
             sPersonality = personality,
@@ -337,7 +346,7 @@ public class Monster
             }
 
         Stats.Add(Stat.HP, MaxHP); //Add HP to dictionary
-        
+
         //OtherStats
         for(int i = 1; i < 6; i++)
         {
@@ -594,9 +603,6 @@ public class Monster
 
 
     }
-
-
-
     public bool CheckForLevelUp()
     {
         if (Exp > Base.GetExpForLevel(level + 1))
@@ -609,6 +615,23 @@ public class Monster
         
         return false;
 
+    }
+    public bool CheckForBondLevelUp()
+    {   
+        if(DevExp > GetExpForBondPoints(true))
+        {
+            BondPoints += 4;
+            return true;
+        }
+        return false;
+        
+    }
+
+    public int GetExpForBondPoints(bool nextBondLevel=false) //the bool is used for when we need to check EXP amount for next bond level
+    {
+        int points = BondPoints;
+        if(nextBondLevel) points += 4;
+        return Mathf.FloorToInt( Mathf.Pow((points), 2) * (points/4) );
     }
 
     public Evolution CheckForEvolution()
@@ -829,6 +852,7 @@ public class MonsterSaveData //only includes the savable data
     public int sHp;
     public int sLevel;
     public int sExp;
+    public int sDevExp;
     public string sHeldItemName; //We will use the name to restore the held item
     public ConditionID? sStatusId;
     public Personality sPersonality;

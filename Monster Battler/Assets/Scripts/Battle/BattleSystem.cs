@@ -15,7 +15,7 @@ public enum BattleState
     PlayerSwitch1, PlayerSwitch2, 
     PlayerItem1, PlayerItem2,
     EnemyAction1, EnemyAction2, 
-    Busy, PlayerFaintedSwitching, ForgettingMove,BattleOver
+    Busy, PlayerFaintedSwitching, DevelopingMonster,BattleOver
     
 }
 public class BattleSystem : MonoBehaviour
@@ -25,6 +25,7 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] PartyScreen partyScreen;
     [SerializeField] InventoryScreen inventoryScreen;
     [SerializeField] MoveSelectionUI moveSelectionUI;
+    [SerializeField] MonsterSummaryScreen monsterSummaryScreen;
 
     [SerializeField] EnemyAI enemyAI;
 
@@ -1132,8 +1133,6 @@ public class BattleSystem : MonoBehaviour
                 yield return battleDialogueBox.TypeDialog
                 ("But it Failed");
             }
-
-
             else //Perform Attack
             {
                 yield return battleDialogueBox.TypeDialog
@@ -1195,24 +1194,27 @@ public class BattleSystem : MonoBehaviour
                     yield return battleDialogueBox.TypeDialog($"but it missed!");
 
                 }
-            }
 
-            //Target Held Item triggers for things like berries to cure status or damage taken
-            if(targetMonster.HeldItem != null && targetMonster.HeldItem.IsEffectiveWhenHeld)
-            {
-                if(targetMonster.HeldItem is Treat)
+
+                //Target Held Item triggers for things like berries to cure status or damage taken
+                if(targetMonster.HeldItem != null && targetMonster.HeldItem.IsEffectiveWhenHeld)
                 {
-                    Treat treat = (Treat)targetMonster.HeldItem;
-                    if (treat.CanUse(targetMonster))
+                    if(targetMonster.HeldItem is Treat)
                     {
+                        Treat treat = (Treat)targetMonster.HeldItem;
+                        if (treat.CanUse(targetMonster))
+                        {
                         treat.Use(targetMonster);
                         targetMonster.HeldItem = null; //remove held item
                         yield return battleDialogueBox.TypeDialog($"{targetMonster.Base.MonsterName} used a {treat.ItemName}.");
 
+                        }
                     }
-                }
                 
-            }        
+                } 
+            }
+
+                   
         }
 
         //attack phase over
@@ -1312,6 +1314,8 @@ public class BattleSystem : MonoBehaviour
 
                     //Add EXP to monsters
                     monster.Exp += expGain;
+                     
+
                     if(monster.InBattle) // update HUD for monsters in battle the we update HUD
                     {
                         yield return battleUnits[playerParty.Monsters.IndexOf(monster)].Hud.SetExpSmooth();
@@ -1351,6 +1355,25 @@ public class BattleSystem : MonoBehaviour
                         }
 
                    }
+
+                 //Dev Points
+                    monster.DevExp += expGain;
+                    if(monster.InBattle) // update HUD for monsters in battle the we update HUD
+                    {
+                        yield return battleUnits[playerParty.Monsters.IndexOf(monster)].Hud.SetBondExpSmooth();
+                    }
+                    while(monster.CheckForBondLevelUp()) //while loop in the event monsters gains more than 1 stage of dev points
+                    {
+                        if(monster.InBattle) //if in battle we update HUD
+                       {
+                           yield return battleUnits[playerParty.Monsters.IndexOf(monster)].Hud.SetBondExpSmooth(true); //in the event the monster gained more exp than required we reset hud
+                       }
+                       yield return battleDialogueBox.TypeDialog($"{monster.Base.MonsterName}'s bond with you grew stronger.");
+
+                       //show Monster Summary Screen for DevPoints
+
+                    }
+                    
                     
 
                 }
@@ -1391,7 +1414,7 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator ChooseMoveToForget(Monster monster, MoveBase newMove)
     {
-        battleState = BattleState.ForgettingMove;
+        battleState = BattleState.DevelopingMonster;
         yield return battleDialogueBox.TypeDialog("Choose a move to forget.");
         moveSelectionUI.gameObject.SetActive(true);
         moveSelectionUI.SetMoveData(monster.Moves.Select(x => x.Base).ToList(), newMove);
@@ -1399,11 +1422,30 @@ public class BattleSystem : MonoBehaviour
         monsterLearning = monster;
         moveToLearn = newMove;
         
-        yield return new WaitUntil(() => battleState != BattleState.ForgettingMove);
+        yield return new WaitUntil(() => battleState != BattleState.DevelopingMonster);
         moveSelectionUI.gameObject.SetActive(false);
 
         yield return new WaitForSeconds(2f);
 
+    }
+
+    public void DevelopmentPointsConfirmed()
+    {
+        //TO DO add more functionality here
+        monsterSummaryScreen.CloseSummaryScreen();
+        battleState = BattleState.Busy;
+    }
+    IEnumerator SpendDevelopmentPoints(Monster monster)
+    {
+        battleState = BattleState.DevelopingMonster;
+        yield return battleDialogueBox.TypeDialog("Choose which stats to invest in.");
+        monsterSummaryScreen.gameObject.SetActive(true);
+        monsterSummaryScreen.SetMonsterData(monster);
+        
+        yield return new WaitUntil(() => battleState != BattleState.DevelopingMonster);
+        monsterSummaryScreen.gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(2f);
     }
 
 

@@ -12,6 +12,7 @@ public class BattleHud : MonoBehaviour
 
     [SerializeField] HPBar hpBar;
     [SerializeField] GameObject expBar;
+    [SerializeField] GameObject bondExpBar;
     [SerializeField] TextMeshProUGUI hpText;
     [SerializeField] Image statusImage;
     [SerializeField] List<Sprite> statusSprites;
@@ -50,27 +51,41 @@ public class BattleHud : MonoBehaviour
     public void SetEXP()
     {
         if (expBar == null) return;
+        if (bondExpBar == null) return;
 
         float normalizedExp = GetNormalizedExp();
-
+        float normalizeBondExp = GetNormalizedBondExp();
+        print(normalizeBondExp);
         expBar.transform.localScale = new Vector3(normalizedExp, 1, 1);
-
+        bondExpBar.transform.localScale = new Vector3(normalizeBondExp, 1, 1);
     }
 
     public IEnumerator SetExpSmooth(bool expFull=false)
     {
-        
         if(expBar == null) yield break;
 
         if(expFull)
         {
-            //reset exp bar
+            //reset bar
             expBar.transform.localScale = new Vector3(0,1,1);
 
         }
 
         float normalizedExp = GetNormalizedExp();
         yield return expBar.transform.DOScaleX(normalizedExp, 1.5f).WaitForCompletion();
+    }
+
+    public IEnumerator SetBondExpSmooth(bool expFull=false)
+    {
+        if(expFull)
+        {
+            //reset bar
+            bondExpBar.transform.localScale = new Vector3(0,1,1);
+
+        }
+
+        float normalizedExp = GetNormalizedBondExp();
+        yield return bondExpBar.transform.DOScaleX(normalizedExp, 1.5f).WaitForCompletion();
     }
 
     float GetNormalizedExp()
@@ -82,6 +97,15 @@ public class BattleHud : MonoBehaviour
 
         return Mathf.Clamp01(normalizedExp);
 
+    }
+    float GetNormalizedBondExp()
+    {
+        int currentBondExp = monster.GetExpForBondPoints();
+        int nextBondLevelExp = monster.GetExpForBondPoints(true);
+
+        float normalizeBondExp = (float)(monster.DevExp - currentBondExp) / (nextBondLevelExp - currentBondExp);
+        
+        return Mathf.Clamp01(normalizeBondExp);  
     }
 
     public void UpdateHP()
