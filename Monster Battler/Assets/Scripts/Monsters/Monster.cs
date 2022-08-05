@@ -57,6 +57,8 @@ public class Monster
     public List<Move> Moves{ get; set;} //we are using a property for the moves
     public Dictionary<Stat, int> Stats {get; private set;} //we can get stats publically but only set stats in the monster class
     public Dictionary<Stat, int> StatStages {get; private set;} //integer values in this dictionary are between minus 6 and plus 6
+    
+    public Dictionary<Stat, int> BaseStats{get; private set;}
     public Dictionary<Stat, int> NaturalAffinities {get; private set;}
     public Dictionary<Stat, int> DevelopmentValues {get; private set;}
     public Queue<string> StatusChangeMessages {get; private set;}
@@ -96,8 +98,8 @@ public class Monster
 
         Exp = Base.GetExpForLevel(level);
 
-        CalculateStats();
         CreateValueDictionaries();
+        CalculateStats();
         HP = MaxHP;
 
         StatusChangeMessages = new Queue<string>();
@@ -159,8 +161,8 @@ public class Monster
 
         //Reinitialize monster
 
-        CalculateStats();
         CreateValueDictionaries();
+        CalculateStats();
         StatusChangeMessages = new Queue<string>();
         ResetStatStages();
         VolatileStatus = null;
@@ -290,6 +292,15 @@ public class Monster
     
     void CreateValueDictionaries()
     {
+        BaseStats = new Dictionary<Stat, int>()
+        {
+            {Stat.HP, Base.MaxHP},
+            {Stat.Attack,Base.Attack},
+            {Stat.Defense,Base.Defense},
+            {Stat.SpAttack,Base.SpAttack},
+            {Stat.SpDefense,Base.SpDefense},
+            {Stat.Speed, Base.Speed},
+        };
         NaturalAffinities = new Dictionary<Stat, int>()
         {
             {Stat.HP, naturalSkillMaxHP},
