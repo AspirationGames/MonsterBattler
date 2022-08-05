@@ -551,6 +551,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -9.069305
       objectReference: {fileID: 0}
+    - target: {fileID: 502164876739011226, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 502164876739011226, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 502164876739011226, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 502164876739011226, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 502164876739011226, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 519532658008802833, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1659,6 +1679,26 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3225164476021979264, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3225164476021979264, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3225164476021979264, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3225164476021979264, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3225164476021979264, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3300631804901460855, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -1711,6 +1751,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3367542545064403272, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3367542545064403272, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3367542545064403272, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3367542545064403272, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3367542545064403272, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3370855046358796474, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
@@ -1732,6 +1792,26 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3391347433603309071, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3450285797673761508, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3450285797673761508, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3450285797673761508, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3450285797673761508, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3450285797673761508, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
@@ -1796,6 +1876,26 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3611987386952823744, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3732945746925884960, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3732945746925884960, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3732945746925884960, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3732945746925884960, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3732945746925884960, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
@@ -2203,6 +2303,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5124807592929078923, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5124807592929078923, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5124807592929078923, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5124807592929078923, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5124807592929078923, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5321692108926953286, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2580,16 +2700,24 @@ PrefabInstance:
       value: 31
       objectReference: {fileID: 0}
     - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[0].developedSkillMaxHP
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
+      propertyPath: monsters.Array.data[0].developedSkillSpeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: monsters.Array.data[0].naturalSkillDefense
       value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: monsters.Array.data[1].developedSkillMaxHP
-      value: 252
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: monsters.Array.data[1].developedSkillSpeed
-      value: 252
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: monsters.Array.data[1].naturalSkillDefense
@@ -2597,11 +2725,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: monsters.Array.data[2].developedSkillMaxHP
-      value: 252
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: monsters.Array.data[2].developedSkillSpeed
-      value: 252
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: monsters.Array.data[2].naturalSkillDefense
@@ -2625,7 +2753,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: monsters.Array.data[1].developedSkillAttack
-      value: 51
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: monsters.Array.data[1].naturalSkillSpAttack
@@ -2645,7 +2773,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: monsters.Array.data[1].developedSkillDefense
-      value: 93
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6221295680672528735, guid: 747c8532265ad9546b0921483d59d26e, type: 3}
       propertyPath: monsters.Array.data[1].naturalSkillSpDefense
@@ -3946,6 +4074,7 @@ MonoBehaviour:
     developedSkillSpAttack: 0
     developedSkillSpDefense: 0
     developedSkillSpeed: 0
+    DevPointMaximum: 0
   - _base: {fileID: 11400000, guid: 424fb588cf7627c4f9b0c80bc5b7d64f, type: 2}
     level: 10
     personality: 21
@@ -3961,6 +4090,7 @@ MonoBehaviour:
     developedSkillSpAttack: 71
     developedSkillSpDefense: 77
     developedSkillSpeed: 112
+    DevPointMaximum: 0
 --- !u!1 &1908092092 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7702003041761851707, guid: bfb193b448fcb64468ea1166b24b1f3a, type: 3}
@@ -4007,6 +4137,7 @@ MonoBehaviour:
     developedSkillSpAttack: 48
     developedSkillSpDefense: 26
     developedSkillSpeed: 90
+    DevPointMaximum: 0
   - _base: {fileID: 11400000, guid: e517362a48ec6f24da07555dc4a1f493, type: 2}
     level: 5
     personality: 8
@@ -4022,6 +4153,7 @@ MonoBehaviour:
     developedSkillSpAttack: 48
     developedSkillSpDefense: 84
     developedSkillSpeed: 90
+    DevPointMaximum: 0
   - _base: {fileID: 11400000, guid: 57d0a29cc67460745b766488d455f982, type: 2}
     level: 5
     personality: 15
@@ -4037,6 +4169,7 @@ MonoBehaviour:
     developedSkillSpAttack: 81
     developedSkillSpDefense: 84
     developedSkillSpeed: 90
+    DevPointMaximum: 0
   - _base: {fileID: 11400000, guid: 149c32699cedbe04c8af6b598da1c975, type: 2}
     level: 5
     personality: 10
@@ -4052,6 +4185,7 @@ MonoBehaviour:
     developedSkillSpAttack: 81
     developedSkillSpDefense: 60
     developedSkillSpeed: 252
+    DevPointMaximum: 0
 --- !u!1001 &7702003041774230872
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -9,14 +9,15 @@ public class MonsterSummaryScreen : MonoBehaviour
 {
     [SerializeField] Image monsterImage;
     [SerializeField] TextMeshProUGUI[] baseStats;
-    [SerializeField] TextMeshProUGUI[] naturalValues;
+    [SerializeField] TextMeshProUGUI[] naturalAffinities;
     [SerializeField] TMP_InputField[] developmentalValues;
     [SerializeField] TextMeshProUGUI[] statTotals;
     [SerializeField] Slider[] developmentalValueSliders;
-    [SerializeField] TextMeshProUGUI skillPointsTMP;
+    [SerializeField] TextMeshProUGUI bondPointsTMP;
 
     Monster monster;
-    int skillPoints;
+    int unspentBondPoints;
+    int investedBondPoints;
 
     public void SetMonsterData(Monster monster)
     {
@@ -27,21 +28,24 @@ public class MonsterSummaryScreen : MonoBehaviour
         {
             
             Stat stat =  (Stat)i;
+            investedBondPoints = 0; //clears previously calculated investment values
+
             baseStats[i].text = monster.BaseStats[stat].ToString();
-            naturalValues[i].text = monster.NaturalAffinities[stat].ToString();
+            naturalAffinities[i].text = monster.NaturalAffinities[stat].ToString();
             developmentalValues[i].text = monster.DevelopmentValues[stat].ToString();
+            investedBondPoints += monster.DevelopmentValues[stat]; //sums all invested development points
             statTotals[i].text = monster.Stats[stat].ToString();
         }
 
-        //TO DO set available skill points
-        //skillPoints = availableSkillPoints;
-        //skillPointsTMP.text = skillPoints.ToString();
+        //Calc Dev Points Availalbe
+        unspentBondPoints = monster.BondPoints - investedBondPoints;
+        print(unspentBondPoints);
+        bondPointsTMP.text = unspentBondPoints.ToString();
+        
     }
 
     public void OnValueChanged(TMP_InputField inputField)
     {
-        
-        print("value changed");
         
         int fieldIndex = inputField.transform.GetSiblingIndex();
         
@@ -52,7 +56,24 @@ public class MonsterSummaryScreen : MonoBehaviour
         //TO DO figure out best way to update monster values.
         //If we use dictionary like below we will need to change stat calcs to also use dictionary
         //We will also need to consider save system which currently uses individual variables for stat values
-        //monster.DevelopmentValues[stat] = int.Parse(inputField.text);
+        
+        monster.DevelopmentValues[stat] = int.Parse(inputField.text);
+        monster.CalculateStats();
+        SetMonsterData(monster);
+    }
+
+    public void ResetPoints()
+    {
+
+    }
+
+    public void ConfirmPointInvestment()
+    {
+        
     }
     
+    public void CloseSummaryScreen()
+    {
+        gameObject.SetActive(false);
+    }
 }
