@@ -98,7 +98,7 @@ public class Monster
 
         Exp = Base.GetExpForLevel(level);
 
-        CreateValueDictionaries();
+        CreateInitialValueDictionaries();
         CalculateStats();
         HP = MaxHP;
 
@@ -120,18 +120,10 @@ public class Monster
         Exp = saveData.sExp;
         personality = saveData.sPersonality;
 
-        naturalSkillMaxHP = saveData.sNaturalSkillMaxHP;
-        naturalSkillAttack = saveData.sNaturalSkillAttack;
-        naturalSkillDefense = saveData.sNaturalSkillDefense;
-        naturalSkillSpAttack = saveData.sNaturalSkillSpAttack;
-        naturalSkillSpDefense = saveData.sNaturalSkillSpDefense;
-        naturalSkillSpeed = saveData.sNaturalSkillSpeed;
-        developedSkillMaxHP = saveData.sDevelopedSkillMaxHP;
-        developedSkillAttack = saveData.sDevelopedSkillAttack;
-        developedSkillDefense = saveData.sDevelopedSkillDefense;
-        developedSkillSpAttack = saveData.sDevelopedSkillSpAttack;
-        developedSkillSpDefense = saveData.sDevelopedSkillSpDefense;
-        developedSkillSpeed = saveData.sDevelopedSkillSpeed;
+        //Stat Dictinories
+        BaseStats = saveData.sBaseStats;
+        NaturalAffinities = saveData.sNaturalAffinities;
+        DevelopmentValues = saveData.sDevelopedSkillValues;
 
         //Status
         if(saveData.sStatusId != null)
@@ -159,9 +151,8 @@ public class Monster
         Moves = saveData.sMoves.Select(s => new Move(s)).ToList();
 
 
-        //Reinitialize monster
 
-        CreateValueDictionaries();
+        //Reinitialize monster
         CalculateStats();
         StatusChangeMessages = new Queue<string>();
         ResetStatStages();
@@ -183,18 +174,9 @@ public class Monster
             sStatusId = Status?.Id,
             sPersonality = personality,
             sMoves = Moves.Select(m => m.GetMoveSaveData()).ToList(),
-            sNaturalSkillMaxHP = naturalSkillMaxHP, //IVs
-            sNaturalSkillAttack = naturalSkillAttack, //IVs
-            sNaturalSkillDefense = naturalSkillDefense,//IVs
-            sNaturalSkillSpAttack = naturalSkillSpAttack, //IVs
-            sNaturalSkillSpDefense = naturalSkillSpDefense, //IVs
-            sNaturalSkillSpeed = naturalSkillSpeed, //IVs
-            sDevelopedSkillMaxHP = developedSkillMaxHP, //EVs
-            sDevelopedSkillAttack = developedSkillAttack, //EVs
-            sDevelopedSkillDefense = developedSkillDefense, //EVs
-            sDevelopedSkillSpAttack = developedSkillSpAttack, //EVs
-            sDevelopedSkillSpDefense = developedSkillSpDefense,//EVs
-            sDevelopedSkillSpeed = developedSkillSpeed //EVs
+            sBaseStats = BaseStats,
+            sNaturalAffinities = NaturalAffinities,
+            sDevelopedSkillValues = DevelopmentValues
 
         };
 
@@ -290,27 +272,15 @@ public class Monster
         return 1f;  //for some stupid reason we need this here even though the switch should always return a value
     }
     
-    void CreateValueDictionaries()
+    void CreateInitialValueDictionaries()
     {
-        BaseStats = new Dictionary<Stat, int>()
-        {
-            {Stat.HP, Base.MaxHP},
-            {Stat.Attack,Base.Attack},
-            {Stat.Defense,Base.Defense},
-            {Stat.SpAttack,Base.SpAttack},
-            {Stat.SpDefense,Base.SpDefense},
-            {Stat.Speed, Base.Speed},
-        };
-        NaturalAffinities = new Dictionary<Stat, int>()
-        {
-            {Stat.HP, naturalSkillMaxHP},
-            {Stat.Attack,naturalSkillAttack},
-            {Stat.Defense,naturalSkillDefense},
-            {Stat.SpAttack,naturalSkillSpAttack},
-            {Stat.SpDefense,naturalSkillSpDefense},
-            {Stat.Speed, naturalSkillSpeed},
-        };
+        CreateBaseStatDictionary();
+        CreateNADictionary();
+        CreateDVMethod();
+    }
 
+    private void CreateDVMethod()
+    {
         DevelopmentValues = new Dictionary<Stat, int>()
         {
             {Stat.HP, developedSkillMaxHP},
@@ -321,7 +291,34 @@ public class Monster
             {Stat.Speed, developedSkillSpeed},
         };
     }
-    void CalculateStats()
+
+    private void CreateNADictionary()
+    {
+        NaturalAffinities = new Dictionary<Stat, int>()
+        {
+            {Stat.HP, naturalSkillMaxHP},
+            {Stat.Attack,naturalSkillAttack},
+            {Stat.Defense,naturalSkillDefense},
+            {Stat.SpAttack,naturalSkillSpAttack},
+            {Stat.SpDefense,naturalSkillSpDefense},
+            {Stat.Speed, naturalSkillSpeed},
+        };
+    }
+
+    private void CreateBaseStatDictionary()
+    {
+        BaseStats = new Dictionary<Stat, int>()
+        {
+            {Stat.HP, Base.MaxHP},
+            {Stat.Attack,Base.Attack},
+            {Stat.Defense,Base.Defense},
+            {Stat.SpAttack,Base.SpAttack},
+            {Stat.SpDefense,Base.SpDefense},
+            {Stat.Speed, Base.Speed},
+        };
+    }
+
+    public void CalculateStats()
     {
         Stats = new Dictionary<Stat, int>();
         int OldMaxHP = MaxHP; //to keep track of max HP changes for things like evolution
@@ -329,7 +326,9 @@ public class Monster
         //HP has unique formula and is not effected by personality
         MaxHP = Mathf.FloorToInt
             (
-                ( ( (2*Base.MaxHP + naturalSkillMaxHP + developedSkillMaxHP/4)* Level / 100  ) + Level + 10 ) 
+                //( ( (2*Base.MaxHP + naturalSkillMaxHP + developedSkillMaxHP/4)* Level / 100  ) + Level + 10 ) 
+                ( ( (2*BaseStats[Stat.HP] + NaturalAffinities[Stat.HP] + DevelopmentValues[Stat.HP]/4)* Level / 100  ) + Level + 10 ) 
+                
             ); 
 
             if(OldMaxHP != 0)
@@ -340,47 +339,20 @@ public class Monster
         Stats.Add(Stat.HP, MaxHP); //Add HP to dictionary
         
         //OtherStats
+        for(int i = 1; i < 6; i++)
+        {
+            Stat stat = (Stat)i;
 
-        Stats.Add
-            (Stat.Attack, 
+            Stats.Add
+            (stat, 
                 Mathf.FloorToInt
                 ( 
-                    ( ( (2*Base.Attack + naturalSkillAttack + developedSkillAttack/4)* Level / 100  ) + 5 ) 
-                    * PersonalityValue(Stat.Attack)
+                    ( ( (2*BaseStats[stat] + NaturalAffinities[stat] + DevelopmentValues[stat]/4)* Level / 100  ) + 5 ) 
+                    * PersonalityValue(stat)
                 )
-        );
-        Stats.Add
-            (Stat.Defense, 
-                Mathf.FloorToInt
-                ( 
-                    ( ( (2*Base.Defense + naturalSkillDefense + developedSkillDefense/4)* Level / 100  ) + 5 ) 
-                    * PersonalityValue(Stat.Defense)
-                )
-        );
-        Stats.Add
-            (Stat.SpAttack, 
-                Mathf.FloorToInt
-                ( 
-                    ( ( (2*Base.SpAttack + naturalSkillSpAttack + developedSkillSpAttack/4)* Level / 100  ) + 5 ) 
-                    * PersonalityValue(Stat.SpAttack)
-                )
-        );
-        Stats.Add
-            (Stat.SpDefense, 
-                Mathf.FloorToInt
-                ( 
-                    ( ( (2*Base.SpDefense + naturalSkillSpDefense + developedSkillSpDefense/4)* Level / 100  ) + 5 ) 
-                    * PersonalityValue(Stat.SpDefense)
-                )
-        );
-        Stats.Add
-            (Stat.Speed, 
-                Mathf.FloorToInt
-                ( 
-                    ( ( (2*Base.Speed + naturalSkillSpeed + developedSkillSpeed/4)* Level / 100  ) + 5 ) 
-                    * PersonalityValue(Stat.Speed)
-                )
-        );
+            );
+            
+        };
 
     }
 
@@ -649,6 +621,7 @@ public class Monster
     {
         
         _base = evolution.MonsterEvolution;
+        CreateBaseStatDictionary(); //we do this because monster Base stats can change upon evolution
         CalculateStats();
         
     }
@@ -860,18 +833,18 @@ public class MonsterSaveData //only includes the savable data
     public ConditionID? sStatusId;
     public Personality sPersonality;
     public List<MoveSaveData> sMoves;
+    public Dictionary<Stat, int> sBaseStats;
+    public Dictionary<Stat, int> sNaturalAffinities;
+    public Dictionary<Stat, int> sDevelopedSkillValues;
     public int sNaturalSkillMaxHP; //IVs
     public int sNaturalSkillAttack; //IVs
     public int sNaturalSkillDefense; //IVs
     public int sNaturalSkillSpAttack; //IVs
     public int sNaturalSkillSpDefense; //IVs
     public int sNaturalSkillSpeed; //IVs
-    public int sDevelopedSkillMaxHP; //EVs
-    public int sDevelopedSkillAttack; //EVs
-    public int sDevelopedSkillDefense; //EVs
-    public int sDevelopedSkillSpAttack; //EVs
-    public int sDevelopedSkillSpDefense; //EVs
-    public int sDevelopedSkillSpeed; //EVs
+
+
+    
 
 
 }
