@@ -55,7 +55,7 @@ public class Monster
 
     public int HP {get; set;} //our monsters current HP, we are using a property
     public int Exp { get; set;}
-    public int DevExp { get; set;}
+    public int BondExp { get; set;}
     public int BondPoints {get; set;}
     public ItemBase HeldItem {get; set;}
     public List<Move> Moves{ get; set;} //we are using a property for the moves
@@ -64,7 +64,7 @@ public class Monster
     
     public Dictionary<Stat, int> BaseStats{get; private set;}
     public Dictionary<Stat, int> NaturalAffinities {get; private set;}
-    public Dictionary<Stat, int> DevelopmentValues {get; private set;}
+    public Dictionary<Stat, int> BondPointValues {get; private set;}
     public Queue<string> StatusChangeMessages {get; private set;}
     
     public Condition Status{get; private set;}
@@ -101,8 +101,9 @@ public class Monster
         }
 
         Exp = Base.GetExpForLevel(level);
+        BondExp = GetExpForBondPoints();
 
-        DevExp = 0; //initially set Dev Exp at 0;
+        BondExp = 0; //initially set Dev Exp at 0;
         
 
         CreateInitialValueDictionaries();
@@ -125,13 +126,13 @@ public class Monster
         HP = saveData.sHp;
         level = saveData.sLevel;
         Exp = saveData.sExp;
-        DevExp = saveData.sDevExp;
+        BondExp = saveData.sDevExp;
         personality = saveData.sPersonality;
 
         //Stat Dictinories
         BaseStats = saveData.sBaseStats;
         NaturalAffinities = saveData.sNaturalAffinities;
-        DevelopmentValues = saveData.sDevelopedSkillValues;
+        BondPointValues = saveData.sDevelopedSkillValues;
 
         //Status
         if(saveData.sStatusId != null)
@@ -178,14 +179,14 @@ public class Monster
             sHp = HP,
             sLevel = Level,
             sExp = Exp,
-            sDevExp = DevExp,
+            sDevExp = BondExp,
             sHeldItemName = HeldItem?.name,
             sStatusId = Status?.Id,
             sPersonality = personality,
             sMoves = Moves.Select(m => m.GetMoveSaveData()).ToList(),
             sBaseStats = BaseStats,
             sNaturalAffinities = NaturalAffinities,
-            sDevelopedSkillValues = DevelopmentValues
+            sDevelopedSkillValues = BondPointValues
 
         };
 
@@ -290,7 +291,7 @@ public class Monster
 
     private void CreateDVMethod()
     {
-        DevelopmentValues = new Dictionary<Stat, int>()
+        BondPointValues = new Dictionary<Stat, int>()
         {
             {Stat.HP, developedSkillMaxHP},
             {Stat.Attack,developedSkillAttack},
@@ -336,7 +337,7 @@ public class Monster
         MaxHP = Mathf.FloorToInt
             (
                 //( ( (2*Base.MaxHP + naturalSkillMaxHP + developedSkillMaxHP/4)* Level / 100  ) + Level + 10 ) 
-                ( ( (2*BaseStats[Stat.HP] + NaturalAffinities[Stat.HP] + DevelopmentValues[Stat.HP]/4)* Level / 100  ) + Level + 10 ) 
+                ( ( (2*BaseStats[Stat.HP] + NaturalAffinities[Stat.HP] + BondPointValues[Stat.HP]/4)* Level / 100  ) + Level + 10 ) 
                 
             ); 
 
@@ -356,7 +357,7 @@ public class Monster
             (stat, 
                 Mathf.FloorToInt
                 ( 
-                    ( ( (2*BaseStats[stat] + NaturalAffinities[stat] + DevelopmentValues[stat]/4)* Level / 100  ) + 5 ) 
+                    ( ( (2*BaseStats[stat] + NaturalAffinities[stat] + BondPointValues[stat]/4)* Level / 100  ) + 5 ) 
                     * PersonalityValue(stat)
                 )
             );
@@ -618,7 +619,7 @@ public class Monster
     }
     public bool CheckForBondLevelUp()
     {   
-        if(DevExp > GetExpForBondPoints(true))
+        if(BondExp > GetExpForBondPoints(true))
         {
             BondPoints += 4;
             return true;
@@ -631,7 +632,7 @@ public class Monster
     {
         int points = BondPoints;
         if(nextBondLevel) points += 4;
-        return Mathf.FloorToInt( Mathf.Pow((points), 2) * (points/4) );
+        return Mathf.FloorToInt( Mathf.Pow((points), 2) * (points/4));
     }
 
     public Evolution CheckForEvolution()

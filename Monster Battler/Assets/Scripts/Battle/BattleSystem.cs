@@ -1349,7 +1349,6 @@ public class BattleSystem : MonoBehaviour
                                 yield return battleDialogueBox.TypeDialog($"Forget a move so that {monster.Base.MonsterName} can learn {newMove.Base.MoveName}.");
                                 //add in yes or no option
                                 yield return ChooseMoveToForget(monster, newMove.Base);
-                                
 
                             }
                         }
@@ -1357,7 +1356,7 @@ public class BattleSystem : MonoBehaviour
                    }
 
                  //Dev Points
-                    monster.DevExp += expGain;
+                    monster.BondExp += expGain/4;
                     if(monster.InBattle) // update HUD for monsters in battle the we update HUD
                     {
                         yield return battleUnits[playerParty.Monsters.IndexOf(monster)].Hud.SetBondExpSmooth();
@@ -1368,8 +1367,8 @@ public class BattleSystem : MonoBehaviour
                        {
                            yield return battleUnits[playerParty.Monsters.IndexOf(monster)].Hud.SetBondExpSmooth(true); //in the event the monster gained more exp than required we reset hud
                        }
-                       yield return battleDialogueBox.TypeDialog($"{monster.Base.MonsterName}'s bond with you grew stronger.");
-
+                        yield return battleDialogueBox.TypeDialog($"{monster.Base.MonsterName}'s bond with you grew stronger.");
+                        yield return SpendBondPoints(monster);
                        //show Monster Summary Screen for DevPoints
 
                     }
@@ -1429,13 +1428,13 @@ public class BattleSystem : MonoBehaviour
 
     }
 
-    public void DevelopmentPointsConfirmed()
+    public void BondPointsConfirmed()
     {
         //TO DO add more functionality here
         monsterSummaryScreen.CloseSummaryScreen();
         battleState = BattleState.Busy;
     }
-    IEnumerator SpendDevelopmentPoints(Monster monster)
+    IEnumerator SpendBondPoints(Monster monster)
     {
         battleState = BattleState.DevelopingMonster;
         yield return battleDialogueBox.TypeDialog("Choose which stats to invest in.");

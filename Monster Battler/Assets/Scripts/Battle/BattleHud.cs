@@ -103,7 +103,7 @@ public class BattleHud : MonoBehaviour
         int currentBondExp = monster.GetExpForBondPoints();
         int nextBondLevelExp = monster.GetExpForBondPoints(true);
 
-        float normalizeBondExp = (float)(monster.DevExp - currentBondExp) / (nextBondLevelExp - currentBondExp);
+        float normalizeBondExp = (float)(monster.BondExp - currentBondExp) / (nextBondLevelExp - currentBondExp);
         
         return Mathf.Clamp01(normalizeBondExp);  
     }

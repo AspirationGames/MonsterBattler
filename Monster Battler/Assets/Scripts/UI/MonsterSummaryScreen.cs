@@ -10,66 +10,110 @@ public class MonsterSummaryScreen : MonoBehaviour
     [SerializeField] Image monsterImage;
     [SerializeField] TextMeshProUGUI[] baseStats;
     [SerializeField] TextMeshProUGUI[] naturalAffinities;
-    [SerializeField] TMP_InputField[] developmentalValues;
+    [SerializeField] TextMeshProUGUI[] BondPointValues;
     [SerializeField] TextMeshProUGUI[] statTotals;
-    [SerializeField] Slider[] developmentalValueSliders;
     [SerializeField] TextMeshProUGUI bondPointsTMP;
 
     Monster monster;
     int unspentBondPoints;
     int investedBondPoints;
+    int[] pointsPendingConfirmation = new int[6];
 
     public void SetMonsterData(Monster monster)
     {
         this.monster = monster;
         monsterImage.sprite = monster.Base.FrontSprite;
+        investedBondPoints = 0; //clears previously calculated investment values
 
         for(int i = 0; i < 6; i++)
         {
             
             Stat stat =  (Stat)i;
-            investedBondPoints = 0; //clears previously calculated investment values
 
             baseStats[i].text = monster.BaseStats[stat].ToString();
             naturalAffinities[i].text = monster.NaturalAffinities[stat].ToString();
-            developmentalValues[i].text = monster.DevelopmentValues[stat].ToString();
-            investedBondPoints += monster.DevelopmentValues[stat]; //sums all invested development points
+            BondPointValues[i].text = monster.BondPointValues[stat].ToString();
+            investedBondPoints += monster.BondPointValues[stat]; //sums all invested development points
             statTotals[i].text = monster.Stats[stat].ToString();
         }
 
         //Calc Dev Points Availalbe
         unspentBondPoints = monster.BondPoints - investedBondPoints;
-        print(unspentBondPoints);
         bondPointsTMP.text = unspentBondPoints.ToString();
         
     }
 
-    public void OnValueChanged(TMP_InputField inputField)
+    public void IncreaseBondPoints(Transform bpTransform)
     {
+        int statIndex = bpTransform.GetSiblingIndex();
+        Debug.Log(statIndex);
+        //update stat development value
+        Stat stat =  (Stat)statIndex;
         
-        int fieldIndex = inputField.transform.GetSiblingIndex();
+        if(unspentBondPoints > 0) //if the player has available points
+        {
+            monster.BondPointValues[stat] ++;
+            pointsPendingConfirmation[statIndex] ++; //keeps track of points pending confirmation per index
+            
+        }
+        else
+        {
+            print("you do not have bond points to spend");
+        }
+
+        RecalculateMonsterData();
+    }
+
+    public void DecreaseBondPoints(Transform bpTransform)
+    {
+        int statIndex = bpTransform.GetSiblingIndex();
         
         //update stat development value
-        Stat stat =  (Stat)fieldIndex;
-        
+        Stat stat =  (Stat)statIndex;
 
-        //TO DO figure out best way to update monster values.
-        //If we use dictionary like below we will need to change stat calcs to also use dictionary
-        //We will also need to consider save system which currently uses individual variables for stat values
-        
-        monster.DevelopmentValues[stat] = int.Parse(inputField.text);
+        if(pointsPendingConfirmation[statIndex] > 0)
+        {
+            monster.BondPointValues[stat] --;
+            pointsPendingConfirmation[statIndex] --; //keeps track of points pending confirmation per index
+            
+        }
+        else
+        {
+            print("you do not have bond points to spend");
+        }
+
+        RecalculateMonsterData();
+    }
+
+    private void RecalculateMonsterData()
+    {
         monster.CalculateStats();
         SetMonsterData(monster);
     }
 
     public void ResetPoints()
     {
+        for(int i = 0; i < 6; i++)
+        {
+            if(pointsPendingConfirmation[i] > 0)
+            {
+                monster.BondPointValues[(Stat)i] -= pointsPendingConfirmation[i]; // removes any invested points from the stat
+                pointsPendingConfirmation[i] = 0;
+            }
+        }
 
+        RecalculateMonsterData();
     }
 
     public void ConfirmPointInvestment()
     {
-        
+        for(int i = 0; i < 6; i++)
+        {
+            if(pointsPendingConfirmation[i] > 0)
+            {
+                pointsPendingConfirmation[i] = 0; //removes all pending points confirming the investment
+            }
+        }
     }
     
     public void CloseSummaryScreen()
