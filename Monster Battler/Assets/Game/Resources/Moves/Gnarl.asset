@@ -24,7 +24,7 @@ MonoBehaviour:
   category: 2
   effects:
     stageChange:
-    - stat: 0
+    - stat: 1
       stage: -1
     statusEffect: 0
     volatileStatusEffect: 0

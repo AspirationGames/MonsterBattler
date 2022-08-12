@@ -32,7 +32,7 @@ MonoBehaviour:
     protect: 0
   secondaryEffects:
   - stageChange:
-    - stat: 5
+    - stat: 6
       stage: -1
     statusEffect: 0
     volatileStatusEffect: 0

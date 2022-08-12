@@ -126,7 +126,8 @@ public class Monster
         HP = saveData.sHp;
         level = saveData.sLevel;
         Exp = saveData.sExp;
-        BondExp = saveData.sDevExp;
+        BondExp = saveData.sBondExp;
+        BondPoints =saveData.sBondPoints;
         personality = saveData.sPersonality;
 
         //Stat Dictinories
@@ -179,7 +180,8 @@ public class Monster
             sHp = HP,
             sLevel = Level,
             sExp = Exp,
-            sDevExp = BondExp,
+            sBondExp = BondExp,
+            sBondPoints = BondPoints,
             sHeldItemName = HeldItem?.name,
             sStatusId = Status?.Id,
             sPersonality = personality,
@@ -853,7 +855,8 @@ public class MonsterSaveData //only includes the savable data
     public int sHp;
     public int sLevel;
     public int sExp;
-    public int sDevExp;
+    public int sBondExp;
+    public int sBondPoints;
     public string sHeldItemName; //We will use the name to restore the held item
     public ConditionID? sStatusId;
     public Personality sPersonality;
