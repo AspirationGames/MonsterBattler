@@ -8,6 +8,7 @@ public class PartyScreen : MonoBehaviour
 {
     [SerializeField] Image monsterImage;
     [SerializeField] MonsterSummaryScreen monsterSummaryScreen;
+    [SerializeField] InventoryScreen inventoryScreen;
     PartyMemberUI[] memberSlots;
     List<Monster> monsters;
     MonsterParty playerParty;
@@ -91,19 +92,23 @@ public class PartyScreen : MonoBehaviour
         choices: new List<String> {"Monster Summary", "Swap Position", "Use Item", "Give Item to Hold", "Back"}, 
         onChoiceSelectedAction: (int selectionIndex) => selectedChoice = selectionIndex);
 
+        SelectedMonster = monster;
+
         switch(selectedChoice)
         {
-            case 0:
+            case 0: //Show Monster Summary
                 yield return ShowMonsterSummary(monster);
                 break;
-            case 1:
+            case 1: //Swap Monster Position
                 yield return SwapMonsterPosition(monster);
                 break;
-            case 2:
-                yield return UseItem(monster);
+            case 2: //Use Item on Monster
+                inventoryScreen.gameObject.SetActive(true);
+                inventoryScreen.SetInventoryState(InventoryScreenState.PartyManagement);
+                yield return DialogManager.Instance.ShowDialogText($"Select and item to use on monster");
                 break;
-            case 3:
-                yield return UseItem(monster);
+            case 3: //Give Monster and Item
+                yield return GiveMonsterItem(monster);
                 break;
             case 4:
                 yield break;
@@ -113,31 +118,63 @@ public class PartyScreen : MonoBehaviour
         }
     }
 
-    IEnumerator ShowMonsterSummary(Monster monster)
+    IEnumerator ShowMonsterSummary(Monster selectedMonster)
     {
         monsterSummaryScreen.gameObject.SetActive(true);
-        monsterSummaryScreen.SetMonsterData(monster);
+        monsterSummaryScreen.SetMonsterData(selectedMonster);
         yield return null;
     }
-    IEnumerator SwapMonsterPosition(Monster monster)
+    IEnumerator SwapMonsterPosition(Monster selectedMonster)
     {
         Debug.Log("Swapping monster position");
         //WIP
         yield return null;
     }
 
-    IEnumerator UseItem(Monster monster)
+    IEnumerator UseItem(Monster selectedMonster)
     {
         Debug.Log("Using Item on Monster");
         //WIP
         yield return null;
     }
 
-    IEnumerator GiveMonsterItem(Monster monster)
+    IEnumerator GiveMonsterItem(Monster selectedMonster, ItemSlot)
     {
-        Debug.Log("Giving Monster Item to hold");
-        //WIP
-        yield return null;
+
+
+        //TO DO: figure out if calling the inventory screen is ok without creating a circular reference
+
+        //if (selectedMonster.HeldItem != null) //monster is currently holding item TO DO
+        //{
+        //    int selectedChoice = 0;
+        //    yield return DialogManager.Instance.ShowDialogText($"{selectedMonster.Base.MonsterName} is already holding a {selectedMonster.HeldItem.ItemName} would you like to switch held item to {selectedItemSlot.Item.ItemName}?",
+        //    choices: new List<String> { "Yes", "No", },
+        //    onChoiceSelectedAction: (int selectionIndex) => selectedChoice = selectionIndex);
+
+        //    switch (selectedChoice)
+        //    {
+        //        case 0: //Yes
+        //            inventory.IncreaseQuantity(selectedMonster.HeldItem);
+        //            selectedMonster.SetHeldItem(selectedItemSlot.Item);
+        //            inventory.DecreaseQuantity(selectedItemSlot.Item);
+        //            yield return DialogManager.Instance.ShowDialogText($"{selectedMonster.Base.MonsterName} is now holding {selectedItemSlot.Item.ItemName}.");
+        //            break;
+        //        case 1: //No
+        //            break;
+        //        default:
+        //            Debug.LogError("No choice selected");
+        //            break;
+        //    }
+        //}
+        //else
+        //{
+        //    selectedMonster.SetHeldItem(selectedItemSlot.Item);
+        //    inventory.DecreaseQuantity(selectedItemSlot.Item);
+        //    yield return DialogManager.Instance.ShowDialogText($"{selectedMonster.Base.MonsterName} is now holding {selectedItemSlot.Item.ItemName}.");
+        //}
+
+
+        //yield return null;
     }
 
 

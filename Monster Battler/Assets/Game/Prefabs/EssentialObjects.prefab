@@ -2635,7 +2635,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.3333334, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -10619,6 +10619,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1789591810871680049, guid: 65515c06dd612f34b91d5fdc690d42f4, type: 3}
+      propertyPath: inventoryScreen
+      value: 
+      objectReference: {fileID: 8232783272163960635}
     - target: {fileID: 1789591810871680055, guid: 65515c06dd612f34b91d5fdc690d42f4, type: 3}
       propertyPath: m_IsActive
       value: 0

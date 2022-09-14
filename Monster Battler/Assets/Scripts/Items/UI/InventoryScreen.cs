@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Linq;
 
-public enum InventoryScreenState{Inventory, UsingItem, GivingItem, BindingTargetSelection, ForgettingMove, Busy, SellingItems}
+public enum InventoryScreenState{Inventory, UsingItem, GivingItem, BindingTargetSelection, ForgettingMove, Busy, SellingItems, PartyManagement}
 public class InventoryScreen : MonoBehaviour
 {
 
@@ -35,6 +35,7 @@ public class InventoryScreen : MonoBehaviour
     List<ItemSlot> currentItemSlots;
     public event Action bindingSelected;
     public event Action<ItemBase> onItemSold;
+    public event Action<ItemBase> onItemGiven;
     MoveBase moveToLearn; //new Move monster is trying to learn
     Monster monsterLearning; //The monster trying to learn a new move
 
@@ -49,10 +50,7 @@ public class InventoryScreen : MonoBehaviour
         SetItemCategory(0); //sets initial item category at index 0
         UpdateItemList();
         
-
-        
     }
-
     private void OnEnable() 
     {
         ItemSlotUI.itemUIHover += ItemHover;
@@ -143,10 +141,14 @@ public class InventoryScreen : MonoBehaviour
           
     }
 
+    public IEnumerator RequestSelectedItem() //using this to request player select item to give to monster
+    {
+        yield return new WaitUntil(() => selectedItemSlot != null);
+
+    }
     public void ItemSelected(ItemSlotUI selectedItemSlotUI)
     {
         
-
         int selectedItemIndex = selectedItemSlotUI.transform.GetSiblingIndex(); //sets the selected item for use.
         selectedItemSlot = currentItemSlots[selectedItemIndex];
 
@@ -289,11 +291,13 @@ public class InventoryScreen : MonoBehaviour
         {
             StartCoroutine(DialogManager.Instance.ShowDialogText($"You are out of {selectedItemSlot.Item.ItemName}."));
             inventoryScreenState = InventoryScreenState.UsingItem;
+
         }
         else if (!GetCanUseItem(selectedMonster)) //can't be used on monster
         {
             StartCoroutine(DialogManager.Instance.ShowDialogText($"{selectedItemSlot.Item.ItemName} won't have any effect on {selectedMonster.Base.MonsterName}."));
             inventoryScreenState = InventoryScreenState.UsingItem;
+
         }
         else if (GetCanUseItem(selectedMonster)) //you can use item
         {
